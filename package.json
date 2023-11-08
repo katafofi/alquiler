@@ -1,0 +1,20 @@
+{
+  "name": "alquiler",
+  "version": "1.0.0",
+  "description": "proyecto de grado sobre alquileres",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "node index.js",
+    "prod": "nodemon index.js"
+  },
+  "keywords": [],
+  "author": "catalina",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.3.1",
+    "mysql2": "^3.6.3",
+    "nodemon": "^3.0.1",
+    "sequelize": "^6.6.5"
+  }
+}
