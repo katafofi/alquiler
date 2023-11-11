@@ -1,15 +1,15 @@
 const Sequelize = require('sequelize');
 const database = require('../db.js');
 
-const Status_pay = database.define('EstadosPagos', {
-    IdEstadoPago: {
+const Colors = database.define('Colores', {
+    IdColor: {
         type: Sequelize.INTEGER,
         primaryKey: true,
         autoIncrement: true,
-    },  
-    descripcion:{
+    },
+    Descripcion: {
         type: Sequelize.STRING(100),
-        allowNull: false,
+        allowNull: false
     }
-})
-module.exports = Status_pay;
+    })
+    module.exports = Colors;
