@@ -1,51 +1,29 @@
 async function syncModels() {
   const database = require("./db");
-  //1
+
   const Employe = require("./Models/employe.model");
   const ExpensesEmploye = require("./Models/expensesEmploye.model");
-  //2
   const Clients = require("./Models/clients.model");
   const Store = require("./Models/store.model");
   const RentingClientsStore = require("./Models/renting.model");
-
-  //3
-  const Employe = require("./Models/employe.model");
-  const Renting = require("./Models/renting.model");
   const PuchaseOrderEmployeRenting = require("./Models/purchase_order.model");
-  //4
-
   const Accesories = require("./Models/accesories.model");
-  const AccesoriesInventoryAccesories= require("./Models/accesories_inventory.model");
-
-  //5
+  const AccesoriesInventoryAccesories = require("./Models/accesories_inventory.model");
   const Item = require("./Models/item.model");
   const ItemInventoryItem = require("./Models/accesories_inventory.model");
-
-  //6
-  const Accesories = require("./Models/accesories.model");
-  const PuchaseOrder = require("./Models/purchase_order.model");
   const puchareAccesoriesAccesorioOrdenCompra = require("./Models/purchase_accesories_order.model");
-  //7
-  const Item = require("./Models/item.model");
-  const PuchaseOrder = require("./Models/purchase_order.model");
   const PuchaseItemOrderPuchaseOrderItem = require("./Models/puchase_item_order.model");
-  //8
   const Colors = require("./Models/colors.model");
   const Sizes = require("./Models/sizes.models");
   const Categorys = require("./Models/categorys.model");
   const ItemInvetory = require("./Models/item_Inventory.model");
   const ItemColorsSizesCategorysItemInventory = require("./Models/item.model");
-  //9
   const StatusPay = require("./Models/status_pay.model");
-  const PuchaseOrder = require("./Models/purchase_order.model");
   const PaymentType = require("./Models/payment_type.model");
   const PaymentStatusPayPucherOrderPaymentType = require("./Models/payments.models");
-  //10
   const PuchaseOrder = require("./Models/purchase_order.model");
   const StatusRegisterNegative = require("./Models/status_register_negative.model.js");
   const PuchaseOrderStatusRegisterNegativeNegativeRecord = require("./Models/Negative_Record.model");
-
-  //11
   const Renting = require("./Models/renting.model.js");
   const ReturnRegisterRenting = require("./Models/Return_Register.model.js");
 
@@ -87,7 +65,7 @@ async function syncModels() {
   });
 
   Accesories.hasMany(puchareAccesoriesAccesorioOrdenCompra, {
-    foreignKey: "IdAccesorio",
+    foreignKeyoreignKey: "IdAccesorio",
     onDelete: "RESTRICT",
   });
   PuchaseOrder.hasMany(puchareAccesoriesAccesorioOrdenCompra, {
@@ -109,7 +87,7 @@ async function syncModels() {
     onDelete: "RESTRICT",
   });
   Sizes.hasMany(ItemColorsSizesCategorysItemInventory, {
-    foreignKey: "IdTalla",
+    foreignKey: "IdSize",
     onDelete: "RESTRICT",
   });
   Categorys.hasMany(ItemColorsSizesCategorysItemInventory, {
@@ -146,7 +124,7 @@ async function syncModels() {
     }
   );
 
-  StatusRegisterNegative.hasMany(ReturnRegisterRenting, {
+  Renting.hasMany(ReturnRegisterRenting, {
     foreignKey: "IdRentig",
     onDelete: "RESTRICT",
   });

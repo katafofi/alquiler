@@ -17,12 +17,15 @@ const Payments = database.define('Pagos', {
     },
     IdEstadoPago: {
         type: Sequelize.INTEGER,
+        allowNull: false
     },
     IdTipoPago: {
         type: Sequelize.INTEGER,
+        allowNull: false
     },
     IdOrdenPago: {
         type: Sequelize.INTEGER,
+        allowNull: false
     }
     })
     module.exports = Payments;

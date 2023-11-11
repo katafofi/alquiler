@@ -32,7 +32,8 @@ const StoreModel = database.define('Tiendas', {
         type: Sequelize.STRING(250),
         allowNull: false,
         unique: true
-    },
+    }
+
 })
 
 module.exports = StoreModel;

@@ -45,6 +45,8 @@ const Clients = database.define('Clientes', {
         type: Sequelize.STRING(255),
         allowNull: false
     },
+    //no es obligatorio para el registropero si cuando valla a retirar el alquiler
+    
     fotoServicioPublico: {
         type: Sequelize.STRING(255),
         allowNull: false

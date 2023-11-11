@@ -11,6 +11,7 @@ const PaymentType = database.define('TipoPago', {
         type: Sequelize.STRING(100),
         allowNull: false
     }
+
     })
     module.exports = PaymentType;
     
