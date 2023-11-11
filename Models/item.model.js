@@ -10,7 +10,12 @@ const Item = database.define("Articulo", {
   Descripcion: {
     type: Sequelize.STRING(100),
     allowNull: false,
-  },
+    },
+    PrecioArticulo: {
+      type: Sequelize.DECIMAL(10, 2),
+      allowNull: false,
+    },
+
   IdInventarioArticulo: {
     type: Sequelize.INTEGER,
     allowNull: false,
