@@ -1,6 +1,5 @@
 async function syncModels() {
   const database = require("./db");
-
   const Employe = require("./Models/employe.model");
   const ExpensesEmploye = require("./Models/expensesEmploye.model");
   const Clients = require("./Models/clients.model");
@@ -11,12 +10,12 @@ async function syncModels() {
   const AccesoriesInventoryAccesories = require("./Models/accesories_inventory.model");
   const Item = require("./Models/item.model");
   const ItemInventoryItem = require("./Models/accesories_inventory.model");
-  const puchareAccesoriesAccesorioOrdenCompra = require("./Models/purchase_accesories_order.model");
+  const PuchaseAccesoriesOrderAccesoriesPuchaseOrder = require("./Models/purchase_accesories_order.model");
   const PuchaseItemOrderPuchaseOrderItem = require("./Models/puchase_item_order.model");
   const Colors = require("./Models/colors.model");
   const Sizes = require("./Models/sizes.models");
   const Categorys = require("./Models/categorys.model");
-  const ItemInvetory = require("./Models/item_Inventory.model");
+  const ItemInventory = require("./Models/item_Inventory.model");
   const ItemColorsSizesCategorysItemInventory = require("./Models/item.model");
   const StatusPay = require("./Models/status_pay.model");
   const PaymentType = require("./Models/payment_type.model");
@@ -27,9 +26,7 @@ async function syncModels() {
   const Renting = require("./Models/renting.model.js");
   const ReturnRegisterRenting = require("./Models/Return_Register.model.js");
 
-  //Employe.hasOne(Employe, { as: 'Employe' })
-
-  //TABLA relacional 1:M Eliminacion en cascada
+  // TABLA relacional 1:M Eliminación en cascada
   Employe.hasMany(ExpensesEmploye, {
     foreignKey: "IdEmpleado",
     onDelete: "RESTRICT",
@@ -64,16 +61,16 @@ async function syncModels() {
     onDelete: "RESTRICT",
   });
 
-  Accesories.hasMany(puchareAccesoriesAccesorioOrdenCompra, {
-    foreignKeyoreignKey: "IdAccesorio",
+  Accesories.hasMany(PuchaseAccesoriesOrderAccesoriesPuchaseOrder, {
+    foreignKey: "IdAccesorio",
     onDelete: "RESTRICT",
   });
-  PuchaseOrder.hasMany(puchareAccesoriesAccesorioOrdenCompra, {
+  PuchaseOrder.hasMany(PuchaseAccesoriesOrderAccesoriesPuchaseOrder, {
     foreignKey: "IdOrdenCompra",
     onDelete: "RESTRICT",
   });
   PuchaseOrder.hasMany(PuchaseItemOrderPuchaseOrderItem, {
-    foreignKey: "IIdOrdenCompra",
+    foreignKey: "IdOrdenCompra",
     onDelete: "RESTRICT",
   });
 
@@ -94,8 +91,8 @@ async function syncModels() {
     foreignKey: "IdCategoria",
     onDelete: "RESTRICT",
   });
-  ItemInvetory.hasMany(ItemColorsSizesCategorysItemInventory, {
-    foreignKey: "IdInevtario",
+  ItemInventory.hasMany(ItemColorsSizesCategorysItemInventory, {
+    foreignKey: "IdInventario",
     onDelete: "RESTRICT",
   });
   StatusPay.hasMany(PaymentStatusPayPucherOrderPaymentType, {
@@ -128,7 +125,9 @@ async function syncModels() {
     foreignKey: "IdRentig",
     onDelete: "RESTRICT",
   });
-  await database.sync({ force: true }); // false Crea la tabla si no existe
+
+  await database.sync({ force: true }); // false crea la tabla si no existe
 }
+
 
 module.exports = syncModels;
