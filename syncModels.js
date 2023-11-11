@@ -9,7 +9,7 @@ async function syncModels() {
   const Accesories = require("./Models/accesories.model");
   const AccesoriesInventoryAccesories = require("./Models/accesories_inventory.model");
   const Item = require("./Models/item.model");
-  const ItemInventoryItem = require("./Models/accesories_inventory.model");
+  const ItemInventoryItem = require("./Models/item_Inventory.model.js");
   const PuchaseAccesoriesOrderAccesoriesPuchaseOrder = require("./Models/purchase_accesories_order.model");
   const PuchaseItemOrderPuchaseOrderItem = require("./Models/puchase_item_order.model");
   const Colors = require("./Models/colors.model");
