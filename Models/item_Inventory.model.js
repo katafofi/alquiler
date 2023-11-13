@@ -15,6 +15,7 @@ const ItemInvetory = database.define('InvetarioArticulos', {
     IdArticulo: {
         type: Sequelize.INTEGER,
         allowNull: false,
+        unique: true
     }
     })
 
