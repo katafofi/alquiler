@@ -1,5 +1,6 @@
 async function syncModels() {
   const database = require("./db");
+
   const Employe = require("./Models/employe.model");
   const ExpensesEmploye = require("./Models/expensesEmploye.model");
   const Clients = require("./Models/clients.model");
@@ -15,7 +16,6 @@ async function syncModels() {
   const Colors = require("./Models/colors.model");
   const Sizes = require("./Models/sizes.models");
   const Categorys = require("./Models/categorys.model");
-  const ItemInventory = require("./Models/item_Inventory.model");
   const ItemColorsSizesCategorysItemInventory = require("./Models/item.model");
   const StatusPay = require("./Models/status_pay.model");
   const PaymentType = require("./Models/payment_type.model");
@@ -25,6 +25,7 @@ async function syncModels() {
   const PuchaseOrderStatusRegisterNegativeNegativeRecord = require("./Models/Negative_Record.model");
   const Renting = require("./Models/renting.model.js");
   const ReturnRegisterRenting = require("./Models/Return_Register.model.js");
+  const StatusEmployeEmploye = require("./Models/employe_status.model.js");
 
   // TABLA relacional 1:M Eliminación en cascada
   Employe.hasMany(ExpensesEmploye, {
@@ -91,10 +92,7 @@ async function syncModels() {
     foreignKey: "IdCategoria",
     onDelete: "RESTRICT",
   });
-  ItemInventory.hasMany(ItemColorsSizesCategorysItemInventory, {
-    foreignKey: "IdInventario",
-    onDelete: "RESTRICT",
-  });
+
   StatusPay.hasMany(PaymentStatusPayPucherOrderPaymentType, {
     foreignKey: "IdEstadoPago",
     onDelete: "RESTRICT",
@@ -125,9 +123,14 @@ async function syncModels() {
     foreignKey: "IdRentig",
     onDelete: "RESTRICT",
   });
-  //TODO: ELIMINAR REALCION MALA DE INVENTARIO...
-  await database.sync({ alter: false, force: true }); // false prod y true dev
-}
 
+  //tabla relacion de 1:1
+  StatusEmployeEmploye.hasOne(Employe, {
+    foreignKey: "IdEstadoEmpleado",
+    sourceKey: "IdEstadoEmpleado",
+  });
+
+  await database.sync({ alter: true, force: false }); // false prod y true dev
+}
 
 module.exports = syncModels;

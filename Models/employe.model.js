@@ -28,12 +28,8 @@ const Employe = database.define('Empleados', {
         type: Sequelize.STRING(20),
         allowNull: false
     },
-    FechaNacimiento: {
-        type: Sequelize.DATE,
-        allowNull: false
-    },
-    Fecha: {
-        type: Sequelize.DATE,
+    IdEstadoEmpleado: {
+        type: Sequelize.INTEGER,
         allowNull: false
     },
 },
