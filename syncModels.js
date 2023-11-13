@@ -125,8 +125,8 @@ async function syncModels() {
     foreignKey: "IdRentig",
     onDelete: "RESTRICT",
   });
-
-  await database.sync({ force: true }); // false crea la tabla si no existe
+  //TODO: ELIMINAR REALCION MALA DE INVENTARIO...
+  await database.sync({ alter: false, force: true }); // false prod y true dev
 }
 
 
