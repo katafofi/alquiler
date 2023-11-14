@@ -8,6 +8,8 @@ const syncModels = require("./syncModels");
 const EmployeRouter = require("./Routes/employe.route");
 const ExpenseEmployeRouter = require("./Routes/expenseEmploye.route");
 const InvetarioAccesoriosRouter = require("./Routes/accesories_inventory.route");
+const AccesoriesRouter = require("./Routes/accesories.route")
+const CategorysRouter = require("./Routes/Categorys.route")
 
 
 const app = express();
@@ -28,6 +30,8 @@ app.use(cors(corsOptions));
 app.use("/employe", EmployeRouter);
 app.use("/expense_employe", ExpenseEmployeRouter);
 app.use("/accesories_inventory", InvetarioAccesoriosRouter);
+app.use("/accesories", AccesoriesRouter);
+app.use("/categorys", CategorysRouter);
 
 
 async function MigrateModels() {
