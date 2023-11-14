@@ -130,7 +130,7 @@ async function syncModels() {
     sourceKey: "IdEstadoEmpleado",
   });
 
-  await database.sync({ alter: false, force:true }); // false prod y true dev
+  await database.sync({ alter: false, force: true}); // false prod y true dev
 }
 
 module.exports = syncModels;

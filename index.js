@@ -8,8 +8,9 @@ const syncModels = require("./syncModels");
 const EmployeRouter = require("./Routes/employe.route");
 const ExpenseEmployeRouter = require("./Routes/expenseEmploye.route");
 const InvetarioAccesoriosRouter = require("./Routes/accesories_inventory.route");
-const AccesoriesRouter = require("./Routes/accesories.route")
-const CategorysRouter = require("./Routes/Categorys.route")
+const AccesoriesRouter = require("./Routes/accesories.route");
+const CategorysRouter = require("./Routes/Categorys.route");
+const ClientsRouter = require("./Routes/clients.route")
 
 
 const app = express();
@@ -32,6 +33,7 @@ app.use("/expense_employe", ExpenseEmployeRouter);
 app.use("/accesories_inventory", InvetarioAccesoriosRouter);
 app.use("/accesories", AccesoriesRouter);
 app.use("/categorys", CategorysRouter);
+app.use("/clients", ClientsRouter)
 
 
 async function MigrateModels() {
@@ -54,7 +56,7 @@ async function ConnectDB() {
     await ConnectDB();
     await MigrateModels();
 
-    const port = 3000 || 3001; //por si esta ocupado uno vaya al otro
+    const port = 3001; //por si esta ocupado uno vaya al otro
 
     app.listen(port, () => {
       console.log("Servidor a sido iniciado");

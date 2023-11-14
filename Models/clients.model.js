@@ -29,11 +29,8 @@ const Clients = database.define('Clientes', {
         type: Sequelize.STRING(20),
         allowNull: false
     },
-    FechaNacimiento: {
-        type: Sequelize.DATE,
-        allowNull: false
-    },
-    ReferenciaPersomalNombre: {
+ 
+        ReferenciaPersomalNombre: {
         type: Sequelize.STRING(50),
         allowNull: false
     },
