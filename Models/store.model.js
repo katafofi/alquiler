@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize');
 const database = require('../db.js');
 
-const StoreModel = database.define('Tiendas', {
+const Store = database.define('Tiendas', {
     IdTienda: {
         type: Sequelize.INTEGER,
         primaryKey: true,
@@ -36,4 +36,4 @@ const StoreModel = database.define('Tiendas', {
 
 })
 
-module.exports = StoreModel;
+module.exports = Store;

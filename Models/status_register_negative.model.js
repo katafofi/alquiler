@@ -8,15 +8,13 @@ const StatusRegisterNegative = database.define('EstadoRegistroNegativo',{
             primaryKey: true,
             autoIncrement: true,
         },    
-        CantidadDisponible: {
-            type: Sequelize.INTEGER,
+        Descripcion: {
+            type: Sequelize.STRING,
             allowNull: false
         },
        
-        IdAccesorio: {
-            type: Sequelize.INTEGER,
-            allowNull: false
-        }
+      
+        
 
 })
 module.exports = StatusRegisterNegative;

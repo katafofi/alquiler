@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize');
 const database = require('../db.js');
 
-const Status_pay = database.define('EstadosPagos', {
+const Statuspay = database.define('EstadoPagos', {
     IdEstadoPago: {
         type: Sequelize.INTEGER,
         primaryKey: true,
@@ -12,4 +12,4 @@ const Status_pay = database.define('EstadosPagos', {
         allowNull: false,
     }
 })
-module.exports = Status_pay;
+module.exports = Statuspay;

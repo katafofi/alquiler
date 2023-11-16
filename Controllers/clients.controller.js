@@ -10,7 +10,8 @@ const CreateClients = async (req, res) => {
     ReferenciaPersomalNombre,
     ReferenciaPersomaltelefono,
     fotoDocumento,
-    fotoServicioPublico
+    fotoServicioPublico,
+    fecha
   } = req.body;
 
   try {
@@ -23,7 +24,8 @@ const CreateClients = async (req, res) => {
     ReferenciaPersomalNombre,
     ReferenciaPersomaltelefono,
     fotoDocumento,
-    fotoServicioPublico
+    fotoServicioPublico,
+    fecha
     });
     res.status(200).json(ClientsCreate);
   } catch (error) {
@@ -43,7 +45,8 @@ const UpdateClients = async (req, res) => {
     ReferenciaPersomalNombre,
     ReferenciaPersomaltelefono,
     fotoDocumento,
-    fotoServicioPublico
+    fotoServicioPublico,
+    fecha
   } = req.body;
 
   try {
@@ -57,7 +60,8 @@ const UpdateClients = async (req, res) => {
         ReferenciaPersomalNombre,
         ReferenciaPersomaltelefono,
         fotoDocumento,
-        fotoServicioPublico
+        fotoServicioPublico,
+        fecha
       },
       {
         where: { IdCliente },
