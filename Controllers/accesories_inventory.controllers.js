@@ -1,17 +1,14 @@
 const AccesoriesInventory = require("../Models/accesories_inventory.model");
 
 const CreateAccesoriesInventory = async (req, res) => {
-  const {
-    Cantidad,
-    IdAccesorio,	    
-  } = req.body;
+  const { IdInventarioAccesori } = req.body;
 
   try {
-    const AccesoriesInventoryCreate = await  AccesoriesInventory.create({
-        Cantidad,
-        IdAccesorio,
+    const AccesoriesInventoryCreate = await AccesoriesInventory.create({
+      Cantidad,
+      IdAccesorio,
     });
-    res.status(200).json(AccesoriesInventoryCreate);
+    res.status(200).json(SizesCreate);
   } catch (error) {
     res.status(500).json({ message: error });
   }
@@ -20,25 +17,20 @@ const CreateAccesoriesInventory = async (req, res) => {
 const UpdateAccesoriesInventory = async (req, res) => {
   const { IdInventarioAccesorio } = req.params;
 
-  const {
-    Cantidad,
-    IdAccesorio,
-  } = req.body;
-
   try {
     const [result] = await AccesoriesInventory.update(
       {
         Cantidad,
-    IdAccesorio,
+        IdAccesorio,
       },
       {
-        where: { IdInventarioAccesorio },
+        where: { IdTalla },
       }
     );
-    if(result == 0){
-        res.status(404).json({ error: "inventario_accesorio no actualizado o encontrado"});
-    }else{
-        res.status(201).json({ message: "nventario_accesorio"});
+    if (result == 0) {
+      res.status(404).json({ error: "Inventario de accesorios actualizada " });
+    } else {
+      res.status(201).json({ message: "Inventario de accesorios actualizado" });
     }
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -47,26 +39,40 @@ const UpdateAccesoriesInventory = async (req, res) => {
 
 const DeleteAccesoriesInventory = async (req, res) => {
   const { IdInventarioAccesorio } = req.params;
-  const result = await AccesoriesInventory.destroy({where: { IdInventarioAccesorio } })
+  const result = await AccesoriesInventory.destroy({
+    where: { IdInventarioAccesorio },
+  });
   try {
-    if(result == 0){
-        res.status(404).json({ error: "inventario_accesorio eliminado o encontrado"});
-    }else{
-        res.status(201).json({ message: "inventario_accesorio"});
+    if (result == 0) {
+      res
+        .status(404)
+        .json({
+          error: "Inventario de accesorios no encontrado por favor valide bien los datos ingresados",
+        });
+    } else {
+      res
+        .status(201)
+        .json({ message: "tInventario de accesorios eliminado con exito" });
     }
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
-const DeleteMultipleAccesoriesInventory = async(req, res) => {
-  const IdInventarioAccesorios = req.body
-  const result = await AccesoriesInventory.destroy({where: { IdInventarioAccesorio : IdInventarioAccesorios }})
+const DeleteMultipleAccesoriesInventory = async (req, res) => {
+  const IdInventarioAccesorios = req.body;
+  const result = await AccesoriesInventory.destroy({
+    where: { IIdInventarioAccesorio: IdInventarioAccesorios },
+  });
   try {
-    if(result == 0){
-        res.status(404).json({ error: "inventario_accesorios no eliminados o encontrados"});
-    }else{
-        res.status(201).json({ message: "inventario_accesorios eliminados"});
+    if (result == 0) {
+      res
+        .status(404)
+        .json({
+          error: "Inventario de accesorios no eliminados o encontrados",
+        });
+    } else {
+      res.status(201).json({ message: "Inventario de accesorios eliminados" });
     }
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -76,12 +82,16 @@ const DeleteMultipleAccesoriesInventory = async(req, res) => {
 const FindOneAccesoriesInventoryById = async (req, res) => {
   const { IdInventarioAccesorio } = req.params;
   try {
-    const result = await AccesoriesInventory.findOne({ where: { IdInventarioAccesorio} })
-    
-    if(result == 0){
-        res.status(404).json({ error: "Accesorio_Inventario no encontrado"});
-    }else{
-        res.status(200).json({ message: result});
+    const result = await AccesoriesInventory.findOne({
+      where: { IdInventarioAccesorio },
+    });
+
+    if (result == 0) {
+      res
+        .status(404)
+        .json({ error: "Inventario de accesorios  no encontrado" });
+    } else {
+      res.status(200).json({ message: result });
     }
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -102,8 +112,8 @@ const all = {
   UpdateAccesoriesInventory,
   DeleteAccesoriesInventory,
   DeleteMultipleAccesoriesInventory,
-  FindOneAccesoriesInventoryById ,
-  FindAllAccesoriesInventory
+  FindOneAccesoriesInventoryById,
+  FindAllAccesoriesInventory,
 };
 
 module.exports = all;

@@ -1,46 +1,34 @@
-const Renting = require("../Models/renting.model");
+const ReturnRegister = require("../Models/Return_Register.model");
 
-const CreateRenting = async (req, res) => {
+const CreateReturnRegisterg = async (req, res) => {
   const {
-    FechaInicialAlquiler,
-    FechaFinlAlquiler,
-    IdTienda,
-    IdCliente   
+    IdAlquiler 
   } = req.body;
 
   try {
-    const RentingCreate = await  Renting.create({
-      FechaInicialAlquiler,
-      FechaFinlAlquiler,
-      IdTienda,
-      IdCliente  
+    const RentingReturnRegister= await  Renting.create({
+        IdAlquiler 
     });
-    res.status(200).json(RentingCreate);
+    res.status(200).json(ReturnRegisterCreate);
   } catch (error) {
     res.status(500).json({ message: error });
   }
 };
 
-const UpdateRenting = async (req, res) => {
-  const { IdAlquiler} = req.params;
+const UpdateReturnRegister= async (req, res) => {
+  const {  IdRegistroDevolucion} = req.params;
 
   const {
-    FechaInicialAlquiler,
-    FechaFinlAlquiler,
-    IdTienda,
-    IdCliente  
+    IdAlquiler 
   } = req.body;
 
   try {
-    const [result] = await Renting.update(
+    const [result] = await ReturnRegister.update(
       {
-        FechaInicialAlquiler,
-        FechaFinlAlquiler,
-        IdTienda,
-        IdCliente  
+        IdAlquiler  
       },
       {
-        where: { IdAlquiler },
+        where: {  IdRegistroDevolucion },
       }
     );
     if(result == 0){
@@ -53,9 +41,9 @@ const UpdateRenting = async (req, res) => {
   }
 };
 
-const DeleteRenting = async (req, res) => {
-  const { IdAlquiler } = req.params;
-  const result = await Renting.destroy({where: { IdAlquiler} })
+const DeleteReturnRegister = async (req, res) => {
+  const { IdRegistroDevolucion } = req.params;
+  const result = await ReturnRegister.destroy({where: {  IdRegistroDevolucion} })
   try {
     if(result == 0){
         res.status(404).json({ error: "Alquiler  eliminado o encontrado"});
@@ -67,9 +55,9 @@ const DeleteRenting = async (req, res) => {
   }
 };
 
-const DeleteMultipleRenting = async(req, res) => {
-  const IdAlquileres = req.body
-  const result = await Renting.destroy({where: {IdAlquiler: IdAlquileres }})
+const DeleteMultipleReturnRegister = async(req, res) => {
+  const  IdRegistroDevolucions = req.body
+  const result = await ReturnRegister.destroy({where: { IdRegistroDevolucion:  IdRegistroDevolucions }})
   try {
     if(result == 0){
         res.status(404).json({ error: "Alquiler  no eliminados o encontrados"});
@@ -81,10 +69,10 @@ const DeleteMultipleRenting = async(req, res) => {
   }
 };
 
-const FindOneRentingById = async (req, res) => {
-  const { IdAlquiler } = req.params;
+const FindOneReturnRegisterById = async (req, res) => {
+  const {  IdRegistroDevolucion} = req.params;
   try {
-    const result = await Renting.findOne({ where: {IdAlquiler} })
+    const result = await ReturnRegister.findOne({ where: { IdRegistroDevolucion} })
     
     if(result == 0){
         res.status(404).json({ error: "Alquiler  no encontrado"});
@@ -96,9 +84,9 @@ const FindOneRentingById = async (req, res) => {
   }
 };
 
-const FindAllRenting = async (req, res) => {
+const FindAllReturnRegister = async (req, res) => {
   try {
-    const result = await Renting.findAll();
+    const result = await ReturnRegister.findAll();
     res.status(200).json(result);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -106,12 +94,12 @@ const FindAllRenting = async (req, res) => {
 };
 
 const all = {
-  CreateRenting,
-  UpdateRenting,
-  DeleteRenting,
-  DeleteMultipleRenting,
-  FindOneRentingById ,
-  FindAllRenting 
+  CreateReturnRegisterg,
+  UpdateReturnRegister,
+  DeleteReturnRegister,
+  DeleteMultipleReturnRegister,
+  FindOneReturnRegisterById,
+  FindAllReturnRegister 
 };
 
 module.exports = all;
