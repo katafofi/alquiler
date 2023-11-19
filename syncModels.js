@@ -26,6 +26,7 @@ async function syncModels() {
   const Renting = require("./Models/renting.model.js");
   const ReturnRegisterRenting = require("./Models/Return_Register.model.js");
   const StatusEmployeEmploye = require("./Models/employe_status.model.js");
+  const RentingRefunt =require("./Models/rental_refunt.model.js");
 
   // TABLA relacional 1:M Eliminación en cascada
   Employe.hasMany(ExpensesEmploye, {
@@ -120,7 +121,7 @@ async function syncModels() {
   );
 
   Renting.hasMany(ReturnRegisterRenting, {
-    foreignKey: "IdRentig",
+    foreignKey: "IdAlquiler",
     onDelete: "RESTRICT",
   });
 
@@ -128,6 +129,16 @@ async function syncModels() {
   StatusEmployeEmploye.hasOne(Employe, {
     foreignKey: "IdEstadoEmpleado",
     sourceKey: "IdEstadoEmpleado",
+  });
+
+  RentingRefunt.belongsTo(Renting, {
+    foreignKey: "IdAlquiler",
+    onDelete: "RESTRICT",
+  });
+  
+  RentingRefunt.belongsTo(Employe, {
+    foreignKey: "IdEmpleado",
+    onDelete: "RESTRICT",
   });
 
   await database.sync({ alter: false, force: true}); // false prod y true dev

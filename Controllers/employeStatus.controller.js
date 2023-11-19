@@ -14,18 +14,13 @@ const createEmployeStatus = async (req, res) => {
 };
 
 const updateEmployeStatus = async (req, res) => {
-  const { IDIdEstadoEmpleado } = req.params;
-
+  const { IdEstadoEmpleado } = req.params;
   const { Descripcion } = req.body;
 
   try {
     const [result] = await EmployeStatus.update(
-      {
-        Descripcion,
-      },
-      {
-        where: { IDIdEstadoEmpleado },
-      }
+      { Descripcion },
+      { where: { IdEstadoEmpleado } }
     );
     if (result === 0) {
       res.status(404).json({ error: "Estado de empleado no actualizado o encontrado" });
@@ -38,9 +33,9 @@ const updateEmployeStatus = async (req, res) => {
 };
 
 const deleteEmployeStatus = async (req, res) => {
-  const { IDIdEstadoEmpleado } = req.params;
-  const result = await EmployeStatus.destroy({ where: { IDIdEstadoEmpleado } });
+  const { IdEstadoEmpleado } = req.params;
   try {
+    const result = await EmployeStatus.destroy({ where: { IdEstadoEmpleado } });
     if (result === 0) {
       res.status(404).json({ error: "Estado de empleado no eliminado o encontrado" });
     } else {
@@ -52,9 +47,9 @@ const deleteEmployeStatus = async (req, res) => {
 };
 
 const deleteMultipleEmployeStatus = async (req, res) => {
-  const IDIdEstadoEmpleados = req.body;
-  const result = await EmployeStatus.destroy({ where: { IDIdEstadoEmpleado: IDIdEstadoEmpleados } });
+  const IdEstadoEmpleados = req.body;
   try {
+    const result = await EmployeStatus.destroy({ where: { IdEstadoEmpleado: IdEstadoEmpleados } });
     if (result === 0) {
       res.status(404).json({ error: "Estados de empleado no eliminados o encontrados" });
     } else {
@@ -66,10 +61,9 @@ const deleteMultipleEmployeStatus = async (req, res) => {
 };
 
 const findOneEmployeStatusById = async (req, res) => {
-  const { IDIdEstadoEmpleado } = req.params;
+  const { IdEstadoEmpleado } = req.params;
   try {
-    const result = await EmployeStatus.findOne({ where: { IDIdEstadoEmpleado } });
-
+    const result = await EmployeStatus.findOne({ where: { IdEstadoEmpleado } });
     if (!result) {
       res.status(404).json({ error: "Estado de empleado no encontrado" });
     } else {
@@ -89,7 +83,7 @@ const findAllEmployeStatus = async (req, res) => {
   }
 };
 
-const all = {
+const employeStatusController = {
   createEmployeStatus,
   updateEmployeStatus,
   deleteEmployeStatus,
@@ -98,4 +92,4 @@ const all = {
   findAllEmployeStatus,
 };
 
-module.exports = all;
+module.exports = employeStatusController;

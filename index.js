@@ -18,8 +18,17 @@ const StoreRouter = require("./Routes/store.route");
 const PaymentTypeRouter = require("./Routes/paymentType.route");
 const StatusRegisterNegativeRouter = require("./Routes/statusRegisterNegative.route");
 const PuchareAccesoriesOrderRouter = require ("./Routes/PuchareAccesoriesOrder.route");
-const RentingRoute = require("./Routes/renting.route.js")
-
+const RentingRoute = require("./Routes/renting.route.js");
+const Accesories_inventorysRouter =require("./Routes/accesories_inventory.route");
+const EmployeStatusRouter = require("./Routes/employeStatus.route.js");
+const ItemRouter = require("./Routes/item.route.js");
+const ItemInventoryRouter = require("./Routes/itemInvetory.route.js");
+const NegativeRedcordRouter = require("./Routes/NegativeRedcord.route.js");
+const PaymentsRouter = require("./Routes/payments.route.js");
+const PuchareItemOrderRouter = require("./Routes/puchaseItemOrder.route.js");
+const PucharseOrderRouter = require("./Routes/purchaseorder.route.js");
+const ReturnRegisterRouter = require("./Routes/Return_Register.router.js");
+const RentalRefuntRouter = require("./Routes/rentalRefunt.route")
 
 const app = express();
 app.use(bodyParser.json());
@@ -48,7 +57,18 @@ app.use("/Store",StoreRouter );
 app.use("/paymentType", PaymentTypeRouter);
 app.use("/StatusRegisterNegative", StatusRegisterNegativeRouter);
 app.use("/PuchareAccesoriesOrder", PuchareAccesoriesOrderRouter);
-app.use("/renting", RentingRoute)
+app.use("/renting", RentingRoute);
+app.use("/accesories_inventory", Accesories_inventorysRouter);
+app.use("/employeStatus",EmployeStatusRouter);
+app.use("/item",ItemRouter);
+app.use("/itemInventory", ItemInventoryRouter);
+app.use("/negativeRecord", NegativeRedcordRouter);
+app.use("/payments", PaymentsRouter);
+app.use("/PuchaseItemOrder", PuchareItemOrderRouter);
+app.use("/PuchaseOrder", PucharseOrderRouter);
+app.use("/retunrRegister", ReturnRegisterRouter);
+app.use("/rentalrefurnt", RentalRefuntRouter);
+
 
 async function MigrateModels() {
   await syncModels();
@@ -70,7 +90,7 @@ async function ConnectDB() {
     await ConnectDB();
     await MigrateModels();
 
-    const port = 3001; //por si esta ocupado uno vaya al otro
+    const port = 3002; //por si esta ocupado uno vaya al otro
 
     app.listen(port, () => {
       console.log("Servidor a sido iniciado");

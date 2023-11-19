@@ -2,7 +2,7 @@ const Sequelize = require("sequelize");
 const database = require("../db.js");
 
 const RentingRefunt = database.define("RegistrosDevolucion", {
-  IdRegistroDevolucio: {
+  IdRegistroDevolucion: {
     type: Sequelize.INTEGER,
     primaryKey: true,
     autoIncrement: true,
@@ -11,14 +11,15 @@ const RentingRefunt = database.define("RegistrosDevolucion", {
     type: Sequelize.STRING(20),
     allowNull: false
 },
-FechaFinAlquiler: {
-        type: Sequelize.DATE,
-        allowNull: false  
-},
+
 IdAlquiler: {
     type: Sequelize.INTEGER,
     allowNull: false 
-}
+},
+IdEmpleado: {
+  type: Sequelize.INTEGER,
+  allowNull: false 
+},
 
 })
 

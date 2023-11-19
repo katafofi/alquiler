@@ -1,21 +1,18 @@
-import react, { useState, useEffect } from 'react';
+import React from 'react';
+import ButtonCataComponente from '../components/provider/Button/Button';
+import TitleCataComponente from '../components/provider/Title/Title';
 
 const Employe = () => {
+    // Puedes agregar el estado y efectos aquí si es necesario
 
-    const [count, setCount] = useState(0);
-
-    const increment = () => {
-        setCount(count + 1)
-    }
-    
     return (
-        <div>
-            <p style={{backgroundColor: 'black'}}>
-                Hola, catalina ganastes {count} carros
-            </p>
-            <button onClick={increment}>Increment</button>
+        <div style={{ backgroundColor: 'white' }}>
+         
+            <ButtonCataComponente type="button" disabled={true} title="Ejecutar" />
+         
+            <TitleCataComponente title="catalina " size="h6" />
         </div>
     );
 }
 
-export default Employe 
+export default Employe;

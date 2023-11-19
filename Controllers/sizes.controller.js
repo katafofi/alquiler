@@ -43,7 +43,7 @@ const UpdateSizes = async (req, res) => {
 
 const DeleteSizes = async (req, res) => {
   const { IdTalla } = req.params;
-  const result = await Sizes.destroy({where: { IdColor} })
+  const result = await Sizes.destroy({where: { IdTalla} })
   try {
     if(result == 0){
         res.status(404).json({ error: "tallaeliminado no encontrado por favor valide bien los datos ingresados"});
@@ -70,9 +70,9 @@ const DeleteMultipleSizes = async(req, res) => {
 };
 
 const FindOneSizesById = async (req, res) => {
-  const { IdColor } = req.params;
+  const { IdTalla } = req.params;
   try {
-    const result = await Sizes.findOne({ where: { IdColor} })
+    const result = await Sizes.findOne({ where: { IdTalla} })
     
     if(result == 0){
         res.status(404).json({ error: "Color  no encontrado"});

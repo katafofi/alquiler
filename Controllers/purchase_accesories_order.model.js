@@ -2,14 +2,14 @@ const PuchareAccesoriesOrder = require("../Models/purchase_accesories_order.mode
 
 const CreatePuchareAccesoriesOrder = async (req, res) => {
   const {
-    Cantidad,
+    cantidad,
     IdOrdenCompra,
     IdAccesorio	    
   } = req.body;
 
   try {
     const PuchareAccesoriesOrderCreate = await  PuchareAccesoriesOrder.create({
-        Cantidad,
+        cantidad,
     IdOrdenCompra,
     IdAccesorio	 
     });
@@ -23,7 +23,7 @@ const UpdatePuchareAccesoriesOrder= async (req, res) => {
   const {  IdAccesorioOrdenCompra } = req.params;
 
   const {
-    Cantidad,
+    cantidad,
     IdOrdenCompra,
     IdAccesorio	 
   } = req.body;
@@ -31,7 +31,7 @@ const UpdatePuchareAccesoriesOrder= async (req, res) => {
   try {
     const [result] = await PuchareAccesoriesOrder.update(
       {
-        Cantidad,
+        cantidad,
         IdOrdenCompra,
         IdAccesorio	 
       },

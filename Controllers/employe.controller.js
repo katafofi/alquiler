@@ -8,9 +8,12 @@ const CreateEmploye = async (req, res) => {
     Apellido,
     Correo,
     Direccion,
+    Cedula,
     Telefono,
     FechaNacimiento,
+    
     Fecha,
+    
   } = req.body;
 
   try {
@@ -19,6 +22,7 @@ const CreateEmploye = async (req, res) => {
       Apellido,
       Correo,
       Direccion,
+      Cedula,
       Telefono,
       FechaNacimiento,
       Fecha,
@@ -37,6 +41,7 @@ const UpdateEmploye = async (req, res) => {
     Apellido,
     Correo,
     Direccion,
+    Cedula,
     Telefono,
     FechaNacimiento,
     Fecha,
@@ -49,6 +54,7 @@ const UpdateEmploye = async (req, res) => {
         Apellido,
         Correo,
         Direccion,
+        Cedula,
         Telefono,
         FechaNacimiento,
         Fecha,

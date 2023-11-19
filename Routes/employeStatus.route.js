@@ -1,20 +1,22 @@
 const router = require('express').Router();
-const EmployeStatusController = require('../Controllers/employeStatus.controller');
+const employeStatusController = require('../Controllers/employeStatus.controller');
 
-//traer informacion
-router.get('/', EmployeStatusController.findAllEmployeStatus)
+// Obtener todos los estados de empleados
+router.get('/', employeStatusController.findAllEmployeStatus);
 
-// por seguridad se recomienda post -> crear.
-router.post('/', EmployeStatusController.createEmployeStatus)
+// Crear un nuevo estado de empleado
+router.post('/', employeStatusController.createEmployeStatus);
 
-//put actualiza todo, ejemplo si tienes [nombre: 'alex', edad: '26'] -> peticion [nombre: 'catalina'] bd [nombre: 'catalina', edad: '']
-//patch el solo actualiza lo que ud le diga.
-router.patch('/:IdEstadoEmpleado:', EmployeStatusController.updateEmployeStatus)
+// Actualizar un estado de empleado por ID
+router.patch('/:IdEstadoEmpleado', employeStatusController.updateEmployeStatus);
 
-router.delete('/:IdEstadoEmpleado:',EmployeStatusController.deleteEmployeStatus)
+// Eliminar un estado de empleado por ID
+router.delete('/:IdEstadoEmpleado', employeStatusController.deleteEmployeStatus);
 
-router.post('/delete/all',EmployeStatusController.deleteMultipleEmployeStatus)
+// Eliminar múltiples estados de empleado
+router.post('/delete/all', employeStatusController.deleteMultipleEmployeStatus);
 
-router.get('/IdEstadoEmpleado:', EmployeStatusController.findOneEmployeStatusById)
+// Obtener un estado de empleado por ID
+router.get('/:IdEstadoEmpleado', employeStatusController.findOneEmployeStatusById);
 
-module.exports = router
+module.exports = router;
