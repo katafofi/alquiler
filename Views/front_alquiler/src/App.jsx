@@ -14,7 +14,7 @@ function App() {
   <div className='App'>
     <Router>
         <NavbarCataComponente />
-        <div>
+        <div id="main-container">
           <Routes>
             <Route exact path='/employe' element={ <Employe /> }></Route>
             <Route exact path='/expense/employe' element={ <ExpenseEmploye /> }></Route>

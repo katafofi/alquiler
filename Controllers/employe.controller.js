@@ -10,9 +10,7 @@ const CreateEmploye = async (req, res) => {
     Direccion,
     Cedula,
     Telefono,
-    FechaNacimiento,
-    
-    Fecha,
+    IdEstadoEmpleado
     
   } = req.body;
 
@@ -24,8 +22,7 @@ const CreateEmploye = async (req, res) => {
       Direccion,
       Cedula,
       Telefono,
-      FechaNacimiento,
-      Fecha,
+      IdEstadoEmpleado
     });
     res.status(200).json(employeCreate);
   } catch (error) {
@@ -34,7 +31,7 @@ const CreateEmploye = async (req, res) => {
 };
 
 const UpdateEmploye = async (req, res) => {
-  const { correo } = req.params;
+  const { IdEmpleado } = req.params;
 
   const {
     Nombre,
@@ -43,8 +40,7 @@ const UpdateEmploye = async (req, res) => {
     Direccion,
     Cedula,
     Telefono,
-    FechaNacimiento,
-    Fecha,
+    IdEstadoEmpleado
   } = req.body;
 
   try {
@@ -56,11 +52,10 @@ const UpdateEmploye = async (req, res) => {
         Direccion,
         Cedula,
         Telefono,
-        FechaNacimiento,
-        Fecha,
+        IdEstadoEmpleado
       },
       {
-        where: { correo },
+        where: { IdEmpleado },
       }
     );
     if(result == 0){
@@ -74,8 +69,8 @@ const UpdateEmploye = async (req, res) => {
 };
 
 const DeleteEmploye = async (req, res) => {
-  const { correo } = req.params;
-  const result = await Employe.destroy({where: { correo } })
+  const { IdEmpleado } = req.params;
+  const result = await Employe.destroy({where: { IdEmpleado } })
   try {
     if(result == 0){
         res.status(404).json({ error: "Empleado no eliminado o encontrado"});
@@ -88,8 +83,8 @@ const DeleteEmploye = async (req, res) => {
 };
 
 const DeleteMultiple = async(req, res) => {
-  const correos = req.body
-  const result = await Employe.destroy({where: { correo: correos }})
+  const IdEmpleados = req.body
+  const result = await Employe.destroy({where: { IdEmpleado: IdEmpleados }})
   try {
     if(result == 0){
         res.status(404).json({ error: "Empleados no eliminados o encontrados"});
@@ -102,9 +97,9 @@ const DeleteMultiple = async(req, res) => {
 };
 
 const FindOneEmployeById = async (req, res) => {
-  const { correo } = req.params;
+  const { IdEmpleado} = req.params;
   try {
-    const EmployeById = await Employe.findOne({ where: { correo } })
+    const EmployeById = await Employe.findOne({ where: { IdEmpleado } })
     
     if(EmployeById == 0){
         res.status(404).json({ error: "Empleado no encontrado"});

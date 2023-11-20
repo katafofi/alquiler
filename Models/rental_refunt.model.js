@@ -11,7 +11,6 @@ const RentingRefunt = database.define("RegistrosDevolucion", {
     type: Sequelize.STRING(20),
     allowNull: false
 },
-
 IdAlquiler: {
     type: Sequelize.INTEGER,
     allowNull: false 
@@ -19,7 +18,7 @@ IdAlquiler: {
 IdEmpleado: {
   type: Sequelize.INTEGER,
   allowNull: false 
-},
+}
 
 })
 
