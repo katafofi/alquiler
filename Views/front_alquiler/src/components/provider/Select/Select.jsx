@@ -3,6 +3,7 @@ import React from "react";
 export const SelectCataComponente = ({ required, label, name, value, options, onChange }) => {
   return (
     <div className="form-group">
+       <label htmlFor={name}>{name}:</label>
       <select
         className="form-control"
         id={name}

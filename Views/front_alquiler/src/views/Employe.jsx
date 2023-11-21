@@ -5,10 +5,11 @@ import InputCataComponente from "../components/provider/Input/Input";
 import TabletCataComponente from "../components/provider/Table/Table";
 import PaginateCataComponente from "../components/provider/Paginate/Paginate";
 import { SelectCataComponente } from "../components/provider/Select/Select";
+import SearchCataComponente from "../components/provider/Search/Search";
 
 const Employe = () => {
   const [forms, setForm] = useState([]);
-  const [newEmploye, setNewEmploye] = useState({
+  const [news, setNews] = useState({
     Nombre: "",
     Apellido: "",
     Correo: "",
@@ -22,6 +23,7 @@ const Employe = () => {
   const [deletedM, setDeletedM] = useState(false);
   const [options, setOptions] = useState([]);
   const [currentPage, setCurrentPage] = useState([]);
+  const [filter, setFilter] = useState("")
 
   const PerPage = 3;
   const form = "employe";
@@ -82,7 +84,7 @@ const Employe = () => {
           setDeleted(true);
           if (selected && selected.IdEmpleado == id) {
             setSelected(null);
-            setNewEmploye({
+            setNews({
               IdEmpleado: "",
               Nombre: "",
               Apellido: "",
@@ -126,7 +128,7 @@ const Employe = () => {
 
   const handleEdit = async (employe) => {
     setSelected(employe);
-    setNewEmploye({
+    setNews({
       IdEmpleado: employe.IdEmpleado,
       Nombre: employe.Nombre,
       Apellido: employe.Apellido,
@@ -138,9 +140,8 @@ const Employe = () => {
     });
   };
 
-  const handleCreate = async (news) => {
+  const handleCreate = async () => {
     try {
-      news = newEmploye;
       const response = await fetch(`${URL}${PORT}/${form}`, {
         method: "POST",
         headers: {
@@ -150,7 +151,7 @@ const Employe = () => {
       });
       const data = await response.json();
       setForm((prev) => [...prev, data]);
-      setNewEmploye({
+      setNews({
         IdEmpleado: "",
         Nombre: "",
         Apellido: "",
@@ -165,14 +166,22 @@ const Employe = () => {
     }
   };
 
+  const handleInputSearch = (e) => {
+    const { name, value } = e.target;
+    setNews((prev) => ({ ...prev, [name]: value }));
+    if (name === "filter") {
+      setFilter(value)
+    }
+  };
+
   const handleInput = (e) => {
     const { name, value } = e.target;
-    setNewEmploye((prev) => ({ ...prev, [name]: value }));
+    setNews((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSelect = (e) => {
     const { name, value } = e.target;
-    setNewEmploye((prev) => ({
+    setNews((prev) => ({
       ...prev,
       [name]: value,
     }));
@@ -187,14 +196,14 @@ const Employe = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          IdEmpleado: newEmploye.IdEmpleado,
-          Nombre: newEmploye.Nombre,
-          Apellido: newEmploye.Apellido,
-          Correo: newEmploye.Correo,
-          Direccion: newEmploye.Direccion,
-          Cedula: newEmploye.Cedula,
-          Telefono: newEmploye.Telefono,
-          IdEstadoEmpleado: newEmploye.IdEstadoEmpleado,
+          IdEmpleado: news.IdEmpleado,
+          Nombre: news.Nombre,
+          Apellido: news.Apellido,
+          Correo: news.Correo,
+          Direccion: news.Direccion,
+          Cedula: news.Cedula,
+          Telefono: news.Telefono,
+          IdEstadoEmpleado: news.IdEstadoEmpleado,
         }),
       }
     );
@@ -205,7 +214,7 @@ const Employe = () => {
       )
     );
     setSelected(null);
-    setNewEmploye({
+    setNews({
       IdEmpleado: "",
       Nombre: "",
       Apellido: "",
@@ -245,11 +254,12 @@ const Employe = () => {
 
   const handlePageChange = (selectedPage) => {
     setCurrentPage(selectedPage);
+    setFilter("")
   };
 
   const indexOfLast = (currentPage + 1) * PerPage;
   const indexOfFirst = indexOfLast - PerPage;
-  const current = forms.slice(indexOfFirst, indexOfLast);
+  const current = forms.filter((item) => item.Cedula.toString().toLowerCase().includes(filter.toString().toLowerCase())).slice(indexOfFirst, indexOfLast);
 
   return (
     <>
@@ -257,6 +267,14 @@ const Employe = () => {
         <div className="row">
           <div className="col">
             <TitleCataComponente title="Empleados" size="h6" />
+            <SearchCataComponente 
+              value={filter}
+              onChange={handleInputSearch}
+              type={"search"}
+              name={"filter"}
+              id={"filter"}
+              placeholder={"Filtrar por Cédula"}
+            />
           </div>
         </div>
         <div className="row">
@@ -264,9 +282,9 @@ const Employe = () => {
             <form onSubmit={handleSubmit} className="mb-4">
               <div className="form-row">
                 <InputCataComponente
-                  value={newEmploye.Nombre}
+                  value={news.Nombre}
                   onChange={handleInput}
-                  placeholdel={"Ingrese nombre empleado"}
+                  placeholder={"Ingrese nombre empleado"}
                   id={"Nombre"}
                   type={"text"}
                   name={"Nombre"}
@@ -274,9 +292,9 @@ const Employe = () => {
                 />
 
                 <InputCataComponente
-                  value={newEmploye.Apellido}
+                  value={news.Apellido}
                   onChange={handleInput}
-                  placeholdel={"Ingrese apellido empleado"}
+                  placeholder={"Ingrese apellido empleado"}
                   id={"Apellido"}
                   type={"text"}
                   name={"Apellido"}
@@ -284,9 +302,9 @@ const Employe = () => {
                 />
 
                 <InputCataComponente
-                  value={newEmploye.Correo}
+                  value={news.Correo}
                   onChange={handleInput}
-                  placeholdel={"Ingrese correo empleado"}
+                  placeholder={"Ingrese correo empleado"}
                   id={"Correo"}
                   type={"text"}
                   name={"Correo"}
@@ -294,9 +312,9 @@ const Employe = () => {
                 />
 
                 <InputCataComponente
-                  value={newEmploye.Direccion}
+                  value={news.Direccion}
                   onChange={handleInput}
-                  placeholdel={"Ingrese direccion empleado"}
+                  placeholder={"Ingrese direccion empleado"}
                   id={"Direccion"}
                   type={"text"}
                   name={"Direccion"}
@@ -304,9 +322,9 @@ const Employe = () => {
                 />
 
                 <InputCataComponente
-                  value={newEmploye.Cedula}
+                  value={news.Cedula}
                   onChange={handleInput}
-                  placeholdel={"Ingrese cedula empleado"}
+                  placeholder={"Ingrese cedula empleado"}
                   id={"Cedula"}
                   type={"text"}
                   name={"Cedula"}
@@ -314,9 +332,9 @@ const Employe = () => {
                 />
 
                 <InputCataComponente
-                  value={newEmploye.Telefono}
+                  value={news.Telefono}
                   onChange={handleInput}
-                  placeholdel={"Ingrese telefono empleado"}
+                  placeholder={"Ingrese telefono empleado"}
                   id={"Telefono"}
                   type={"text"}
                   name={"Telefono"}
@@ -327,7 +345,7 @@ const Employe = () => {
                   required
                   label={"- Seleccionar un Estado empleado -"}
                   name={"IdEstadoEmpleado"}
-                  value={newEmploye.IdEstadoEmpleado}
+                  value={news.IdEstadoEmpleado}
                   options={options}
                   onChange={handleSelect}
                 />
@@ -341,6 +359,7 @@ const Employe = () => {
             </form>
           </div>
           <div className="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
+            
             <TabletCataComponente
               data={current}
               handleDelete={handleDelete}

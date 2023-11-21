@@ -15,7 +15,7 @@ const Employe = database.define('Empleados', {
         type: Sequelize.STRING(50),
         allowNull: false,
     },
-    Correo:{
+    Correo: {
         type: Sequelize.STRING(100),
         allowNull: false,
         unique: true
@@ -26,7 +26,8 @@ const Employe = database.define('Empleados', {
     },
     Cedula: {
         type: Sequelize.STRING(100),
-        allowNull: false
+        allowNull: false,
+        unique: true
     },
     Telefono: {
         type: Sequelize.STRING(20),

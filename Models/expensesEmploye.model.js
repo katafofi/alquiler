@@ -20,7 +20,7 @@ const ExpensesEmploye = database.define('GastosEmpleados', {
         allowNull: false
     }
 }, {
-    timestamps: false
+    timestamps: true
 });
   
 module.exports = ExpensesEmploye;

@@ -8,6 +8,7 @@ import NavbarCataComponente from './components/provider/Layout/Navbar/Navbar';
 import FooterCataComponente from './components/provider/Layout/Footer/Footer';
 import Employe from './views/Employe';
 import ExpenseEmploye from './views/ExpenseEmploye';
+import StatusEmploye from './views/StatusEmploye';
 
 function App() {
  return (
@@ -18,6 +19,7 @@ function App() {
           <Routes>
             <Route exact path='/employe' element={ <Employe /> }></Route>
             <Route exact path='/expense/employe' element={ <ExpenseEmploye /> }></Route>
+            <Route exact path='/status/employe' element={ <StatusEmploye /> }></Route>
           </Routes>
         </div>
         <FooterCataComponente />
