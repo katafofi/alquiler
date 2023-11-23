@@ -9,7 +9,8 @@ const Sizes = database.define('Tallas', {
     },
     Descripcion: {
         type: Sequelize.STRING(20),
-        allowNull: false
+        allowNull: false,
+        unique: true
     }
     })
     module.exports = Sizes;

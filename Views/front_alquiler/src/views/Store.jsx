@@ -7,14 +7,18 @@ import PaginateCataComponente from "../components/provider/Paginate/Paginate";
 import { SelectCataComponente } from "../components/provider/Select/Select";
 import SearchCataComponente from "../components/provider/Search/Search";
 
-
-const ExpenseEmploye = () => {
+const Store= () => {
     const [forms, setForm] = useState([]);
     const [news, setNews] = useState({
-        //IdGastoEmpleado
-        Descripcion: "",
-        Monto: "",
-        IdEmpleado: ""
+        //IdTienda
+        Descripcion:"", 
+        Nit:"",
+        Nombre:"",
+        Direccion:"",
+        Telefono:"",
+        Correo:"",
+        Logo:""
+    
     });
     const [selected, setSelected] = useState(null);
     const [deleted, setDeleted] = useState(false);
@@ -23,26 +27,23 @@ const ExpenseEmploye = () => {
     const [currentPage, setCurrentPage] = useState([]);
     const [filter, setFilter] = useState("")
 
-    const PerPage = 3;
-    const form = "expense_employe";
+    const PerPage = 10;
+    const form = "Store";
 
     const URL = "http://localhost:";
     const PORT = "3004";
 
     useEffect(() => {
         handleGet();
-        handleGetEmpleado();
       }, [selected]);
     
       useEffect(() => {
         handleGet();
-        handleGetEmpleado();
         setDeleted(false);
       }, [deleted]);
     
       useEffect(() => {
         handleGet();
-        handleGetEmpleado();
         setDeletedM(false);
       }, [deletedM]);
 
@@ -56,20 +57,6 @@ const ExpenseEmploye = () => {
         }
       };
 
-      const handleGetEmpleado = async () => {
-        try {
-          const response = await fetch(`${URL}${PORT}/employe`);
-          const data = await response.json();
-          const newOptions = data.map((element) => ({
-            value: element.IdEmpleado, //lo que selecciona en el back
-            label: element.Nombre+' '+element.Apellido+' - '+element.IdEmpleado, //lo que se ve en el selector
-          }));
-          setOptions(newOptions);
-        } catch (error) {
-          console.log(error);
-        }
-      };
-
       const handleDelete = async (id) => {
         if (window.prompt("Ingrese la credencial de autorizacion", 0) == "202312") {
           if (window.confirm("¿Estás seguro de que quieres eliminar?")) {
@@ -78,15 +65,19 @@ const ExpenseEmploye = () => {
                 method: "DELETE",
               });
               console.log(response);
-              setForm((prev) => prev.filter((info) => info.IdGastoEmpleado != id));
+              setForm((prev) => prev.filter((info) => info.IdTienda != id));
               setDeleted(true);
-              if (selected && selected.IdGastoEmpleado == id) {
+              if (selected && selected.IdTienda == id) {
                 setSelected(null);
                 setNews({
-                    IdGastoEmpleado: "",
-                    Descripcion: "",
-                    Monto: "",
-                    IdEmpleado: ""
+                  IdTienda: "",
+                  Descripcion:"",
+                  Nit:"",
+                  Nombre:"",
+                  Direccion:"",
+                  Telefono:"",
+                  Correo:"",
+                  Logo:""
                 });
               }
             } catch (error) {
@@ -123,10 +114,14 @@ const ExpenseEmploye = () => {
       const handleEdit = async (news) => {
         setSelected(news);
         setNews({
-            IdGastoEmpleado: news.IdGastoEmpleado,
+            IdTienda: news.IdTienda,
             Descripcion: news.Descripcion,
-            Monto: news.Monto,
-            IdEmpleado: news.IdEmpleado
+            Nit:news.Nit,            
+            Nombre:news.Nombre,            
+            Direccion:news.Direccion,            
+            Telefono:news.Telefono,           
+             Correo:news.Correo,            
+             Logo:news.Logo         
         });
       };
 
@@ -142,20 +137,25 @@ const ExpenseEmploye = () => {
           const data = await response.json();
           setForm((prev) => [...prev, data]);
           setNews({
-            IdGastoEmpleado: "",
-            Descripcion: "",
-            Monto: "",
-            IdEmpleado: ""
+            IdTienda: "",
+            Descripcion:"", 
+            Nit:"",
+            Nombre:"",
+            Direccion:"",
+            Telefono:"",
+            Correo:"",
+            Logo:""
+           
           });
         } catch (error) {
           console.log(error);
         }
       };
 
-      const handleInputSearch = (e) => {
-        const { name, value } = e.target;
-        setNews((prev) => ({ ...prev, [name]: value }));
-        if (name === "filter") {
+    const handleInputSearch = (e) => {
+    const { name, value } = e.target;
+       setNews((prev) => ({ ...prev, [name]: value }));
+       if (name === "filter") {
           setFilter(value)
         }
       };
@@ -175,32 +175,42 @@ const ExpenseEmploye = () => {
 
       const handleUpdate = async () => {
         const response = await fetch(
-          `${URL}${PORT}/${form}/${selected.IdGastoEmpleado}`,
+          `${URL}${PORT}/${form}/${selected.IdTienda}`,
           {
             method: "PATCH",
             headers: {
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
-                IdGastoEmpleado: news.IdGastoEmpleado,
-                Descripcion: news.Descripcion,
-                Monto: news.Monto,
-                IdEmpleado: news.IdEmpleado
+             IdTienda: news.IdTienda,
+            Descripcion: news.Descripcion,
+            Nit:news.Nit,            
+            Nombre:news.Nombre,            
+            Direccion:news.Direccion,            
+            Telefono:news.Telefono,           
+             Correo:news.Correo,            
+             Logo:news.Logo  
+               
             }),
           }
         );
         const data = await response.json();
         setForm((prev) =>
           prev.map((estado) =>
-            estado.IdGastoEmpleado == data.IdGastoEmpleado ? data : estado
+            estado.IdTienda == data.IdTienda ? data : estado
           )
         );
         setSelected(null);
-        setNewEmploye({
-            IdGastoEmpleado: "",
-            Descripcion: "",
-            Monto: "",
-            IdEmpleado: ""
+        setNews({
+            IdTienda: "",
+            Descripcion:"", 
+        Nit:"",
+        Nombre:"",
+        Direccion:"",
+        Telefono:"",
+        Correo:"",
+        Logo:""
+            
         });
       };
 
@@ -230,99 +240,134 @@ const ExpenseEmploye = () => {
         }
       };
 
-      const handlePageChange = (selectedPage) => {
+     const handlePageChange = (selectedPage) => {
         setCurrentPage(selectedPage);
         setFilter("")
       };
     
       const indexOfLast = (currentPage + 1) * PerPage;
       const indexOfFirst = indexOfLast - PerPage;
-      const current = forms.filter((item) => item.IdEmpleado.toString().toLowerCase().includes(filter.toString().toLowerCase())).slice(indexOfFirst, indexOfLast);
-
-    return (
-       <>
-       <div className="container mt-4">
-        <div className="row">
-          <div className="col">
-            <TitleCataComponente title="Empleados" size="h6" />
-            <SearchCataComponente 
-              value={filter}
-              onChange={handleInputSearch}
-              type={"search"}
-              name={"filter"}
-              id={"filter"}
-              placeholder={"Filtrar por Cédula"}
-            />
-          </div>
-        </div>
-        <div className="row">
-          <div className="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
-            <form onSubmit={handleSubmit} className="mb-4">
-              <div className="form-row">
-            
-                <InputCataComponente
-                  value={news.Descripcion}
-                  onChange={handleInput}
-                  placeholder={"Ingrese descripcion"}
-                  id={"Descripcion"}
-                  type={"text"}
-                  name={"Descripcion"}
-                  label={"Descripcion"}
-                />
-
-                <InputCataComponente
-                  value={news.Monto}
-                  onChange={handleInput}
-                  placeholder={"Ingrese monto"}
-                  id={"Monto"}
-                  type={"number"}
-                  name={"Monto"}
-                  label={"Monto"}
-                />
+      const current = forms.filter((item) => item.Descripcion.toString().toLowerCase().includes(filter.toString().toLowerCase())).slice(indexOfFirst, indexOfLast);
 
 
-                <SelectCataComponente
-                  required
-                  label={"- Seleccionar empleado -"}
-                  name={"IdEmpleado"}
-                  value={news.IdEmpleado}
-                  options={options}
-                  onChange={handleSelect}
-                />
+      return (
+        <>
+        <div className="container mt-4">
+         <div className="row">
+           <div className="col">
+             <TitleCataComponente title="tallas" size="h6" />
+             <SearchCataComponente 
+               value={filter}
+               onChange={handleInputSearch}
+               type={"search"}
+               name={"filter"}
+               id={"filter"}
+               placeholder={"Filtrar por Estado"} //no es necesario 
+             />
+           </div>
+         </div>
+         <div className="row">
+           <div className="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
+             <form onSubmit={handleSubmit} className="mb-4">
+               <div className="form-row"> 
+               
+               <InputCataComponente
+  value={news.Nit}
+  onChange={handleInput}
+  placeholder={"Ingrese NIT"}
+  id={"Nit"}
+  type={"text"}
+  name={"Nit"}
+  label={"NIT"}
+/>
+    
 
-                <ButtonCataComponente
-                  type="submit"
-                  className="btn btn-primary btn-block"
-                  title="Guardar"
-                />
-              </div>
-            </form>
-          </div>
-          <div className="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
-            <TabletCataComponente
-              data={current}
-              handleDelete={handleDelete}
-              handleEdit={handleEdit}
-              handleDeleteM={handleDeleteM}
-              idField={"IdGastoEmpleado"}
-              Fields={[
-                "Descripcion",
-                "Monto",
-                "IdEmpleado",
-                "updatedAt",
-                "createdAt"
-              ]}
-            />
-            <PaginateCataComponente
-              data={forms}
-              PerPage={PerPage}
-              handlePageChange={handlePageChange}
-            />
-          </div>
-        </div>
-      </div>
-       </>
-    );
+<InputCataComponente
+  value={news.Nit}
+  onChange={handleInput}
+  placeholder={"Ingrese NIT"}
+  id={"Nit"}
+  type={"text"}
+  name={"Nit"}
+  label={"NIT"}
+/>
+
+<InputCataComponente
+  value={news.Nombre}
+  onChange={handleInput}
+  placeholder={"Ingrese nombre de la tienda"}
+  id={"Nombre"}
+  type={"text"}
+  name={"Nombre"}
+  label={"Nombre de la Tienda"}
+/>  
+<InputCataComponente
+  value={news.Direccion}
+  onChange={handleInput}
+  placeholder={"Ingrese dirección de la tienda"}
+  id={"Direccion"}
+  type={"text"}
+  name={"Direccion"}
+  label={"Dirección de la Tienda"}
+/>           
+<InputCataComponente
+  value={news.Telefono}
+  onChange={handleInput}
+  placeholder={"Ingrese número de teléfono"}
+  id={"Telefono"}
+  type={"text"}
+  name={"Telefono"}
+  label={"Teléfono"}
+/>  
+<InputCataComponente
+  value={news.Correo}
+  onChange={handleInput}
+  placeholder={"Ingrese correo electrónico"}
+  id={"Correo"}
+  type={"email"}
+  name={"Correo"}
+  label={"Correo Electrónico"}
+/> 
+<InputCataComponente
+  value={news.Logo}
+  onChange={handleInput}
+  placeholder={"Ingrese ruta o nombre del logo"}
+  id={"Logo"}
+  type={"text"}
+  name={"Logo"}
+  label={"Logo de la Tienda"}
+/>          
+                
+                
+                 <ButtonCataComponente
+                   type="submit"
+                   className="btn btn-primary btn-block"
+                   title="Guardar"
+                 />
+               </div>
+             </form>
+           </div>
+           <div className="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
+             <TabletCataComponente
+               data={current}
+               handleDelete={handleDelete}
+               handleEdit={handleEdit}
+               handleDeleteM={handleDeleteM}
+               idField={"IdTienda"}
+               Fields={[
+                 "Descripcion",
+               ]}
+             />
+             <PaginateCataComponente
+               data={forms}
+               PerPage={PerPage}
+               handlePageChange={handlePageChange}
+             />
+           </div>
+         </div>
+       </div>
+        </>
+     );
 }
 
-export default ExpenseEmploye 
+export default Store;

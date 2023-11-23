@@ -8,6 +8,7 @@ const Clients = database.define('Clientes', {
         primaryKey: true,
         autoIncrement: true,
     },
+
     Nombre: {
         type: Sequelize.STRING(50),
         allowNull: false,
@@ -15,6 +16,11 @@ const Clients = database.define('Clientes', {
     Apellido: {
         type: Sequelize.STRING(50),
         allowNull: false,
+    },
+    Cedula: {
+        type: Sequelize.STRING(50),
+        allowNull: false,
+        unique: true
     },
     Correo: {
         type: Sequelize.STRING(100),
@@ -29,8 +35,7 @@ const Clients = database.define('Clientes', {
         type: Sequelize.STRING(20),
         allowNull: false
     },
- 
-        ReferenciaPersomalNombre: {
+    ReferenciaPersomalNombre: {
         type: Sequelize.STRING(50),
         allowNull: false
     },
@@ -39,14 +44,10 @@ const Clients = database.define('Clientes', {
         allowNull: false
     },
     fotoDocumento: {
-        type: Sequelize.STRING(255),
-        
+        type: Sequelize.BLOB('long'), // Cambié el tipo de dato a BLOB
     },
-    //no es obligatorio para el registropero si cuando valla a retirar el alquiler
-    
     fotoServicioPublico: {
-        type: Sequelize.STRING(255),
-        
+        type: Sequelize.BLOB('long'), // Cambié el tipo de dato a BLOB
     },
     Fecha: {
         type: Sequelize.DATE,
@@ -54,5 +55,7 @@ const Clients = database.define('Clientes', {
     }
 }, {
     timestamps: false
-})
+});
+
 module.exports = Clients;
+

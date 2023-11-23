@@ -90,7 +90,7 @@ async function ConnectDB() {
     await ConnectDB();
     await MigrateModels();
 
-    const port = 3002; //por si esta ocupado uno vaya al otro
+    const port = 3004; //por si esta ocupado uno vaya al otro
 
     app.listen(port, () => {
       console.log("Servidor a sido iniciado");
