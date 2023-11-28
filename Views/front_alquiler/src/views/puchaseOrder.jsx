@@ -7,44 +7,47 @@ import PaginateCataComponente from "../components/provider/Paginate/Paginate";
 import { SelectCataComponente } from "../components/provider/Select/Select";
 import SearchCataComponente from "../components/provider/Search/Search";
 
-const Employe = () => {
+const PuchaseOrder = () => {
   const [forms, setForm] = useState([]);
   const [news, setNews] = useState({
-    Nombre: "",
-    Apellido: "",
-    Correo: "",
-    Direccion: "",
-    Cedula: "",
-    Telefono: "",
-    IdEstadoEmpleado: "",
+    //IdOrdenCompra
+    FechaCompra: "",
+    IdAlquiler: "",
+    IdEmpleado: "",
   });
   const [selected, setSelected] = useState(null);
   const [deleted, setDeleted] = useState(false);
   const [deletedM, setDeletedM] = useState(false);
   const [options, setOptions] = useState([]);
+  const [options2, setOptions2] = useState([]);
   const [currentPage, setCurrentPage] = useState([]);
+  const [optionsSelectedFilter, setOptionsSelectedFilter] = useState([]);
+  const [optionSelectFilter, setOptionSelectFilter] = useState("");
   const [filter, setFilter] = useState("")
 
   const PerPage = 10;
-  const form = "employe";
+  const form = "PuchaseOrder";
 
   const URL = "http://localhost:";
   const PORT = "3003";
 
   useEffect(() => {
     handleGet();
-    handleGetEstadoEmpleado();
+    handleGetAlquiler();
+    handleGetEmpleado();
   }, [selected]);
 
   useEffect(() => {
     handleGet();
-    handleGetEstadoEmpleado();
+    handleGetAlquiler();
+    handleGetEmpleado();
     setDeleted(false);
   }, [deleted]);
 
   useEffect(() => {
     handleGet();
-    handleGetEstadoEmpleado();
+    handleGetAlquiler();
+    handleGetEmpleado();
     setDeletedM(false);
   }, [deletedM]);
 
@@ -53,18 +56,57 @@ const Employe = () => {
       const response = await fetch(`${URL}${PORT}/${form}`);
       const data = await response.json();
       setForm(data);
+      const availableOptions = ["IdOrdenCompra", "FechaCompra", "IdEmpleado", "IdAlquiler"];
+      const newOptionsSelectedFilter = availableOptions.map(option => ({
+        value: option,
+        label: option,
+      }));
+      setOptionsSelectedFilter(newOptionsSelectedFilter);
     } catch (error) {
       console.log(error);
     }
   };
 
-  const handleGetEstadoEmpleado = async () => {
+  const handleGetOneTienda = async (IdTienda) => {
+    const response = await fetch(`${URL}${PORT}/Store/${IdTienda}`);
+    const data = await response.json();
+    return data.message.Nombre + " " + data.message.Nit;
+  };
+
+  const handleGetOneCliente = async (IdCliente) => {
+    const response = await fetch(`${URL}${PORT}/clients/${IdCliente}`);
+    const data = await response.json();
+    return data.message.Nombre + " " + data.message.Apellido;
+  };
+
+  const handleGetAlquiler = async () => {
     try {
-      const response = await fetch(`${URL}${PORT}/employeStatus`);
+      const response = await fetch(`${URL}${PORT}/renting`);
+      const data = await response.json();
+      const newOptions = await Promise.all(
+        data.map(async (element) => {
+          const client = await handleGetOneCliente(element.IdCliente);
+          const tienda = await handleGetOneTienda(element.IdTienda);
+          return {
+            value: element.IdAlquiler,
+            label: `${client} - ${tienda} - ${element.IdAlquiler}`,
+          };
+        })
+      );
+      setOptions2(newOptions);
+    } catch (error) {
+      console.error("Error in handleGetAlquiler:", error);
+    }
+  };
+
+  const handleGetEmpleado = async () => {
+    try {
+      const response = await fetch(`${URL}${PORT}/employe`);
       const data = await response.json();
       const newOptions = data.map((element) => ({
-        value: element.IdEstadoEmpleado,
-        label: element.Descripcion,
+        value: element.IdEmpleado, //lo que selecciona en el back
+        label:
+          element.Nombre + " " + element.Apellido + " - " + element.IdEmpleado, //lo que se ve en el selector
       }));
       setOptions(newOptions);
     } catch (error) {
@@ -80,19 +122,15 @@ const Employe = () => {
             method: "DELETE",
           });
           console.log(response);
-          setForm((prev) => prev.filter((info) => info.IdEmpleado != id));
+          setForm((prev) => prev.filter((info) => info.IdOrdenCompra != id));
           setDeleted(true);
-          if (selected && selected.IdEmpleado == id) {
+          if (selected && selected.IdOrdenCompra == id) {
             setSelected(null);
             setNews({
+              IdOrdenCompra: "",
+              FechaCompra: "",
+              IdAlquiler: "",
               IdEmpleado: "",
-              Nombre: "",
-              Apellido: "",
-              Correo: "",
-              Direccion: "",
-              Cedula: "",
-              Telefono: "",
-              IdEstadoEmpleado: "",
             });
           }
         } catch (error) {
@@ -126,17 +164,13 @@ const Employe = () => {
     }
   };
 
-  const handleEdit = async (employe) => {
-    setSelected(employe);
+  const handleEdit = async (news) => {
+    setSelected(news);
     setNews({
-      IdEmpleado: employe.IdEmpleado,
-      Nombre: employe.Nombre,
-      Apellido: employe.Apellido,
-      Correo: employe.Correo,
-      Direccion: employe.Direccion,
-      Cedula: employe.Cedula,
-      Telefono: employe.Telefono,
-      IdEstadoEmpleado: employe.IdEstadoEmpleado,
+      IdOrdenCompra: news.IdOrdenCompra,
+      FechaCompra: news.FechaCompra,
+      IdAlquiler: news.IdAlquiler,
+      IdEmpleado: news.IdEmpleado,
     });
   };
 
@@ -152,14 +186,10 @@ const Employe = () => {
       const data = await response.json();
       setForm((prev) => [...prev, data]);
       setNews({
+        IdOrdenCompra: "",
+        FechaCompra: "",
+        IdAlquiler: "",
         IdEmpleado: "",
-        Nombre: "",
-        Apellido: "",
-        Correo: "",
-        Direccion: "",
-        Cedula: "",
-        Telefono: "",
-        IdEstadoEmpleado: "",
       });
     } catch (error) {
       console.log(error);
@@ -170,7 +200,7 @@ const Employe = () => {
     const { name, value } = e.target;
     setNews((prev) => ({ ...prev, [name]: value }));
     if (name === "filter") {
-      setFilter(value)
+      setFilter(value);
     }
   };
 
@@ -189,40 +219,32 @@ const Employe = () => {
 
   const handleUpdate = async () => {
     const response = await fetch(
-      `${URL}${PORT}/${form}/${selected.IdEmpleado}`,
+      `${URL}${PORT}/${form}/${selected.IdOrdenCompra}`,
       {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
+          IdOrdenCompra: news.IdOrdenCompra,
+          FechaCompra: news.FechaCompra,
+          IdAlquiler: news.IdAlquiler,
           IdEmpleado: news.IdEmpleado,
-          Nombre: news.Nombre,
-          Apellido: news.Apellido,
-          Correo: news.Correo,
-          Direccion: news.Direccion,
-          Cedula: news.Cedula,
-          Telefono: news.Telefono,
-          IdEstadoEmpleado: news.IdEstadoEmpleado,
         }),
       }
     );
     const data = await response.json();
     setForm((prev) =>
       prev.map((estado) =>
-        estado.IdEstadoEmpleado == data.IdEstadoEmpleado ? data : estado
+        estado.IdOrdenCompra == data.IdOrdenCompra ? data : estado
       )
     );
     setSelected(null);
-    setNews({
+    setNewEmploye({
+      IdOrdenCompra: "",
+      FechaCompra: "",
+      IdAlquiler: "",
       IdEmpleado: "",
-      Nombre: "",
-      Apellido: "",
-      Correo: "",
-      Direccion: "",
-      Cedula: "",
-      Telefono: "",
-      IdEstadoEmpleado: "",
     });
   };
 
@@ -254,26 +276,41 @@ const Employe = () => {
 
   const handlePageChange = (selectedPage) => {
     setCurrentPage(selectedPage);
-    setFilter("")
+    setFilter("");
   };
 
   const indexOfLast = (currentPage + 1) * PerPage;
   const indexOfFirst = indexOfLast - PerPage;
-  const current = forms.filter((item) => item.Cedula.toString().toLowerCase().includes(filter.toString().toLowerCase())).slice(indexOfFirst, indexOfLast);
+  const current = forms
+    .filter((item) => 
+      item.IdOrdenCompra.toString().toLowerCase().includes(filter.toString().toLowerCase())
+    ).slice(indexOfFirst, indexOfLast);
+  //const current = forms.filter((item) => item.IdAlquiler.toString().toLowerCase().includes(filter.toString().toLowerCase())).slice(indexOfFirst, indexOfLast)
 
   return (
     <>
       <div className="container mt-4">
         <div className="row">
           <div className="col">
-            <TitleCataComponente title="Empleados" size="h6" />
-            <SearchCataComponente 
+            <TitleCataComponente title="Orden Compra" size="h6" />
+            
+            <SelectCataComponente
+              required
+              style={{ 'width': '100px'}}
+              label={"- Seleccionar un campo -"}
+              name={"Campos a filtrar"}
+              value={optionSelectFilter}
+              options={optionsSelectedFilter}
+              onChange={handleSelect}
+            />
+            
+            <SearchCataComponente
               value={filter}
               onChange={handleInputSearch}
               type={"search"}
               name={"filter"}
               id={"filter"}
-              placeholder={"Filtrar por Cédula"}
+              placeholder={"Filtrar por orden compra"}
             />
           </div>
         </div>
@@ -282,74 +319,31 @@ const Employe = () => {
             <form onSubmit={handleSubmit} className="mb-4">
               <div className="form-row">
                 <InputCataComponente
-                  value={news.Nombre}
+                  value={news.FechaCompra}
                   onChange={handleInput}
-                  placeholder={"Ingrese nombre empleado"}
-                  id={"Nombre"}
-                  type={"text"}
-                  name={"Nombre"}
-                  label={"Nombre"}
-                />
-
-                <InputCataComponente
-                  value={news.Apellido}
-                  onChange={handleInput}
-                  placeholder={"Ingrese apellido empleado"}
-                  id={"Apellido"}
-                  type={"text"}
-                  name={"Apellido"}
-                  label={"Apellido"}
-                />
-
-                <InputCataComponente
-                  value={news.Correo}
-                  onChange={handleInput}
-                  placeholder={"Ingrese correo empleado"}
-                  id={"Correo"}
-                  type={"text"}
-                  name={"Correo"}
-                  label={"Correo"}
-                />
-
-                <InputCataComponente
-                  value={news.Direccion}
-                  onChange={handleInput}
-                  placeholder={"Ingrese direccion empleado"}
-                  id={"Direccion"}
-                  type={"text"}
-                  name={"Direccion"}
-                  label={"Direccion"}
-                />
-
-                <InputCataComponente
-                  value={news.Cedula}
-                  onChange={handleInput}
-                  placeholder={"Ingrese cedula empleado"}
-                  id={"Cedula"}
-                  type={"text"}
-                  name={"Cedula"}
-                  label={"Cedula"}
-                />
-
-                <InputCataComponente
-                  value={news.Telefono}
-                  onChange={handleInput}
-                  placeholder={"Ingrese telefono empleado"}
-                  id={"Telefono"}
-                  type={"text"}
-                  name={"Telefono"}
-                  label={"Telefono"}
+                  placeholder={"Ingrese FechaCompra"}
+                  id={"FechaCompra"}
+                  type={"date"}
+                  name={"FechaCompra"}
+                  label={"FechaCompra"}
                 />
 
                 <SelectCataComponente
                   required
-                  label={"- Seleccionar un Estado empleado -"}
-                  name={"IdEstadoEmpleado"}
-                  value={news.IdEstadoEmpleado}
+                  label={"- Seleccionar empleado -"}
+                  name={"IdEmpleado"}
+                  value={news.IdEmpleado}
                   options={options}
                   onChange={handleSelect}
                 />
-
+                <SelectCataComponente
+                  required
+                  label={"- Seleccionar alquiler -"}
+                  name={"IdAlquiler"}
+                  value={news.IdAlquiler}
+                  options={options2}
+                  onChange={handleSelect}
+                />
                 <ButtonCataComponente
                   type="submit"
                   className="btn btn-primary btn-block"
@@ -359,21 +353,19 @@ const Employe = () => {
             </form>
           </div>
           <div className="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
-            
             <TabletCataComponente
               data={current}
               handleDelete={handleDelete}
               handleEdit={handleEdit}
               handleDeleteM={handleDeleteM}
-              idField={"IdEmpleado"}
+              idField={" IdOrdenCompra"}
               Fields={[
-                "Nombre",
-                "Apellido",
-                "Correo",
-                "Direccion",
-                "Cedula",
-                "Telefono",
-                "IdEstadoEmpleado",
+                "FechaCompra",
+                "IdAlquiler",
+                "IdEmpleado",
+                "IdOrdenCompra",
+                "createdAt",
+                "updatedAt",
               ]}
             />
             <PaginateCataComponente
@@ -388,4 +380,4 @@ const Employe = () => {
   );
 };
 
-export default Employe;
+export default PuchaseOrder;

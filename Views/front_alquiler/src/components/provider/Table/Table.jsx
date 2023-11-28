@@ -59,11 +59,12 @@ const TabletCataComponente = ({
                 </td>
                 {Fields.map((e) => (
                 <td>
-                  {provider[e] == 1
+                  { e == 'IdEstadoEmpleado' ? provider[e] == 1
                     ? <p style={{backgroundColor: 'green', Color: 'white'}}>Activo</p>
                     : provider[e] == 2
                     ?  <p style={{backgroundColor: 'red', Color: 'white'}}>Inactivo</p>
-                    : provider[e]}
+                    : provider[e] : provider[e]}
+                    
                 </td>
               ))}
                 <td>

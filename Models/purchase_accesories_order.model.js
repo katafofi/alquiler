@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize');
 const database = require('../db.js');
 
-const PuchareAccesoriesOrder = database.define('AccesoriosOrdenCompra', {
+const PuchaseAccesoriesOrder = database.define('AccesoriosOrdenCompra', {
 
     IdAccesorioOrdenCompra: {
         type: Sequelize.INTEGER,
@@ -21,4 +21,4 @@ const PuchareAccesoriesOrder = database.define('AccesoriosOrdenCompra', {
         allowNull: false,
     }
 })
-module.exports = PuchareAccesoriesOrder;
+module.exports = PuchaseAccesoriesOrder;

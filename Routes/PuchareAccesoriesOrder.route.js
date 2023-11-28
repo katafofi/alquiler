@@ -1,20 +1,20 @@
 const router = require('express').Router();
-const PuchareAccesoriesOrderController = require('../Controllers/purchase_accesories_order.model');
+const PuchaseAccesoriesOrderController = require('../Controllers/purchase_accesories_order.model');
 
 //traer informacion
-router.get('/',PuchareAccesoriesOrderController. FindAllPuchareAccesoriesOrder)
+router.get('/',PuchaseAccesoriesOrderController. FindAllPuchaseAccesoriesOrder)
 
 // por seguridad se recomienda post -> crear.
-router.post('/', PuchareAccesoriesOrderController.CreatePuchareAccesoriesOrder)
+router.post('/', PuchaseAccesoriesOrderController.CreatePuchaseAccesoriesOrder)
 
 //put actualiza todo, ejemplo si tienes [nombre: 'alex', edad: '26'] -> peticion [nombre: 'catalina'] bd [nombre: 'catalina', edad: '']
 //patch el solo actualiza lo que ud le diga.
-router.patch('/:IdAccesorioOrdenCompra:', PuchareAccesoriesOrderController.UpdatePuchareAccesoriesOrder )
+router.patch('/:IdAccesorioOrdenCompra:', PuchaseAccesoriesOrderController.UpdatePuchaseAccesoriesOrder )
 
-router.delete('/:IdAccesorioOrdenCompra:', PuchareAccesoriesOrderController.DeleteMultiplePuchareAccesoriesOrder)
+router.delete('/:IdAccesorioOrdenCompra:', PuchaseAccesoriesOrderController.DeleteMultiplePuchaseAccesoriesOrder)
 
-router.post('/delete/all',PuchareAccesoriesOrderController.DeleteMultiplePuchareAccesoriesOrder)
+router.post('/delete/all',PuchaseAccesoriesOrderController.DeleteMultiplePuchaseAccesoriesOrder)
 
-router.get('/:IdAccesorioOrdenCompra:', PuchareAccesoriesOrderController.FindOnePuchareAccesoriesOrderById)
+router.get('/:IdAccesorioOrdenCompra:', PuchaseAccesoriesOrderController.FindOnePuchaseAccesoriesOrderById)
 
 module.exports = router

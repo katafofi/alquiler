@@ -3,7 +3,7 @@ const database = require('../db.js');
 
 const Clients = database.define('Clientes', {
 
-    Idcliente: {
+    IdCliente: {
         type: Sequelize.INTEGER,
         primaryKey: true,
         autoIncrement: true,
@@ -35,13 +35,14 @@ const Clients = database.define('Clientes', {
         type: Sequelize.STRING(20),
         allowNull: false
     },
-    ReferenciaPersomalNombre: {
+    ReferenciaPersonalNombre: { 
         type: Sequelize.STRING(50),
         allowNull: false
     },
-    ReferenciaPersomaltelefono: {
+    ReferenciaPersonalTelefono: { 
         type: Sequelize.STRING(20),
         allowNull: false
+        
     },
     fotoDocumento: {
         type: Sequelize.BLOB('long'), // Cambié el tipo de dato a BLOB
@@ -58,4 +59,3 @@ const Clients = database.define('Clientes', {
 });
 
 module.exports = Clients;
-

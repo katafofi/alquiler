@@ -1,6 +1,6 @@
-const PuchareAccesoriesOrder = require("../Models/purchase_accesories_order.model");
+const PuchaseAccesoriesOrder = require("../Models/purchase_accesories_order.model");
 
-const CreatePuchareAccesoriesOrder = async (req, res) => {
+const CreatePuchaseAccesoriesOrder = async (req, res) => {
   const {
     cantidad,
     IdOrdenCompra,
@@ -8,18 +8,18 @@ const CreatePuchareAccesoriesOrder = async (req, res) => {
   } = req.body;
 
   try {
-    const PuchareAccesoriesOrderCreate = await  PuchareAccesoriesOrder.create({
+    const PuchaseAccesoriesOrderCreate = await  PuchaseAccesoriesOrder.create({
         cantidad,
     IdOrdenCompra,
     IdAccesorio	 
     });
-    res.status(200).json(PuchareAccesoriesOrderCreate);
+    res.status(200).json(PuchaseAccesoriesOrderCreate);
   } catch (error) {
     res.status(500).json({ message: error });
   }
 };
 
-const UpdatePuchareAccesoriesOrder= async (req, res) => {
+const UpdatePuchaseAccesoriesOrder= async (req, res) => {
   const {  IdAccesorioOrdenCompra } = req.params;
 
   const {
@@ -29,7 +29,7 @@ const UpdatePuchareAccesoriesOrder= async (req, res) => {
   } = req.body;
 
   try {
-    const [result] = await PuchareAccesoriesOrder.update(
+    const [result] = await PuchaseAccesoriesOrder.update(
       {
         cantidad,
         IdOrdenCompra,
@@ -49,9 +49,9 @@ const UpdatePuchareAccesoriesOrder= async (req, res) => {
   }
 };
 
-const DeletePuchareAccesoriesOrder = async (req, res) => {
+const DeletePuchaseAccesoriesOrder = async (req, res) => {
   const {  IdAccesorioOrdenCompra } = req.params;
-  const result = await PuchareAccesoriesOrder.destroy({where: {  IdAccesorioOrdenCompra } })
+  const result = await PuchaseAccesoriesOrder.destroy({where: {  IdAccesorioOrdenCompra } })
   try {
     if(result == 0){
         res.status(404).json({ error: "accesorio orden compra eliminado o encontrado"});
@@ -63,9 +63,9 @@ const DeletePuchareAccesoriesOrder = async (req, res) => {
   }
 };
 
-const DeleteMultiplePuchareAccesoriesOrder = async(req, res) => {
+const DeleteMultiplePuchaseAccesoriesOrder = async(req, res) => {
   const  IdAccesorioOrdenCompras = req.body
-  const result = await PuchareAccesoriesOrder.destroy({where: {  IdAccesorioOrdenCompra :  IdAccesorioOrdenCompras }})
+  const result = await PuchaseAccesoriesOrder.destroy({where: {  IdAccesorioOrdenCompra :  IdAccesorioOrdenCompras }})
   try {
     if(result == 0){
         res.status(404).json({ error: "accesorio orden compra no eliminados o encontrados"});
@@ -77,10 +77,10 @@ const DeleteMultiplePuchareAccesoriesOrder = async(req, res) => {
   }
 };
 
-const FindOnePuchareAccesoriesOrderById = async (req, res) => {
+const FindOnePuchaseAccesoriesOrderById = async (req, res) => {
   const {  IdAccesorioOrdenCompra } = req.params;
   try {
-    const result = await PuchareAccesoriesOrder.findOne({ where: {  IdAccesorioOrdenCompra} })
+    const result = await PuchaseAccesoriesOrder.findOne({ where: {  IdAccesorioOrdenCompra} })
     
     if(result == 0){
         res.status(404).json({ error: "Accesorio_Inventario no encontrado"});
@@ -92,9 +92,9 @@ const FindOnePuchareAccesoriesOrderById = async (req, res) => {
   }
 };
 
-const FindAllPuchareAccesoriesOrder = async (req, res) => {
+const FindAllPuchaseAccesoriesOrder = async (req, res) => {
   try {
-    const result = await PuchareAccesoriesOrder.findAll();
+    const result = await PuchaseAccesoriesOrder.findAll();
     res.status(200).json(result);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -102,12 +102,12 @@ const FindAllPuchareAccesoriesOrder = async (req, res) => {
 };
 
 const all = {
-  CreatePuchareAccesoriesOrder,
-  UpdatePuchareAccesoriesOrder,
-  DeletePuchareAccesoriesOrder,
-  DeleteMultiplePuchareAccesoriesOrder,
-  FindOnePuchareAccesoriesOrderById ,
-  FindAllPuchareAccesoriesOrder
+  CreatePuchaseAccesoriesOrder,
+  UpdatePuchaseAccesoriesOrder,
+  DeletePuchaseAccesoriesOrder,
+  DeleteMultiplePuchaseAccesoriesOrder,
+  FindOnePuchaseAccesoriesOrderById ,
+  FindAllPuchaseAccesoriesOrder
 };
 
 module.exports = all;

@@ -26,7 +26,7 @@ const Accesories = () => {
     const form = "Accesories";
 
     const URL = "http://localhost:";
-    const PORT = "3004";
+    const PORT = "3003";
 
     useEffect(() => {
         handleGet();
@@ -226,7 +226,7 @@ const Accesories = () => {
         <div className="container mt-4">
          <div className="row">
            <div className="col">
-             <TitleCataComponente title="tallas" size="h6" />
+             <TitleCataComponente title="Accesorios" size="h6" />
              <SearchCataComponente 
                value={filter}
                onChange={handleInputSearch}
@@ -283,6 +283,7 @@ const Accesories = () => {
                idField={"IdAccesorio"}
                Fields={[
                  "Descripcion",
+                 "PrecioAccesorio"
                ]}
              />
              <PaginateCataComponente

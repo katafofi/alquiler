@@ -25,7 +25,7 @@ const Sizes = () => {
     const form = "Sizes";
 
     const URL = "http://localhost:";
-    const PORT = "3004";
+    const PORT = "3003";
 
     useEffect(() => {
         handleGet();

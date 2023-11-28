@@ -8,7 +8,7 @@ async function syncModels() {
   const RentingClientsStore = require("./Models/renting.model");
   const PuchaseOrderEmployeRenting = require("./Models/purchase_order.model");
   const Accesories = require("./Models/accesories.model");
-  const AccesoriesInventoryAccesories = require("./Models/accesories_inventory.model");
+  const AccesoriesInventoryAccesories = require("./Models/accesoriesInventory.model.js");
   const Item = require("./Models/item.model");
   const ItemInventoryItem = require("./Models/item_Inventory.model.js");
   const PuchaseAccesoriesOrderAccesoriesPuchaseOrder = require("./Models/purchase_accesories_order.model");

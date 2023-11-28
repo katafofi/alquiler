@@ -26,7 +26,7 @@ const PaymentType = () => {
     const form = "PaymentType";
 
     const URL = "http://localhost:";
-    const PORT = "3004";
+    const PORT = "3003";
 
     useEffect(() => {
         handleGet();

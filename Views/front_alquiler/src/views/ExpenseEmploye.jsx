@@ -23,11 +23,11 @@ const ExpenseEmploye = () => {
     const [currentPage, setCurrentPage] = useState([]);
     const [filter, setFilter] = useState("")
 
-    const PerPage = 3;
+    const PerPage = 10;
     const form = "expense_employe";
 
     const URL = "http://localhost:";
-    const PORT = "3004";
+    const PORT = "3003";
 
     useEffect(() => {
         handleGet();
@@ -244,7 +244,7 @@ const ExpenseEmploye = () => {
        <div className="container mt-4">
         <div className="row">
           <div className="col">
-            <TitleCataComponente title="Empleados" size="h6" />
+            <TitleCataComponente title="Gastos empleados" size="h6" />
             <SearchCataComponente 
               value={filter}
               onChange={handleInputSearch}

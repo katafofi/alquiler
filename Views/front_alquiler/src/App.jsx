@@ -17,6 +17,11 @@ import Sizes from './views/Sizes';
 import PaymentType from './views/PaymentType';
 import Accesories from './views/Accesories';
 import Store from './views/Store';
+import PuchaseAccesoriesOrder from './views/PuchaseAccesoriesOrder';
+import PuchaseOrder from './views/puchaseOrder';
+import AccesoriesInventory from './views/accesoriesInventory';
+
+
 
 
 
@@ -41,7 +46,10 @@ function App() {
            <Route exact path='/payment/type' element= { < PaymentType />}></Route>
            <Route exact path='/accesories' element= { < Accesories />}></Route>
            <Route exact path='/store' element= { < Store />}></Route>  
-                       </Routes>
+           <Route exact path='/puchase/accesories/order' element={ < PuchaseAccesoriesOrder  />}></Route> 
+           <Route exact path='/puchase/order' element= { < PuchaseOrder />}></Route>
+           <Route exact path='/accesories/inventory' element= { < AccesoriesInventory />}></Route>
+         </Routes>
         </div>
         <FooterCataComponente />
     </Router>

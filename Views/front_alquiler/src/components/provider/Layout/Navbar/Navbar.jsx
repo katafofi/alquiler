@@ -57,7 +57,15 @@ const NavbarCataComponente = () => {
                             <li className="nav-item">
                                 <Link to={'/store'}>Tienda</Link>
                             </li>
-                           
+                            <li className="nav-item">
+                                <Link to={'/puchase/accesories/order'}>Orden compra Accesorios</Link>
+                            </li>
+                            <li className="nav-item">
+                                <Link to={'/puchase/order'}>Orden compra </Link>
+                            </li>
+                            <li className="nav-item">
+                                <Link to={'/accesories/inventory'}>Invetario Accesorios </Link>
+                            </li>
                            
                         </ul>
                     </div>

@@ -7,7 +7,7 @@ const syncModels = require("./syncModels");
 //aca agregas mas rutas
 const EmployeRouter = require("./Routes/employe.route");
 const ExpenseEmployeRouter = require("./Routes/expenseEmploye.route");
-const InvetarioAccesoriosRouter = require("./Routes/accesories_inventory.route");
+const InvetarioAccesoriosRouter = require("./Routes/accesoriesInventory.route.js");
 const AccesoriesRouter = require("./Routes/accesories.route");
 const CategorysRouter = require("./Routes/Categorys.route");
 const ClientsRouter = require("./Routes/clients.route");
@@ -17,9 +17,9 @@ const SizesRouter = require("./Routes/sizes.route");
 const StoreRouter = require("./Routes/store.route");
 const PaymentTypeRouter = require("./Routes/paymentType.route");
 const StatusRegisterNegativeRouter = require("./Routes/statusRegisterNegative.route");
-const PuchareAccesoriesOrderRouter = require ("./Routes/PuchareAccesoriesOrder.route");
+const PuchaseAccesoriesOrderRouter = require ("./Routes/PuchareAccesoriesOrder.route.js");
 const RentingRoute = require("./Routes/renting.route.js");
-const Accesories_inventorysRouter =require("./Routes/accesories_inventory.route");
+const AccesoriesInventorysRouter = require("./Routes/accesoriesInventory.route");
 const EmployeStatusRouter = require("./Routes/employeStatus.route.js");
 const ItemRouter = require("./Routes/item.route.js");
 const ItemInventoryRouter = require("./Routes/itemInvetory.route.js");
@@ -56,9 +56,9 @@ app.use("/sizes", SizesRouter);
 app.use("/Store",StoreRouter );
 app.use("/paymentType", PaymentTypeRouter);
 app.use("/StatusRegisterNegative", StatusRegisterNegativeRouter);
-app.use("/PuchareAccesoriesOrder", PuchareAccesoriesOrderRouter);
+app.use("/PuchaseAccesoriesOrder", PuchaseAccesoriesOrderRouter);
 app.use("/renting", RentingRoute);
-app.use("/accesories_inventory", Accesories_inventorysRouter);
+app.use("/accesoriesInventory", AccesoriesInventorysRouter);
 app.use("/employeStatus",EmployeStatusRouter);
 app.use("/item",ItemRouter);
 app.use("/itemInventory", ItemInventoryRouter);
@@ -90,7 +90,7 @@ async function ConnectDB() {
     await ConnectDB();
     await MigrateModels();
 
-    const port = 3004; //por si esta ocupado uno vaya al otro
+    const port = 3003; //por si esta ocupado uno vaya al otro
 
     app.listen(port, () => {
       console.log("Servidor a sido iniciado");

@@ -7,11 +7,14 @@ import PaginateCataComponente from "../components/provider/Paginate/Paginate";
 import { SelectCataComponente } from "../components/provider/Select/Select";
 import SearchCataComponente from "../components/provider/Search/Search";
 
-const StatusEmploye = () => {
+
+const PuchaseAccesoriesOrder= () => {
     const [forms, setForm] = useState([]);
     const [news, setNews] = useState({
-        // IdEstadoEmpleado
-        Descripcion: ""
+        // IdAccesorioOrdenCompra
+        cantidad: "",
+        IdOrdenCompra:"",
+        IdAccesorio:""
     
     });
     const [selected, setSelected] = useState(null);
@@ -22,30 +25,61 @@ const StatusEmploye = () => {
     const [filter, setFilter] = useState("")
 
     const PerPage = 10;
-    const form = "employeStatus";
+    const form = "PuchaseAccesoriesOrder";
 
     const URL = "http://localhost:";
     const PORT = "3003";
 
     useEffect(() => {
         handleGet();
+        handleGetOrdenCompra();
+        handleGetAccesorios();
       }, [selected]);
     
       useEffect(() => {
         handleGet();
+        handleGetOrdenCompra();
+        handleGetAccesorios();
         setDeleted(false);
       }, [deleted]);
     
       useEffect(() => {
         handleGet();
+        handleGetOrdenCompra();
+        handleGetAccesorios();
         setDeletedM(false);
       }, [deletedM]);
 
       const handleGet = async () => {
         try {
-          const response = await fetch(`${URL}${PORT}/${form}`);
+          const response = await fetch(`${URL}${PORT}${form}`);
           const data = await response.json();
-          setForm(data);
+          } catch (error) {
+          console.error(error);
+        }
+      };
+      const handleGetOrdenCompra = async () => {
+        try {
+          const response = await fetch(`${URL}${PORT}/orden/compra`);
+          const data = await response.json();
+          const newOptions = data.map((element) => ({
+            value: element.IdOrdenCompra, //lo que selecciona en el back
+            label: element.FechaCompra+' - '+element.IdOrdenCompra //lo que se ve en el selector
+          }));
+          setOptions(newOptions);
+        } catch (error) {
+          console.log(error);
+        }
+      };
+      const handleGetAccesorios = async () => {
+        try {
+          const response = await fetch(`${URL}${PORT}/accesories`);
+          const data = await response.json();
+          const newOptions = data.map((element) => ({
+            value: element.IdAccesorio, //lo que selecciona en el back
+            label: element.Descripcion+' - '+element.IdOrdenCompra //lo que se ve en el selector
+          }));
+          setOptions(newOptions);
         } catch (error) {
           console.log(error);
         }
@@ -59,13 +93,15 @@ const StatusEmploye = () => {
                 method: "DELETE",
               });
               console.log(response);
-              setForm((prev) => prev.filter((info) => info.IdEstadoEmpleado != id));
+              setForm((prev) => prev.filter((info) => info.IdAccesorioOrdenCompra != id));
               setDeleted(true);
-              if (selected && selected.IdEstadoEmpleado == id) {
+              if (selected && selected.IdAccesorioOrdenCompra == id) {
                 setSelected(null);
                 setNews({
-                  IdEstadoEmpleado: "",
-                  Descripcion: ""
+                  IdAccesorioOrdenCompra: "",
+                  cantidad: "",
+                 IdOrdenCompra:"",
+                 IdAccesorio:""
                 });
               }
             } catch (error) {
@@ -102,9 +138,10 @@ const StatusEmploye = () => {
       const handleEdit = async (news) => {
         setSelected(news);
         setNews({
-            IdEstadoEmpleado: news.IdEstadoEmpleado,
-            Descripcion: news.Descripcion,
-            
+            IdAccesorioOrdenCompra: news.IdAccesorioOrdenCompra,
+            cantidad: news.cantidad,
+            IdOrdenCompra:news.IdOrdenCompra,
+            IdAccesorio: news.IdAccesorio      
         });
       };
 
@@ -120,8 +157,10 @@ const StatusEmploye = () => {
           const data = await response.json();
           setForm((prev) => [...prev, data]);
           setNews({
-            IdEstadoEmpleado: "",
-            Descripcion: "",
+            IdAccesorioOrdenCompra: "",
+                  cantidad: "",
+                 IdOrdenCompra:"",
+                 IdAccesorio:""
            
           });
         } catch (error) {
@@ -129,10 +168,10 @@ const StatusEmploye = () => {
         }
       };
 
-      const handleInputSearch = (e) => {
-        const { name, value } = e.target;
-        setNews((prev) => ({ ...prev, [name]: value }));
-        if (name === "filter") {
+    const handleInputSearch = (e) => {
+    const { name, value } = e.target;
+       setNews((prev) => ({ ...prev, [name]: value }));
+       if (name === "filter") {
           setFilter(value)
         }
       };
@@ -152,15 +191,17 @@ const StatusEmploye = () => {
 
       const handleUpdate = async () => {
         const response = await fetch(
-          `${URL}${PORT}/${form}/${selected.IdEstadoEmpleado}`,
+          `${URL}${PORT}/${form}/${selected.IdAccesorioOrdenCompra}`,
           {
             method: "PATCH",
             headers: {
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
-                IdEstadoEmpleado: news.IdEstadoEmpleado,
-                Descripcion: news.Descripcion,
+                IdAccesorioOrdenCompra: news.IdAccesorioOrdenCompra,
+                cantidad: news.cantidad,
+                IdOrdenCompra:news.IdOrdenCompra,
+                IdAccesorio: news.IdAccesorio   
                
             }),
           }
@@ -168,13 +209,15 @@ const StatusEmploye = () => {
         const data = await response.json();
         setForm((prev) =>
           prev.map((estado) =>
-            estado.IdEstadoEmpleado == data.IdEstadoEmpleado ? data : estado
+            estado.IdAccesorioOrdenCompra == data.IdAccesorioOrdenCompra ? data : estado
           )
         );
         setSelected(null);
-        setNewEmploye({
-            IdEstadoEmpleado: "",
-            Descripcion: "",
+        setNews({
+            IdAccesorioOrdenCompra: "",
+            cantidad: "",
+           IdOrdenCompra:"",
+           IdAccesorio:""
             
         });
       };
@@ -205,7 +248,7 @@ const StatusEmploye = () => {
         }
       };
 
-      const handlePageChange = (selectedPage) => {
+     const handlePageChange = (selectedPage) => {
         setCurrentPage(selectedPage);
         setFilter("")
       };
@@ -220,34 +263,52 @@ const StatusEmploye = () => {
         <div className="container mt-4">
          <div className="row">
            <div className="col">
-             <TitleCataComponente title="Estado Empleado" size="h6" />
+             <TitleCataComponente title="Accesorios Orden Compra" size="h6" />
              <SearchCataComponente 
                value={filter}
                onChange={handleInputSearch}
                type={"search"}
                name={"filter"}
                id={"filter"}
-               placeholder={"Filtrar por estado empleado"}
+               placeholder={"Filtrar accesorio orden compra"} //no es necesario 
              />
            </div>
          </div>
          <div className="row">
            <div className="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
              <form onSubmit={handleSubmit} className="mb-4">
-               <div className="form-row">
-             
-                 <InputCataComponente
-                   value={news.Descripcion}
-                   onChange={handleInput}
-                   placeholder={"Ingrese descripcion"}
-                   id={"Descripcion"}
-                   type={"text"}
-                   name={"Descripcion"}
-                   label={"Descripcion"}
-                 />
-                  
-                
-                
+               <div className="form-row"> 
+
+        <InputCataComponente
+        value={news.cantidad}
+        onChange={handleInput}
+        placeholder={"Ingrese cantidad"}
+        id={"cantidad"}
+        type={"number"}
+        name={"cantidad"}
+        label={"cantidad"}
+      />     
+     
+           
+      <           SelectCataComponente
+                  required
+                  label={"- Seleccionar orden de compra"}
+                  name={"IdOrdenCompra"}
+                  value={news.IdOrdenCompra}
+                  options={options}
+                  onChange={handleSelect}
+                />
+
+
+              <SelectCataComponente
+                  required
+                  label={" Seleccionar un Accesorio -"}
+                  name={"IdAccesorio"}
+                  value={news.IdAccesorio}
+                  options={options}
+                  onChange={handleSelect}
+                />
+
                  <ButtonCataComponente
                    type="submit"
                    className="btn btn-primary btn-block"
@@ -262,9 +323,11 @@ const StatusEmploye = () => {
                handleDelete={handleDelete}
                handleEdit={handleEdit}
                handleDeleteM={handleDeleteM}
-               idField={"IdEstadoEmpleado"}
+               idField={"IdAccesorioOrdenCompra"}
                Fields={[
-                 "Descripcion",
+               " Cantidad",
+                "IdOrdenCompra",
+                "IdAccesorio"
                ]}
              />
              <PaginateCataComponente
@@ -279,4 +342,4 @@ const StatusEmploye = () => {
      );
 }
 
-export default StatusEmploye;
+export default PuchaseAccesoriesOrder;

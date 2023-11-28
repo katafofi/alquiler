@@ -1,12 +1,12 @@
 const PuchaseOrder = require("../Models/purchase_order.model");
 
 const createPurchaseOrder = async (req, res) => {
-  const { FechaCompr, dAlquiler, IdEmpleado } = req.body;
+  const { FechaCompra, IdAlquiler, IdEmpleado } = req.body;
 
   try {
     const purchaseOrderCreate = await PuchaseOrder.create({
-      FechaCompr,
-      dAlquiler,
+      FechaCompra,
+      IdAlquiler,
       IdEmpleado,
     });
     res.status(201).json(purchaseOrderCreate);
@@ -18,13 +18,13 @@ const createPurchaseOrder = async (req, res) => {
 const updatePurchaseOrder = async (req, res) => {
   const { IdOrdenCompra } = req.params;
 
-  const { FechaCompr, dAlquiler, IdEmpleado } = req.body;
+  const { FechaCompra, IdAlquiler, IdEmpleado } = req.body;
 
   try {
     const [result] = await PuchaseOrder.update(
       {
-        FechaCompr,
-        dAlquiler,
+        FechaCompra,
+        IdAlquiler,
         IdEmpleado,
       },
       {
