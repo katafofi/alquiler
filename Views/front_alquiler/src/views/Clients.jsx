@@ -18,8 +18,8 @@ const Clients = () => {
     Telefono: "",
     ReferenciaPersonalNombre: "",
     ReferenciaPersonalTelefono: "",
-    fotoDocumento: "",
-    fotoServicioPublico: "",
+    FotoDocumento: "",
+    FotoServicioPublico: "",
     Fecha: "",
   });
   const [selected, setSelected] = useState(null);
@@ -75,13 +75,14 @@ const Clients = () => {
               IdCliente: "",
               Nombre: "",
               Apellido: "",
+              Cedula: "",
               Correo: "",
               Direccion: "",
               Telefono: "",
               ReferenciaPersonalNombre: "",
               ReferenciaPersonalTelefono: "",
-              fotoDocumento: "",
-              fotoServicioPublico: "",
+              FotoDocumento: "",
+              FotoServicioPublico: "",
               Fecha: "",
             });
           }
@@ -122,13 +123,14 @@ const Clients = () => {
       IdCliente: news.IdCliente,
       Nombre: news.Nombre,
       Apellido: news.Apellido,
+      Cedula: news.Cedula,
       Correo: news.Correo,
       Direccion: news.Direccion,
       Telefono: news.Telefono,
       ReferenciaPersonalNombre: news.ReferenciaPersonalNombre,
       ReferenciaPersonalTelefono: news.ReferenciaPersonalTelefono,
-      fotoDocumento: news.fotoDocumento,
-      fotoServicioPublico: news.fotoServicioPublico,
+      FotoDocumento: news.FotoDocumento,
+      FotoServicioPublico: news.FotoServicioPublico,
       Fecha: news.Fecha,
     });
   };
@@ -148,13 +150,14 @@ const Clients = () => {
         IdCliente: "",
         Nombre: "",
         Apellido: "",
+        Cedula: "",
         Correo: "",
         Direccion: "",
         Telefono: "",
         ReferenciaPersonalNombre: "",
         ReferenciaPersonalTelefono: "",
-        fotoDocumento: "",
-        fotoServicioPublico: "",
+        FotoDocumento: "",
+        FotoServicioPublico: "",
         Fecha: "",
       });
     } catch (error) {
@@ -195,13 +198,14 @@ const Clients = () => {
           IdCliente: news.IdCliente,
           Nombre: news.Nombre,
           Apellido: news.Apellido,
+          Cedula: news.Cedula,
           Correo: news.Correo,
           Direccion: news.Direccion,
           Telefono: news.Telefono,
           ReferenciaPersonalNombre: news.ReferenciaPersonalNombre,
           ReferenciaPersonalTelefono: news.ReferenciaPersonalTelefono,
-          fotoDocumento: news.fotoDocumento,
-          fotoServicioPublico: news.fotoServicioPublico,
+          FotoDocumento: news.FotoDocumento,
+          FotoServicioPublico: news.FotoServicioPublico,
           Fecha: news.Fecha,
         }),
       }
@@ -215,13 +219,14 @@ const Clients = () => {
       IdCliente: "",
       Nombre: "",
       Apellido: "",
+      Cedula: "",
       Correo: "",
       Direccion: "",
       Telefono: "",
       ReferenciaPersonalNombre: "",
       ReferenciaPersonalTelefono: "",
-      fotoDocumento: "",
-      fotoServicioPublico: "",
+      FotoDocumento: "",
+      FotoServicioPublico: "",
       Fecha: "",
     });
   };
@@ -260,7 +265,7 @@ const Clients = () => {
   const indexOfLast = (currentPage + 1) * PerPage;
   const indexOfFirst = indexOfLast - PerPage;
   const current = forms
-    .filter((item) => item.Cedula.toString().toLowerCase()
+    .filter((item) => item?.Cedula?.toString().toLowerCase()
         .includes(filter.toString().toLowerCase())
     )
     .slice(indexOfFirst, indexOfLast);
@@ -365,25 +370,7 @@ const Clients = () => {
                   label={"Referencia Personal Telefono"}
                 />
 
-                <InputCataComponente
-                  value={news.fotoDocumento}
-                  onChange={handleInput}
-                  placeholder={"Ingrese URL de foto de documento"}
-                  id={"fotoDocumento"}
-                  type={"file"}
-                  name={"fotoDocumento"}
-                  label={"Foto de Documento"}
-                />
-
-                <InputCataComponente
-                  value={news.fotoServicioPublico}
-                  onChange={handleInput}
-                  placeholder={"Ingrese URL de foto de servicio público"}
-                  id={"fotoServicioPublico"}
-                  type={"file"}
-                  name={"fotoServicioPublico"}
-                  label={"Foto de Servicio Público"}
-                />
+              
 
                 <InputCataComponente
                   value={news.Fecha}
@@ -410,7 +397,7 @@ const Clients = () => {
               handleEdit={handleEdit}
               handleDeleteM={handleDeleteM}
               idField={"IdCliente"}
-              Fields={["Nombre", "Apellido", "Correo"]}
+              Fields={["Nombre", "Apellido", "Correo", "Cedula"]}
             />
             <PaginateCataComponente
               data={forms}

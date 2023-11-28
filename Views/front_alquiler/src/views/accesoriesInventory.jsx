@@ -178,13 +178,12 @@ const AccesoriesInventory = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          IdInventarioAccesorio: news.IdInventarioAccesorio,
+          IdInventarioAccesorio: news.IdInventarioAccesorio, // Asegúrate de que news tenga los datos correctos
           Cantidad: news.Cantidad,
           IdAccesorio: news.IdAccesorio
         }),
       }
-    );
-    const data = await response.json();
+    );    const data = await response.json();
     setForm((prev) =>
       prev.map((estado) =>
         estado.IdInventarioAccesorio == data.IdInventarioAccesorio
@@ -264,7 +263,7 @@ const AccesoriesInventory = () => {
                 <InputCataComponente
                   value={news.Cantidad}
                   onChange={handleInput}
-                  placeholder={"Ingrese cantidad"}
+                  placeholder={"Ingrese Cantidad"}
                   id={"Cantidad"}
                   type={"number"}
                   name={"Cantidad"}
