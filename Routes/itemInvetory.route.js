@@ -9,12 +9,12 @@ router.post('/', ItemInvetoryController.CreateItemInvetory)
 
 //put actualiza todo, ejemplo si tienes [nombre: 'alex', edad: '26'] -> peticion [nombre: 'catalina'] bd [nombre: 'catalina', edad: '']
 //patch el solo actualiza lo que ud le diga.
-router.patch('/: IdInventarioArticulo', ItemInvetoryController.UpdateItemInvetory )
+router.patch('/:IdInventarioArticulo', ItemInvetoryController.UpdateItemInvetory )
 
-router.delete('/: IdInventarioArticulo', ItemInvetoryController.DeleteItemInvetory)
+router.delete('/:IdInventarioArticulo', ItemInvetoryController.DeleteItemInvetory)
 
 router.post('/delete/all', ItemInvetoryController.DeleteMultipleItemInvetory)
 
-router.get('/: IdInventarioArticulo', ItemInvetoryController.FindOneItemInvetoryById)
+router.get('/:IdInventarioArticulo', ItemInvetoryController.FindOneItemInvetoryById)
 
 module.exports = router

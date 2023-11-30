@@ -15,12 +15,12 @@ const Item = database.define("Articulo", {
       type: Sequelize.DECIMAL(10, 2),
       allowNull: false,
     },
+    IdCategoria: {
+      type: Sequelize.INTEGER,
+      allowNull: false,
+    },
 
-  IdInventarioArticulo: {
-    type: Sequelize.INTEGER,
-    allowNull: false,
-  },
-  IdColor: {
+   IdColor: {
     type: Sequelize.INTEGER,
     allowNull: false,
   },
@@ -28,9 +28,6 @@ const Item = database.define("Articulo", {
     type: Sequelize.INTEGER,
     allowNull: false,
   },
-  IdCategoria: {
-    type: Sequelize.INTEGER,
-    allowNull: false,
-  },
+ 
 });
 module.exports = Item;

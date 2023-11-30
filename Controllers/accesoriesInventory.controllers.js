@@ -1,12 +1,15 @@
 const AccesoriesInventory = require("../Models/accesoriesInventory.model");
 
 const CreateAccesoriesInventory = async (req, res) => {
-  const { Cantidad, IdAccesorio } = req.body;
+  const {
+    Cantidad,
+    IdAccesorio 	    
+  } = req.body;
 
   try {
-    const AccesoriesInventoryCreate = await AccesoriesInventory.create({
+    const AccesoriesInventoryCreate = await  AccesoriesInventory.create({
       Cantidad,
-      IdAccesorio,
+      IdAccesorio 
     });
     res.status(200).json(AccesoriesInventoryCreate);
   } catch (error) {
@@ -17,80 +20,68 @@ const CreateAccesoriesInventory = async (req, res) => {
 const UpdateAccesoriesInventory = async (req, res) => {
   const { IdInventarioAccesorio } = req.params;
 
-  const { Cantidad,     
-          IdAccesorio 
-          }
-           = req.body;
+  const {
+    Cantidad,
+    IdAccesorio 
+  } = req.body;
 
   try {
     const [result] = await AccesoriesInventory.update(
       {
         Cantidad,
-      IdAccesorio
+        IdAccesorio 
       },
       {
         where: { IdInventarioAccesorio },
       }
     );
-    if (result == 0) {
-      res.status(404).json({ error: "accesorio no actualizado o encontrado" });
-    } else {
-      res.status(201).json({ message: "accesorio" });
+    if(result == 0){
+        res.status(404).json({ error: "accesorio no actualizado o encontrado"});
+    }else{
+        res.status(201).json({ message: "accesorio"});
     }
   } catch (error) {
-    console.log(error); 
     res.status(500).json({ message: error.message });
   }
 };
 
 const DeleteAccesoriesInventory = async (req, res) => {
   const { IdInventarioAccesorio } = req.params;
-  const result = await AccesoriesInventory.destroy({
-    where: { IdInventarioAccesorio },
-  });
+  const result = await AccesoriesInventory.destroy({where: { IdInventarioAccesorio } })
   try {
-    if (result == 0) {
-      res.status(404).json({
-        error:
-          "Inventario de accesorios no encontrado por favor valide bien los datos ingresados",
-      });
-    } else {
-      res
-        .status(201)
-        .json({ message: "tInventario de accesorios eliminado con exito" });
+    if(result == 0){
+        res.status(404).json({ error: "inventario_accesorio eliminado o encontrado"});
+    }else{
+        res.status(201).json({ message: "inventario_accesorio"});
     }
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
-const DeleteMultipleAccesoriesInventory = async (req, res) => {
-  const IdInventarioAccesorios = req.body;
-  const result = await AccesoriesInventory.destroy({
-    where: { IdInventarioAccesorio: IdInventarioAccesorios },
-  });
+const DeleteMultipleAccesoriesInventory = async(req, res) => {
+  const IdInventarioAccesorios = req.body
+  const result = await AccesoriesInventory.destroy({where: { IdInventarioAccesorio : IdInventarioAccesorios }})
   try {
-    if (result == 0) {
-      res.status(404).json({
-        error: "Inventario de accesorios no eliminados o encontrados",
-      });
-    } else {
-      res.status(201).json({ message: "Inventario de accesorios eliminados" });
+    if(result == 0){
+        res.status(404).json({ error: "inventario_accesorios no eliminados o encontrados"});
+    }else{
+        res.status(201).json({ message: "inventario_accesorios eliminados"});
     }
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
-const findOneAccesoriesInventoryById = async (req, res) => {
+const FindOneAccesoriesInventoryById = async (req, res) => {
   const { IdInventarioAccesorio } = req.params;
   try {
-    const result = await Item.findOne({ where: { IdInventarioAccesorio } });
-
-    if (!result) {
-      res.status(404).json({ error: "Artículo no encontrado" });
-    } else {
-      res.status(200).json({ message: result });
+    const result = await AccesoriesInventory.findOne({ where: { IdInventarioAccesorio} })
+    
+    if(result == 0){
+        res.status(404).json({ error: "Accesorio_Inventario no encontrado"});
+    }else{
+        res.status(200).json({ message: result});
     }
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -111,8 +102,8 @@ const all = {
   UpdateAccesoriesInventory,
   DeleteAccesoriesInventory,
   DeleteMultipleAccesoriesInventory,
- findOneAccesoriesInventoryById,
-  FindAllAccesoriesInventory,
+  FindOneAccesoriesInventoryById,
+  FindAllAccesoriesInventory
 };
 
 module.exports = all;

@@ -66,6 +66,12 @@ const NavbarCataComponente = () => {
                             <li className="nav-item">
                                 <Link to={'/accesories/inventory'}>Invetario Accesorios </Link>
                             </li>
+                            <li className="nav-item">
+                                <Link to={'/Colors'}>colores </Link>
+                            </li>
+                            <li className="nav-item">
+                                <Link to={'/item/inventory'}>invetario articulos </Link>
+                            </li>
                            
                         </ul>
                     </div>

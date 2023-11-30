@@ -20,6 +20,9 @@ import Store from './views/Store';
 import PuchaseAccesoriesOrder from './views/PuchaseAccesoriesOrder';
 import PuchaseOrder from './views/puchaseOrder';
 import AccesoriesInventory from './views/accesoriesInventory';
+import Colors from './views/Colors';
+import ItemInventory from './views/ItemInventory';
+
 
 
 
@@ -49,6 +52,8 @@ function App() {
            <Route exact path='/puchase/accesories/order' element={ < PuchaseAccesoriesOrder  />}></Route> 
            <Route exact path='/puchase/order' element= { < PuchaseOrder />}></Route>
            <Route exact path='/accesories/inventory' element= { < AccesoriesInventory />}></Route>
+           <Route exact path='/colors' element= { < Colors />}></Route>
+           <Route exact path='/item/inventory' element= { < ItemInventory/>}></Route>
          </Routes>
         </div>
         <FooterCataComponente />

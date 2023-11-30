@@ -370,7 +370,25 @@ const Clients = () => {
                   label={"Referencia Personal Telefono"}
                 />
 
-              
+                 <InputCataComponente
+                  value={news.FotoDocumento}
+                  onChange={handleInput}
+                  placeholder={"Ingrese URL de foto de documento"}
+                  id={"FotoDocumento"}
+                  type={"file"}
+                  name={"FotoDocumento"}
+                  label={"Foto de Documento"}
+                />
+
+                <InputCataComponente
+                  value={news.FotoServicioPublico}
+                  onChange={handleInput}
+                  placeholder={"Ingrese URL de foto de servicio público"}
+                  id={"FotoServicioPublico"}
+                  type={"file"}
+                  name={"FotoServicioPublico"}
+                  label={"Foto de Servicio Público"}
+                /> 
 
                 <InputCataComponente
                   value={news.Fecha}

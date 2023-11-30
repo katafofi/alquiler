@@ -44,11 +44,13 @@ const Clients = database.define('Clientes', {
         allowNull: false
         
     },
-    fotoDocumento: {
-        type: Sequelize.BLOB('long'), // Cambié el tipo de dato a BLOB
+    FotoDocumento: {
+        type: Sequelize.BLOB, 
+        
     },
-    fotoServicioPublico: {
-        type: Sequelize.BLOB('long'), // Cambié el tipo de dato a BLOB
+    FotoServicioPublico: {
+        type: Sequelize.BLOB, 
+        
     },
     Fecha: {
         type: Sequelize.DATE,

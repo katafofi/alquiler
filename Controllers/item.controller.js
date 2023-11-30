@@ -2,12 +2,17 @@ const Item = require("../Models/item.model");
 
 
 const createItem = async (req, res) => {
-  const { Descripcion, Precio } = req.body;
+  const { 
+    PrecioArticulo,
+    IdColor,
+    IdTalla,
+    IdCategoria
+    
+   } = req.body;
 
   try {
     const itemCreate = await Item.create({
       PrecioArticulo,
-      IdInventarioArticulo,
       IdColor,
       IdTalla,
       IdCategoria
@@ -22,13 +27,18 @@ const createItem = async (req, res) => {
 const updateItem = async (req, res) => {
   const { IdArticulo } = req.params;
 
-  const { Descripcion, Precio } = req.body;
+  const {
+    PrecioArticulo,
+    IdColor,
+    IdTalla,
+    IdCategoria
+    
+   } = req.body;
 
   try {
     const [result] = await Item.update(
       {
         PrecioArticulo,
-        IdInventarioArticulo,
         IdColor,
         IdTalla,
         IdCategoria

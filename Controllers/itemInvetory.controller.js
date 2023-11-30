@@ -1,4 +1,4 @@
-const ItemInvetory = require("../Models/item_Inventory.model");
+const ItemInvetory = require("../Models/itemInventory.model");
 
 const CreateItemInvetory = async (req, res) => {
   const {
@@ -11,7 +11,7 @@ const CreateItemInvetory = async (req, res) => {
         Cantidad,
         IdArticulo
     });
-    res.status(200).json(AccesoriesCreate);
+    res.status(200).json(ItemInvetoryCreate);
   } catch (error) {
     res.status(500).json({ message: error });
   }
@@ -19,45 +19,41 @@ const CreateItemInvetory = async (req, res) => {
 
 const UpdateItemInvetory = async (req, res) => {
   const { IdInventarioArticulo } = req.params;
-
-  const {
-    Cantidad,
-    IdArticulo
-  } = req.body;
+  const { Cantidad, IdArticulo } = req.body;
 
   try {
     const [result] = await ItemInvetory.update(
-      {
-        Cantidad,
-        IdArticulo
-      },
-      {
-        where: { IdAccesorio },
-      }
+      { Cantidad, IdArticulo },
+      { where: { IdInventarioArticulo } }
     );
-    if(result == 0){
-        res.status(404).json({ error: "accesorio no actualizado o encontrado"});
-    }else{
-        res.status(201).json({ message: "accesorio"});
+
+    if (result === 0) {
+      res.status(404).json({ error: "Articulo no actualizado o encontrado" });
+    } else {
+      res.status(201).json({ message: "Inventario articulo actualizado" });
     }
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ error: error.name, message: error.message });
   }
 };
 
 const DeleteItemInvetory = async (req, res) => {
-  const { IdAccesorio } = req.params;
-  const result = await ItemInvetory.destroy({where: { IdInventarioArticulo } })
+  const { IdInventarioArticulo } = req.params;
+
   try {
-    if(result == 0){
-        res.status(404).json({ error: "inventario_articulo eliminado o encontrado"});
-    }else{
-        res.status(201).json({ message: "inventario_articulo"});
+    const result = await ItemInvetory.destroy({ where: { IdInventarioArticulo } });
+
+    if (result === 0) {
+      res.status(404).json({ error: "Inventario_articulo no eliminado o encontrado" });
+    } else {
+      res.status(201).json({ message: "Inventario_articulo eliminado" });
     }
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ error: error.name, message: error.message });
   }
 };
+
+
 
 const DeleteMultipleItemInvetory = async(req, res) => {
   const IdInventarioArticulos = req.body
