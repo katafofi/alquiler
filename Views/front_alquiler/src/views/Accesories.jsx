@@ -125,7 +125,7 @@ const Accesories = () => {
           setNews({
             IdAccesorio: "",
             Descripcion: "",
-            PrecioAccesorio: ""
+            PrecioAccesorio: "",
            
           });
         } catch (error) {
@@ -180,7 +180,7 @@ const Accesories = () => {
         setNews({
             IdAccesorio: "",
             Descripcion: "",
-            PrecioAccesorio: ""
+            PrecioAccesorio: "",
             
         });
       };

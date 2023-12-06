@@ -114,6 +114,25 @@ const PuchaseOrder = () => {
     }
   };
 
+  const generateVoice = async (id) => {
+    try {
+      const response = await fetch(`${URL}${PORT}/${form}/invoice`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ id }),
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      const data = await response.json();
+      console.log(data);
+    } catch (error) {
+      console.error("Error:", error.message);
+    }
+  };
+
   const handleDelete = async (id) => {
     if (window.prompt("Ingrese la credencial de autorizacion", 0) == "202312") {
       if (window.confirm("¿Estás seguro de que quieres eliminar?")) {
@@ -358,7 +377,8 @@ const PuchaseOrder = () => {
               handleDelete={handleDelete}
               handleEdit={handleEdit}
               handleDeleteM={handleDeleteM}
-              idField={" IdOrdenCompra"}
+              generateVoice={generateVoice}
+              idField={"IdOrdenCompra"}
               Fields={[
                 "FechaCompra",
                 "IdAlquiler",

@@ -15,12 +15,12 @@ const PuchaseAccesoriesOrder= () => {
         cantidad: "",
         IdOrdenCompra:"",
         IdAccesorio:""
-    
     });
     const [selected, setSelected] = useState(null);
     const [deleted, setDeleted] = useState(false);
     const [deletedM, setDeletedM] = useState(false);
     const [options, setOptions] = useState([]);
+    const [options2, setOptions2] = useState([]);
     const [currentPage, setCurrentPage] = useState([]);
     const [filter, setFilter] = useState("")
 
@@ -52,21 +52,22 @@ const PuchaseAccesoriesOrder= () => {
 
       const handleGet = async () => {
         try {
-          const response = await fetch(`${URL}${PORT}${form}`);
+          const response = await fetch(`${URL}${PORT}/${form}`);
           const data = await response.json();
+          setForm(data);
           } catch (error) {
           console.error(error);
         }
       };
       const handleGetOrdenCompra = async () => {
         try {
-          const response = await fetch(`${URL}${PORT}/orden/compra`);
+          const response = await fetch(`${URL}${PORT}/PuchaseOrder`);
           const data = await response.json();
           const newOptions = data.map((element) => ({
             value: element.IdOrdenCompra, //lo que selecciona en el back
             label: element.FechaCompra+' - '+element.IdOrdenCompra //lo que se ve en el selector
           }));
-          setOptions(newOptions);
+          setOptions2(newOptions);
         } catch (error) {
           console.log(error);
         }
@@ -77,7 +78,7 @@ const PuchaseAccesoriesOrder= () => {
           const data = await response.json();
           const newOptions = data.map((element) => ({
             value: element.IdAccesorio, //lo que selecciona en el back
-            label: element.Descripcion+' - '+element.IdOrdenCompra //lo que se ve en el selector
+            label: element.Descripcion+' - '+element.IdAccesorio //lo que se ve en el selector
           }));
           setOptions(newOptions);
         } catch (error) {
@@ -198,11 +199,9 @@ const PuchaseAccesoriesOrder= () => {
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
-                IdAccesorioOrdenCompra: news.IdAccesorioOrdenCompra,
                 cantidad: news.cantidad,
                 IdOrdenCompra:news.IdOrdenCompra,
                 IdAccesorio: news.IdAccesorio   
-               
             }),
           }
         );
@@ -255,7 +254,7 @@ const PuchaseAccesoriesOrder= () => {
     
       const indexOfLast = (currentPage + 1) * PerPage;
       const indexOfFirst = indexOfLast - PerPage;
-      const current = forms.filter((item) => item.Descripcion.toString().toLowerCase().includes(filter.toString().toLowerCase())).slice(indexOfFirst, indexOfLast);
+      const current = forms.filter((item) => item.IdOrdenCompra.toString().toLowerCase().includes(filter.toString().toLowerCase())).slice(indexOfFirst, indexOfLast);
 
 
       return (
@@ -295,7 +294,7 @@ const PuchaseAccesoriesOrder= () => {
                   label={"- Seleccionar orden de compra"}
                   name={"IdOrdenCompra"}
                   value={news.IdOrdenCompra}
-                  options={options}
+                  options={options2}
                   onChange={handleSelect}
                 />
 
@@ -325,7 +324,7 @@ const PuchaseAccesoriesOrder= () => {
                handleDeleteM={handleDeleteM}
                idField={"IdAccesorioOrdenCompra"}
                Fields={[
-               " Cantidad",
+                "cantidad",
                 "IdOrdenCompra",
                 "IdAccesorio"
                ]}

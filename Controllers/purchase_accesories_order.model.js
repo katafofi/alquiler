@@ -51,10 +51,11 @@ const UpdatePuchaseAccesoriesOrder= async (req, res) => {
 
 const DeletePuchaseAccesoriesOrder = async (req, res) => {
   const {  IdAccesorioOrdenCompra } = req.params;
+  
   const result = await PuchaseAccesoriesOrder.destroy({where: {  IdAccesorioOrdenCompra } })
   try {
     if(result == 0){
-        res.status(404).json({ error: "accesorio orden compra eliminado o encontrado"});
+        res.status(404).json({ error: "accesorio orden compra eliminado no encontrado"});
     }else{
         res.status(201).json({ message: "iaccesorio orden compra"});
     }

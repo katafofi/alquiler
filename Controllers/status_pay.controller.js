@@ -2,12 +2,12 @@ const StatusPay = require("../Models/status_pay.model");
 
 const CreateStatusPay= async (req, res) => {
   const {
-    descripcion
+    Descripcion
   } = req.body;
 
   try {
     const StatusPayCreate = await StatusPay.create({
-      descripcion
+      Descripcion
     });
     res.status(200).json(StatusPayCreate);
   } catch (error) {
@@ -19,13 +19,13 @@ const UpdateStatusPay = async (req, res) => {
   const { IdEstadoPago } = req.params;
 
   const {
-    descripcion
+    Descripcion
   } = req.body;
 
   try {
     const [result] = await StatusPay.update(
       {
-        descripcion
+        Descripcion
       },
       {
         where: { IdEstadoPago },

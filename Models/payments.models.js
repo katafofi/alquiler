@@ -23,7 +23,7 @@ const Payments = database.define('Pagos', {
         type: Sequelize.INTEGER,
         allowNull: false
     },
-    IdOrdenPago: {
+    IdOrdenCompra: {
         type: Sequelize.INTEGER,
         allowNull: false
     }

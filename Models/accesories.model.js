@@ -9,7 +9,8 @@ const Accesories = database.define('Accesorios', {
     },
     Descripcion: {
         type: Sequelize.STRING(100),
-        allowNull: false
+        allowNull: false,
+        unique: true,
     },
     PrecioAccesorio: {
         type: Sequelize.DECIMAL(10, 2),

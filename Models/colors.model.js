@@ -9,7 +9,8 @@ const Colors = database.define('Colores', {
     },
     Descripcion: {
         type: Sequelize.STRING(100),
-        allowNull: false
+        allowNull: false,
+        unique: true,
     }
     })
     module.exports = Colors;

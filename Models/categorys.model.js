@@ -10,6 +10,7 @@ const Categorys = database.define("Categorias", {
   Descripcion: {
     type: Sequelize.STRING(20),
     allowNull: false,
+    unique: true,
   },
 
 });

@@ -1,7 +1,7 @@
 const Payments = require("../Models/payments.models");
 
 const CreatePayments = async (req, res) => {
-  const { FechadPago, Valor, IdEstadoPago, IdTipoPago, IdOrdenPago } = req.body;
+  const { FechadPago, Valor, IdEstadoPago, IdTipoPago, IdOrdenCompra } = req.body;
 
   try {
     const PaymentsCreate = await Payments.create({
@@ -9,7 +9,7 @@ const CreatePayments = async (req, res) => {
       Valor,
       IdEstadoPago,
       IdTipoPago,
-      IdOrdenPago,
+      IdOrdenCompra,
     });
     res.status(200).json(PaymentsCreate);
   } catch (error) {
@@ -20,7 +20,7 @@ const CreatePayments = async (req, res) => {
 const UpdatePayments = async (req, res) => {
   const { IdPago } = req.params;
 
-  const { FechadPago, Valor, IdEstadoPago, IdTipoPago, IdOrdenPago } = req.body;
+  const { FechadPago, Valor, IdEstadoPago, IdTipoPago, IdOrdenCompra } = req.body;
 
   try {
     const [result] = await Payments.update(
@@ -29,7 +29,7 @@ const UpdatePayments = async (req, res) => {
         Valor,
         IdEstadoPago,
         IdTipoPago,
-        IdOrdenPago,
+        IdOrdenCompra,
       },
       {
         where: { IdPago },

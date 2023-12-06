@@ -1,4 +1,5 @@
 import React, { useState} from 'react';
+import ButtonCataComponente from '../Button/Button';
 
 const TabletCataComponente = ({
     data,
@@ -7,6 +8,7 @@ const TabletCataComponente = ({
     idField,
     Fields,
     handleDeleteM,
+    generateVoice
   }) => {
     const [selectedItems, setSelectedItems] = useState([]);
 
@@ -22,6 +24,13 @@ const TabletCataComponente = ({
     handleDeleteM(selectedItems);
       setSelectedItems([]);
     };
+
+    //format datos
+    const handleGetOneEmpleado = async (IdEmpleado) => {
+      const response = await  fetch(`${URL}${PORT}/puchaseOrder/${IdEmpleado}`);
+      const data = await response.json();
+      return data.message.Nombre + " " + data.message.Apellido;
+    }
   
     return (
       <div className="table-responsive">
@@ -63,6 +72,8 @@ const TabletCataComponente = ({
                     ? <p style={{backgroundColor: 'green', Color: 'white'}}>Activo</p>
                     : provider[e] == 2
                     ?  <p style={{backgroundColor: 'red', Color: 'white'}}>Inactivo</p>
+                    : e == 'IdOrdenCompra'
+                    ? handleGetOneEmpleado(provider[e])
                     : provider[e] : provider[e]}
                     
                 </td>
@@ -86,6 +97,10 @@ const TabletCataComponente = ({
                     >
                       Delete
                     </button>
+                    &nbsp;
+
+                    <ButtonCataComponente title={'Generar factura'} type={'button'} onClick={() => generateVoice(provider[idField])} ></ButtonCataComponente>
+
                  
                 </td>
               </tr>

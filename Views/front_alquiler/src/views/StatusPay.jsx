@@ -13,7 +13,7 @@ const StatusPay = () => {
     const [forms, setForm] = useState([]);
     const [news, setNews] = useState({
         //IdEstadoPago
-        descripcion: ""
+        Descripcion: ""
     
     });
 
@@ -25,7 +25,7 @@ const StatusPay = () => {
     const [filter, setFilter] = useState("")
 
     const PerPage = 10;
-    const form = "StatusPay";
+    const form = "statusPay";
 
     const URL = "http://localhost:";
     const PORT = "3003";
@@ -68,7 +68,7 @@ const StatusPay = () => {
                 setSelected(null);
                 setNews({
                   IdEstadoPago: "",
-                  descripcion: ""
+                  Descripcion: ""
                 });
               }
             } catch (error) {
@@ -106,7 +106,7 @@ const StatusPay = () => {
         setSelected(news);
         setNews({
             IdEstadoPago: news.IdEstadoPago,
-            descripcion: news.descripcion,
+            Descripcion: news.Descripcion,
             
         });
       };
@@ -124,7 +124,7 @@ const StatusPay = () => {
           setForm((prev) => [...prev, data]);
           setNews({
             IdEstadoPago: "",
-            descripcion: "",
+            Descripcion: "",
            
           });
         } catch (error) {
@@ -163,7 +163,7 @@ const StatusPay = () => {
             },
             body: JSON.stringify({
                 IdEstadoPago: news.IdEstadoPago,
-                descripcion: news.descripcion,
+                Descripcion: news.Descripcion,
                
             }),
           }
@@ -175,9 +175,9 @@ const StatusPay = () => {
           )
         );
         setSelected(null);
-        setNewEmploye({
+        setNews({
             IdEstadoPago: "",
-            descripcion: "",
+            Descripcion: "",
             
         });
       };
@@ -215,7 +215,7 @@ const StatusPay = () => {
     
       const indexOfLast = (currentPage + 1) * PerPage;
       const indexOfFirst = indexOfLast - PerPage;
-      const current = forms.filter((item) => item.descripcion.toString().toLowerCase().includes(filter.toString().toLowerCase())).slice(indexOfFirst, indexOfLast);
+      const current = forms.filter((item) => item.Descripcion.toString().toLowerCase().includes(filter.toString().toLowerCase())).slice(indexOfFirst, indexOfLast);
 
 
       return (
@@ -223,7 +223,7 @@ const StatusPay = () => {
         <div className="container mt-4">
          <div className="row">
            <div className="col">
-             <TitleCataComponente title="categoria" size="h6" />
+             <TitleCataComponente title="estado pago" size="h6" />
              <SearchCataComponente 
                value={filter}
                onChange={handleInputSearch}
@@ -240,13 +240,13 @@ const StatusPay = () => {
                <div className="form-row">
              
                  <InputCataComponente
-                   value={news.descripcion}
+                   value={news.Descripcion}
                    onChange={handleInput}
-                   placeholder={"Ingrese descripcion"}
-                   id={"descripcion"}
+                   placeholder={"Ingrese Descripcion"}
+                   id={"Descripcion"}
                    type={"text"}
-                   name={"descripcion"}
-                   label={"descripcion"}
+                   name={"Descripcion"}
+                   label={"Descripcion"}
                  />
                   
                 
@@ -267,7 +267,7 @@ const StatusPay = () => {
                handleDeleteM={handleDeleteM}
                idField={"IdEstadoPago"}
                Fields={[
-                 "descripcion",
+                 "Descripcion",
                ]}
              />
              <PaginateCataComponente

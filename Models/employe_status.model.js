@@ -10,6 +10,7 @@ const EmployeStatus = database.define("EstadoEmpleado", {
   Descripcion: {
     type: Sequelize.STRING(50),
     allowNull: false,
+    unique: true,
   },
 }, {
   timestamps: false,

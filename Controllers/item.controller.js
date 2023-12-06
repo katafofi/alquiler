@@ -3,6 +3,7 @@ const Item = require("../Models/item.model");
 
 const createItem = async (req, res) => {
   const { 
+    Descripcion,
     PrecioArticulo,
     IdColor,
     IdTalla,
@@ -11,14 +12,15 @@ const createItem = async (req, res) => {
    } = req.body;
 
   try {
-    const itemCreate = await Item.create({
+    const ItemCreate = await Item.create({
+      Descripcion,
       PrecioArticulo,
       IdColor,
       IdTalla,
       IdCategoria
       
     });
-    res.status(201).json(itemCreate);
+    res.status(201).json(ItemCreate);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -28,6 +30,7 @@ const updateItem = async (req, res) => {
   const { IdArticulo } = req.params;
 
   const {
+    Descripcion,
     PrecioArticulo,
     IdColor,
     IdTalla,
@@ -38,6 +41,7 @@ const updateItem = async (req, res) => {
   try {
     const [result] = await Item.update(
       {
+        Descripcion,
         PrecioArticulo,
         IdColor,
         IdTalla,

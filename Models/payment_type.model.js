@@ -9,7 +9,8 @@ const PaymentType = database.define('TipoPago', {
     },
     Descripcion: {
         type: Sequelize.STRING(100),
-        allowNull: false
+        allowNull: false,
+        unique: true,
     }
 
     })

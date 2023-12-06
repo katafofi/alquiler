@@ -8,7 +8,7 @@ const PuchareItemOrder = database.define('ArticulosOrdenCompra', {
         primaryKey: true,
         autoIncrement: true,
     },
-    cantidad: {
+    Cantidad: {
         type: Sequelize.INTEGER,
         allowNull: false,
     },

@@ -9,7 +9,7 @@ router.post('/', PaymentsController.CreatePayments)
 
 //put actualiza todo, ejemplo si tienes [nombre: 'alex', edad: '26'] -> peticion [nombre: 'catalina'] bd [nombre: 'catalina', edad: '']
 //patch el solo actualiza lo que ud le diga.
-router.patch('/:IdTPago', PaymentsController.UpdatePayments)
+router.patch('/:IdPago', PaymentsController.UpdatePayments)
 
 router.delete('/:IdPago', PaymentsController.DeletePayments)
 

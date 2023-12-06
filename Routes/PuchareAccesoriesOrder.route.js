@@ -9,12 +9,12 @@ router.post('/', PuchaseAccesoriesOrderController.CreatePuchaseAccesoriesOrder)
 
 //put actualiza todo, ejemplo si tienes [nombre: 'alex', edad: '26'] -> peticion [nombre: 'catalina'] bd [nombre: 'catalina', edad: '']
 //patch el solo actualiza lo que ud le diga.
-router.patch('/:IdAccesorioOrdenCompra:', PuchaseAccesoriesOrderController.UpdatePuchaseAccesoriesOrder )
+router.patch('/:IdAccesorioOrdenCompra', PuchaseAccesoriesOrderController.UpdatePuchaseAccesoriesOrder)
 
-router.delete('/:IdAccesorioOrdenCompra:', PuchaseAccesoriesOrderController.DeleteMultiplePuchaseAccesoriesOrder)
+router.delete('/:IdAccesorioOrdenCompra', PuchaseAccesoriesOrderController.DeletePuchaseAccesoriesOrder)
 
 router.post('/delete/all',PuchaseAccesoriesOrderController.DeleteMultiplePuchaseAccesoriesOrder)
 
-router.get('/:IdAccesorioOrdenCompra:', PuchaseAccesoriesOrderController.FindOnePuchaseAccesoriesOrderById)
+router.get('/:IdAccesorioOrdenCompra', PuchaseAccesoriesOrderController.FindOnePuchaseAccesoriesOrderById)
 
 module.exports = router

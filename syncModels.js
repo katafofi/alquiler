@@ -22,7 +22,7 @@ async function syncModels() {
   const PaymentStatusPayPucherOrderPaymentType = require("./Models/payments.models");
   const PuchaseOrder = require("./Models/purchase_order.model");
   const StatusRegisterNegative = require("./Models/status_register_negative.model.js");
-  const PuchaseOrderStatusRegisterNegativeNegativeRecord = require("./Models/Negative_Record.model");
+  const PuchaseOrderStatusRegisterNegativeNegativeRecord = require("./Models/negativeRecord.model.js");
   const Renting = require("./Models/renting.model.js");
   const ReturnRegisterRenting = require("./Models/Return_Register.model.js");
   const StatusEmployeEmploye = require("./Models/employe_status.model.js");
@@ -100,7 +100,7 @@ async function syncModels() {
   });
 
   PuchaseOrder.hasMany(PaymentStatusPayPucherOrderPaymentType, {
-    foreignKey: "IdOrdenPago",
+    foreignKey: "IdOrdenCompra",
     onDelete: "RESTRICT",
   });
 
@@ -140,8 +140,8 @@ async function syncModels() {
     foreignKey: "IdEmpleado",
     onDelete: "RESTRICT",
   });
-
-  await database.sync({ alter: false, force: true}); // false prod y true dev
+ 
+  await database.sync({ alter:false, force: false }); // false prod y true dev
 }
 
 module.exports = syncModels;

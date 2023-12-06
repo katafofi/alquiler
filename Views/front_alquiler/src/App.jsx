@@ -22,6 +22,11 @@ import PuchaseOrder from './views/puchaseOrder';
 import AccesoriesInventory from './views/accesoriesInventory';
 import Colors from './views/Colors';
 import ItemInventory from './views/ItemInventory';
+import Item from './views/Item';
+import NegativeRecord from './views/NegativeRecord';
+import Payments from './views/Payments';
+
+
 
 
 
@@ -54,6 +59,9 @@ function App() {
            <Route exact path='/accesories/inventory' element= { < AccesoriesInventory />}></Route>
            <Route exact path='/colors' element= { < Colors />}></Route>
            <Route exact path='/item/inventory' element= { < ItemInventory/>}></Route>
+           <Route exact path='/item' element= { < Item/>}></Route>
+           <Route exact path='/negative/record' element= { < NegativeRecord/>}></Route>
+           <Route exact path='payments' element= { < Payments/>}></Route>
          </Routes>
         </div>
         <FooterCataComponente />

@@ -7,7 +7,7 @@ const Statuspay = database.define('EstadoPagos', {
         primaryKey: true,
         autoIncrement: true,
     },  
-    descripcion:{
+    Descripcion:{
         type: Sequelize.STRING(100),
         allowNull: false,
     }

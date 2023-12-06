@@ -53,19 +53,19 @@ const PaymentType = () => {
       };
 
       const handleDelete = async (id) => {
-        if (window.prompt("Ingrese la credencial de autorizacion", 0) == "202312") {
+        if (window.prompt("Ingrese la credencial de autorización", 0) === "202312") {
           if (window.confirm("¿Estás seguro de que quieres eliminar?")) {
             try {
               const response = await fetch(`${URL}${PORT}/${form}/${id}`, {
                 method: "DELETE",
               });
               console.log(response);
-              setForm((prev) => prev.filter((info) => info. IdTipoPago != id));
+              setForm((prev) => prev.filter((info) => info.IdTipoPago !== id));  
               setDeleted(true);
-              if (selected && selected. IdTipoPago == id) {
+              if (selected && selected.IdTipoPago === id) {  
                 setSelected(null);
                 setNews({
-                   IdTipoPago: "",
+                  IdTipoPago: "",  
                   Descripcion: ""
                 });
               }
@@ -74,7 +74,7 @@ const PaymentType = () => {
             }
           }
         } else {
-          alert("No esta permitido para las credenciales por defecto.");
+          alert("No está permitido para las credenciales por defecto.");
         }
       };
 
@@ -103,9 +103,8 @@ const PaymentType = () => {
       const handleEdit = async (news) => {
         setSelected(news);
         setNews({
-             IdTipoPago: news. IdTipoPago,
-            Descripcion: news.Descripcion,
-            
+          IdTipoPago: news.IdTipoPago,  
+          Descripcion: news.Descripcion,
         });
       };
 
@@ -173,7 +172,7 @@ const PaymentType = () => {
           )
         );
         setSelected(null);
-        setNewEmploye({
+        setNews({
              IdTipoPago: "",
             Descripcion: "",
             
@@ -221,14 +220,14 @@ const PaymentType = () => {
         <div className="container mt-4">
          <div className="row">
            <div className="col">
-             <TitleCataComponente title="categoria" size="h6" />
+             <TitleCataComponente title="tipo de pago" size="h6" />
              <SearchCataComponente 
                value={filter}
                onChange={handleInputSearch}
                type={"search"}
                name={"filter"}
                id={"filter"}
-               placeholder={"Filtrar por categoria"}
+               placeholder={"Filtrar portipo de pago"}
              />
            </div>
          </div>
@@ -263,7 +262,7 @@ const PaymentType = () => {
                handleDelete={handleDelete}
                handleEdit={handleEdit}
                handleDeleteM={handleDeleteM}
-               idField={" IdTipoPago"}
+               idField={"IdTipoPago"}
                Fields={[
                  "Descripcion",
                ]}

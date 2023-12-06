@@ -78,9 +78,9 @@ const DeleteMultiPuchareItemOrder = async(req, res) => {
 };
 
 const FindOnePuchareItemOrderById = async (req, res) => {
-  const { IdArticuloOrdenCompra } = req.params;
+  const { IdOrdenCompra } = req.params;
   try {
-    const result = await PuchareItemOrder.findOne({ where: { IdArticuloOrdenCompra } })
+    const result = await PuchareItemOrder.findAll({ where: { IdOrdenCompra } })
     
     if(result == 0){
         res.status(404).json({ error: "articulo orden compra no encontrado"});

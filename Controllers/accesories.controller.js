@@ -61,7 +61,7 @@ const DeleteAccesories = async (req, res) => {
 
 const DeleteMultipleAccesories = async(req, res) => {
   const IdAccesorios = req.body
-  const result = await Accesories.destroy({where: { IdoAccesorio : IdAccesorios }})
+  const result = await Accesories.destroy({where: { IdAccesorio : IdAccesorios }})
   try {
     if(result == 0){
         res.status(404).json({ error: "inventario_accesorios no eliminados o encontrados"});
