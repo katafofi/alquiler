@@ -45,12 +45,12 @@ const Clients = database.define('Clientes', {
         
     },
     FotoDocumento: {
-        type: Sequelize.BLOB, 
-        
+        type: Sequelize.BLOB('long'), 
+        allowNull: false,
     },
     FotoServicioPublico: {
-        type: Sequelize.BLOB, 
-        
+        type: Sequelize.BLOB('long'), 
+        allowNull: false,
     },
     Fecha: {
         type: Sequelize.DATE,

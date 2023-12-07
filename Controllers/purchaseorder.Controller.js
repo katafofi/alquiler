@@ -153,27 +153,30 @@ const exportPdf = async (result, responseEmploye, responseRenting, responseClien
 
     let total = 0
 
+    function formatprecing(number) {
+      return number.toLocaleString('co-ES');
+    }
+
+    doc.text('Cantidad | Id Articulo | Descripcion | Precio | Subtotal').moveDown(0, 2);
+
     await Promise.all(responsePuchaseItemOrder.message.map(async (name, key) => {
       try {
         const ArticulosDetails = await handleGetByIdItems(name.IdArticulo);
-
         const subtotal = name.Cantidad * ArticulosDetails.message.PrecioArticulo
         total += subtotal
-
-        doc.text(`
-          Cantidad ${name.Cantidad}
-          Id Articulo ${ArticulosDetails.message.IdArticulo}
-          Descripcion ${ArticulosDetails.message.Descripcion}
-          Precio ${ArticulosDetails.message.PrecioArticulo}
-          Subtotal $ ${subtotal}
-          // Add the rest of the details like color, categoria...
-        `).moveDown(0, 5);
+            doc.text(`${name.Cantidad} | ${ArticulosDetails.message.IdArticulo} | ${ArticulosDetails.message.Descripcion} | ${formatprecing(Math.round(parseFloat(ArticulosDetails.message.PrecioArticulo)))} | ${formatprecing(Math.round(parseFloat(subtotal)))}`)
       } catch (error) {
         console.error(`Error for ${name.IdArticulo}:`, error);
       }
     }));
 
-    doc.text(`Total: ${total}`).moveDown(0, 5);
+    doc.text(`Total: $ ${formatprecing(Math.round(parseFloat(total)))}`).moveDown(0, 5);
+
+    doc.text(`
+          Politicas: colocarlas...
+
+
+        `).moveDown(0, 5);
 
    doc.end();
    stream.on('finish', () => {

@@ -415,7 +415,7 @@ const Clients = () => {
               handleEdit={handleEdit}
               handleDeleteM={handleDeleteM}
               idField={"IdCliente"}
-              Fields={["Nombre", "Apellido", "Correo", "Cedula"]}
+              Fields={["Nombre", "Apellido", "Correo", "Cedula", "FotoDocumento", "FotoServicioPublico"]}
             />
             <PaginateCataComponente
               data={forms}

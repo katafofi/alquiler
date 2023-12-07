@@ -1,5 +1,7 @@
 const Clients = require("../Models/clients.model");
 
+const bufferToFile = require('../provider/bufferToFile');
+
 const CreateClients = async (req, res) => {
   const {
     Nombre,  
@@ -10,11 +12,12 @@ const CreateClients = async (req, res) => {
     Telefono,
     ReferenciaPersonalNombre,
     ReferenciaPersonalTelefono,
-    FotoDocumento,
-    FotoServicioPublico,
     Fecha
   } = req.body;
 
+  const FotoDocumento = req.files && req.files['FotoDocumento'] ? req.files['FotoDocumento'][0].path : null;
+  const FotoServicioPublico = req.files && req.files['FotoServicioPublico'] ? req.files['FotoServicioPublico'][0].path : null;
+  //organizar que se guarden son los dos que vienen desde el cb multer
   try {
     const ClientsCreate = await  Clients.create({
      Nombre,  
@@ -127,7 +130,14 @@ const FindOneClientsById = async (req, res) => {
 const FindAllClients = async (req, res) => {
   try {
     const result = await Clients.findAll();
-    res.status(200).json(result);
+
+    const clientsFilepath = await Promise.all(result.map(async (client) => {
+       client.FotoDocumento ? client.FotoDocumentoPath = await bufferToFile(client.FotoDocumento, `/assets/${client.Cedula}_${client.Nombre}`) : null
+       client.FotoServicioPublico ? client.FotoServicioPublicoPath = await bufferToFile(client.FotoServicioPublico, `/assets/${client.Cedula}_${client.Nombre}`) : null
+       return client
+    }))
+
+    res.status(200).json(clientsFilepath);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
