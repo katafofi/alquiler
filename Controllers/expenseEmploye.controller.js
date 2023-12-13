@@ -1,4 +1,6 @@
 const ExpenseEmploye = require("../Models/expensesEmploye.model");
+const dataToExcel = require("../provider/dataToExcel");
+const formattedDate = require("../provider/formatDate");
 
 const CreateExpenseEmploye = async (req, res) => {
   const {
@@ -101,13 +103,58 @@ const FindAllExpenseEmploye = async (req, res) => {
   }
 };
 
+
+const handleGetEmploye = async (id) => {
+  try {
+    const form = "employe";
+    const URL = "http://localhost:";
+    const PORT = "3003";
+    const response = await fetch(`${URL}${PORT}/${form}/${id}`);
+    const data = await response.json();
+    return data
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const FindAllExpenseEmployeExport = async (req, res) => {
+  try {
+    const { name } = req.params
+
+    const result = await ExpenseEmploye.findAll();
+    const data = []
+
+    await Promise.all(
+      result.map(async (expense) => {
+        const employe = await handleGetEmploye(expense.IdEmpleado)
+
+        const formattedExpense = { 
+          ...expense.dataValues, 
+          IdEmpleado: employe.message.Nombre + ' ' + employe.message.Apellido,
+          createdAt: formattedDate(expense.dataValues.createdAt),
+          updatedAt: formattedDate(expense.dataValues.updatedAt)
+        }
+
+        data.push(formattedExpense)
+        return formattedExpense
+      })
+    )
+
+    dataToExcel(data, name)
+    res.status(200).json(result);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 const all = {
   CreateExpenseEmploye,
   UpdateExpenseEmploye,
   DeleteExpenseEmploye,
   DeleteMultipleExpenseEmploye,
   FindOneExpenseEmployeById,
-  FindAllExpenseEmploye
+  FindAllExpenseEmploye,
+  FindAllExpenseEmployeExport
 };
 
 module.exports = all;

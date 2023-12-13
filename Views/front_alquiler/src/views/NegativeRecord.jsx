@@ -97,8 +97,7 @@ const NegativeRecord = () => {
   };
 
   const handleDelete = async (id) => {
-    if (window.prompt("Ingrese la credencial de autorizacion", 0) == "202312") {
-      if (window.confirm("¿Estás seguro de que quieres eliminar?")) {
+
         try {
           const response = await fetch(`${URL}${PORT}/${form}/${id}`, {
             method: "DELETE",
@@ -119,10 +118,7 @@ const NegativeRecord = () => {
         } catch (error) {
           console.log(error);
         }
-      }
-    } else {
-      alert("No esta permitido para las credenciales por defecto.");
-    }
+   
   };
 
   const handleDeleteM = async (ids) => {

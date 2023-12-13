@@ -4,6 +4,8 @@ const  PaymentsController = require('../Controllers/payments.controller');
 //traer informacion
 router.get('/',PaymentsController.FindAllPayments)
 
+router.get('/:name', PaymentsController.FindAllPaymentsExport)
+
 // por seguridad se recomienda post -> crear.
 router.post('/', PaymentsController.CreatePayments)
 

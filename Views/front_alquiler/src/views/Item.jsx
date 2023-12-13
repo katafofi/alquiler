@@ -108,54 +108,42 @@ const Item = () => {
   };
 
   const handleDelete = async (id) => {
-    if (window.prompt("Ingrese la credencial de autorizacion", 0) == "202312") {
-      if (window.confirm("¿Estás seguro de que quieres eliminar?")) {
-        try {
-          const response = await fetch(`${URL}${PORT}/${form}/${id}`, {
-            method: "DELETE",
-          });
-          console.log(response);
-          setForm((prev) => prev.filter((info) => info.IdArticulo != id));
-          setDeleted(true);
-          if (selected && selected.IdArticulo == id) {
-            setSelected(null);
-            setNews({
-              IdArticulo: "",
-              Descripcion: "",
-              PrecioArticulo: "",
-              IdCategoria: "",
-              IdColor: "",
-              IdTalla: "",
-            });
-          }
-        } catch (error) {
-          console.log(error);
-        }
+    try {
+      const response = await fetch(`${URL}${PORT}/${form}/${id}`, {
+        method: "DELETE",
+      });
+      console.log(response);
+      setForm((prev) => prev.filter((info) => info.IdArticulo != id));
+      setDeleted(true);
+      if (selected && selected.IdArticulo == id) {
+        setSelected(null);
+        setNews({
+          IdArticulo: "",
+          Descripcion: "",
+          PrecioArticulo: "",
+          IdCategoria: "",
+          IdColor: "",
+          IdTalla: "",
+        });
       }
-    } else {
-      alert("No esta permitido para las credenciales por defecto.");
+    } catch (error) {
+      console.log(error);
     }
   };
 
   const handleDeleteM = async (ids) => {
-    if (window.prompt("Ingrese la credencial de autorizacion", 0) == "202312") {
-      if (window.confirm("¿Estás seguro de que quieres eliminar?")) {
-        try {
-          const response = await fetch(`${URL}${PORT}/${form}/delete/all`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(ids),
-          });
-          console.log(response);
-          setDeletedM(true);
-        } catch (error) {
-          console.log(error);
-        }
-      }
-    } else {
-      alert("No esta permitido para las credenciales por defecto.");
+    try {
+      const response = await fetch(`${URL}${PORT}/${form}/delete/all`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(ids),
+      });
+      console.log(response);
+      setDeletedM(true);
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -230,7 +218,7 @@ const Item = () => {
           PrecioArticulo: news.PrecioArticulo,
           IdCategoria: news.IdCategoria,
           IdColor: news.IdColor,
-          IdTalla: news.IdTalla
+          IdTalla: news.IdTalla,
         }),
       }
     );
@@ -255,18 +243,10 @@ const Item = () => {
     e.preventDefault();
 
     if (selected) {
-      if (
-        window.prompt("Ingrese la credencial de autorizacion", 0) == "202312"
-      ) {
-        if (window.confirm("¿Estás seguro de que quieres actualizar este?")) {
-          try {
-            handleUpdate();
-          } catch (error) {
-            console.error("Error al actualizar:", error);
-          }
-        }
-      } else {
-        alert("No esta permitido para las credenciales por defecto.");
+      try {
+        handleUpdate();
+      } catch (error) {
+        console.error("Error al actualizar:", error);
       }
     } else {
       try {
@@ -285,11 +265,13 @@ const Item = () => {
   const indexOfLast = (currentPage + 1) * PerPage;
   const indexOfFirst = indexOfLast - PerPage;
   const current = forms
-    .filter((item) => item?.Descripcion?.toString().toLowerCase()
+    .filter((item) =>
+      item?.Descripcion?.toString()
+        .toLowerCase()
         .includes(filter.toString().toLowerCase())
     )
     .slice(indexOfFirst, indexOfLast);
-console.log
+  console.log;
   return (
     <>
       <div className="container mt-4">
@@ -311,7 +293,6 @@ console.log
           <div className="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
             <form onSubmit={handleSubmit} className="mb-4">
               <div className="form-row">
-
                 <InputCataComponente
                   value={news.Descripcion}
                   onChange={handleInput}

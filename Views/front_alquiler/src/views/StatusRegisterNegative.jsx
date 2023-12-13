@@ -53,8 +53,6 @@ const [selected, setSelected] = useState(null);
       };
 
       const handleDelete = async (id) => {
-        if (window.prompt("Ingrese la credencial de autorizacion", 0) == "202312") {
-          if (window.confirm("¿Estás seguro de que quieres eliminar?")) {
             try {
               const response = await fetch(`${URL}${PORT}/${form}/${id}`, {
                 method: "DELETE",
@@ -72,15 +70,11 @@ const [selected, setSelected] = useState(null);
             } catch (error) {
               console.log(error);
             }
-          }
-        } else {
-          alert("No esta permitido para las credenciales por defecto.");
-        }
+
       };
 
       const handleDeleteM = async (ids) => {
-        if (window.prompt("Ingrese la credencial de autorizacion", 0) == "202312") {
-          if (window.confirm("¿Estás seguro de que quieres eliminar?")) {
+
             try {
               const response = await fetch(`${URL}${PORT}/${form}/delete/all`, {
                 method: "POST",
@@ -94,10 +88,7 @@ const [selected, setSelected] = useState(null);
             } catch (error) {
               console.log(error);
             }
-          }
-        } else {
-          alert("No esta permitido para las credenciales por defecto.");
-        }
+       
       };
 
       const handleEdit = async (news) => {
@@ -184,19 +175,13 @@ const [selected, setSelected] = useState(null);
         e.preventDefault();
     
         if (selected) {
-          if (
-            window.prompt("Ingrese la credencial de autorizacion", 0) == "202312"
-          ) {
-            if (window.confirm("¿Estás seguro de que quieres actualizar este?")) {
+  
               try {
                 handleUpdate();
               } catch (error) {
                 console.error("Error al actualizar:", error);
               }
-            }
-          } else {
-            alert("No esta permitido para las credenciales por defecto.");
-          }
+        
         } else {
           try {
             handleCreate();

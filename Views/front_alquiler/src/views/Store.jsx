@@ -334,10 +334,9 @@ const Store = () => {
               Fields={[
                 "Nombre",
                 "Nit",
-                "Nombre",
                 "Direccion",
                 "Telefono",
-                " Correo",
+                "Correo",
               ]}
             />
             <PaginateCataComponente

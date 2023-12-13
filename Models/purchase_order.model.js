@@ -19,6 +19,10 @@ const PuchaseOrder = database.define('OrdenCompra', {
     IdEmpleado: {
         type: Sequelize.INTEGER,
         allowNull: false,
+    },
+    Total: {
+        type: Sequelize.DECIMAL(10, 2),
+        allowNull: false,
     }
 
 })

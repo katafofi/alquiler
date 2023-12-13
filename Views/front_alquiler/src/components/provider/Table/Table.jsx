@@ -50,15 +50,15 @@ const TabletCataComponente = ({
                   }}
                 />
               </th>
-              {Fields.map((e) => (
-                <th>{e}</th>
+              {Fields.map((e, key) => (
+                <th key={key}>{e}</th>
               ))}
               <th style={{ width: "100%" }}>Acciones</th>
             </tr>
           </thead>
           <tbody>
-            {data.map((provider) => (
-              <tr key={provider[idField]}>
+            {data.map((provider, id) => (
+              <tr key={id}>
                 <td>
                   <input
                     type="checkbox"
@@ -78,6 +78,8 @@ const TabletCataComponente = ({
                     
                 </td>
               ))}
+
+              
                 <td>
                   
                     <button
@@ -88,7 +90,7 @@ const TabletCataComponente = ({
                       update
                     </button>
                  
-                  &nbsp;
+                    &nbsp;
                  
                     <button
                       type="button"
@@ -97,9 +99,12 @@ const TabletCataComponente = ({
                     >
                       Delete
                     </button>
+
                     &nbsp;
 
-                    <ButtonCataComponente title={'Generar factura'} type={'button'} onClick={() => generateVoice(provider[idField])} ></ButtonCataComponente>
+                    { idField == 'IdOrdenCompra' &&
+                        <ButtonCataComponente title={'Generar factura'} type={'button'} onClick={() => generateVoice(provider[idField])} ></ButtonCataComponente>
+                    }
 
                  
                 </td>

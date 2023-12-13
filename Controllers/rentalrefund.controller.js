@@ -2,20 +2,18 @@ const RentingRefunt = require("../Models/rental_refunt.model");
 
 const CreateRentingRefunt = async (req, res) => {
   const {
-  
     Descripcion,
     IdAlquiler,
-    Idempleado
+    IdEmpleado
      
   } = req.body;
 
   try {
     const RentingRefuntCreate = await  RentingRefunt.create({
-      
-    
+          
       Descripcion,
       IdAlquiler,
-      Idempleado  
+      IdEmpleado  
     });
     res.status(200).json(RentingRefuntCreate);
   } catch (error) {
@@ -30,7 +28,7 @@ const UpdateRentingRefunt= async (req, res) => {
    
     Descripcion,
     IdAlquiler,
-    Idempleado  
+    IdEmpleado  
   } = req.body;
 
   try {
@@ -39,7 +37,7 @@ const UpdateRentingRefunt= async (req, res) => {
         
     Descripcion,
     IdAlquiler,
-    Idempleado  
+    IdEmpleado  
       },
       {
         where: {IdRegistroDevolucion },

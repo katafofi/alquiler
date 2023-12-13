@@ -105,15 +105,6 @@ const exportPdf = async (result, responseEmploye, responseRenting, responseClien
    const stream = fs.createWriteStream(outputPath);
    doc.pipe(stream);
 
-
-   console.log('employe',responseEmploye)
-   console.log('RENTING',responseRenting)
-   console.log('cliente',responseClient)
-   console.log('store',responseStore)
-   console.log('responsePuchaseOrder',responsePuchaseOrder)
-   console.log('responsePuchaseItemOrder',responsePuchaseItemOrder)
-
-
    const opcionesFormato = { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit', timeZoneName: 'short', timeZone: 'UTC' };
 
    doc.fontSize(18);
@@ -211,13 +202,14 @@ const generateInvoice = async (req, res) => {
 }
 
 const createPurchaseOrder = async (req, res) => {
-  const { FechaCompra, IdAlquiler, IdEmpleado } = req.body;
+  const { FechaCompra, IdAlquiler, IdEmpleado, Total } = req.body;
 
   try {
     const purchaseOrderCreate = await PuchaseOrder.create({
       FechaCompra,
       IdAlquiler,
       IdEmpleado,
+      Total,
     });
     res.status(201).json(purchaseOrderCreate);
   } catch (error) {
@@ -228,7 +220,7 @@ const createPurchaseOrder = async (req, res) => {
 const updatePurchaseOrder = async (req, res) => {
   const { IdOrdenCompra } = req.params;
 
-  const { FechaCompra, IdAlquiler, IdEmpleado } = req.body;
+  const { FechaCompra, IdAlquiler, IdEmpleado, Total } = req.body;
 
   try {
     const [result] = await PuchaseOrder.update(
@@ -236,6 +228,7 @@ const updatePurchaseOrder = async (req, res) => {
         FechaCompra,
         IdAlquiler,
         IdEmpleado,
+        Total
       },
       {
         where: { IdOrdenCompra },

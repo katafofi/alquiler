@@ -3,6 +3,8 @@ const expenseEmployeController = require('../Controllers/expenseEmploye.controll
 
 router.get('/', expenseEmployeController.FindAllExpenseEmploye)
 
+router.get('/:name', expenseEmployeController.FindAllExpenseEmployeExport)
+
 router.post('/', expenseEmployeController.CreateExpenseEmploye)
 
 router.patch('/:IdGastoEmpleado', expenseEmployeController.UpdateExpenseEmploye)

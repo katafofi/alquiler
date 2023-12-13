@@ -3,13 +3,13 @@ const Accesories = require("../Models/accesories.model");
 const CreateAccesories = async (req, res) => {
   const {
     Descripcion,
-    PrecioAccesorio,	    
+    	    
   } = req.body;
 
   try {
     const AccesoriesCreate = await  Accesories.create({
         Descripcion,
-    PrecioAccesorio,
+    
     });
     res.status(200).json(AccesoriesCreate);
   } catch (error) {
@@ -22,14 +22,14 @@ const UpdateAccesories = async (req, res) => {
 
   const {
     Descripcion,
-    PrecioAccesorio,
+    
   } = req.body;
 
   try {
     const [result] = await Accesories.update(
       {
         Descripcion,
-        PrecioAccesorio,
+        
       },
       {
         where: { IdAccesorio },

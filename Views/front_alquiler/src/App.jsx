@@ -25,16 +25,8 @@ import ItemInventory from './views/ItemInventory';
 import Item from './views/Item';
 import NegativeRecord from './views/NegativeRecord';
 import Payments from './views/Payments';
-
-
-
-
-
-
-
-
-
-
+import Reports from './views/Reports'
+import RentingRefunt from './views/RentingRefunt';
 
 function App() {
  return (
@@ -61,7 +53,9 @@ function App() {
            <Route exact path='/item/inventory' element= { < ItemInventory/>}></Route>
            <Route exact path='/item' element= { < Item/>}></Route>
            <Route exact path='/negative/record' element= { < NegativeRecord/>}></Route>
-           <Route exact path='payments' element= { < Payments/>}></Route>
+           <Route exact path='/payments' element= { < Payments/>}></Route>
+           <Route exact path='/reports' element= { < Reports/>}></Route>
+           <Route exact path='/rentalrefurnt' element= { < RentingRefunt/>}></Route>
          </Routes>
         </div>
         <FooterCataComponente />

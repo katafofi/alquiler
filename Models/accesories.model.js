@@ -12,12 +12,7 @@ const Accesories = database.define('Accesorios', {
         allowNull: false,
         unique: true,
     },
-    PrecioAccesorio: {
-        type: Sequelize.DECIMAL(10, 2),
-        allowNull: false,
-
-
-    }
+   
     })
     module.exports = Accesories;
     

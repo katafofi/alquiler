@@ -1,4 +1,6 @@
 const Payments = require("../Models/payments.models");
+const dataToExcel = require("../provider/dataToExcel");
+const formattedDate = require("../provider/formatDate");
 
 const CreatePayments = async (req, res) => {
   const { FechadPago, Valor, IdEstadoPago, IdTipoPago, IdOrdenCompra } = req.body;
@@ -97,6 +99,34 @@ const FindAllPayments = async (req, res) => {
   }
 };
 
+const FindAllPaymentsExport = async (req, res) => {
+  try {
+    const { name } = req.params
+
+    const result = await Payments.findAll();
+    const data = []
+
+    await Promise.all(
+      result.map(async (payments) => {
+
+        const formattedExpense = { 
+          ...payments.dataValues,
+          createdAt: formattedDate(payments.dataValues.createdAt),
+          updatedAt: formattedDate(payments.dataValues.updatedAt)
+        }
+
+        data.push(formattedExpense)
+        return formattedExpense
+      })
+    )
+
+    dataToExcel(data, name)
+    res.status(200).json(result);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 const all = {
   CreatePayments,
   UpdatePayments,
@@ -104,6 +134,7 @@ const all = {
   DeleteMultiplePayments,
   FindOnePaymentsById,
   FindAllPayments,
+  FindAllPaymentsExport
 };
 
 module.exports = all;

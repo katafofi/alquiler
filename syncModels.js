@@ -1,7 +1,7 @@
 async function syncModels() {
   const database = require("./db");
 
-  const Employe = require("./Models/employe.model");
+  const Employe = require("./Models/employe.model.js")
   const ExpensesEmploye = require("./Models/expensesEmploye.model");
   const Clients = require("./Models/clients.model");
   const Store = require("./Models/store.model");
@@ -24,7 +24,6 @@ async function syncModels() {
   const StatusRegisterNegative = require("./Models/status_register_negative.model.js");
   const PuchaseOrderStatusRegisterNegativeNegativeRecord = require("./Models/negativeRecord.model.js");
   const Renting = require("./Models/renting.model.js");
-  const ReturnRegisterRenting = require("./Models/Return_Register.model.js");
   const StatusEmployeEmploye = require("./Models/employe_status.model.js");
   const RentingRefunt =require("./Models/rental_refunt.model.js");
 
@@ -120,10 +119,7 @@ async function syncModels() {
     }
   );
 
-  Renting.hasMany(ReturnRegisterRenting, {
-    foreignKey: "IdAlquiler",
-    onDelete: "RESTRICT",
-  });
+  
 
   //tabla relacion de 1:1
   StatusEmployeEmploye.hasOne(Employe, {
@@ -141,7 +137,7 @@ async function syncModels() {
     onDelete: "RESTRICT",
   });
  
-  await database.sync({ alter:false, force: false }); // false prod y true dev
+  await database.sync({ alter: false, force: false }); // false prod y true dev
 }
 
 module.exports = syncModels;

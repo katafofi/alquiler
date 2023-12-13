@@ -27,7 +27,6 @@ const NegativeRecordRouter = require("./Routes/negativeRecord.route.js");
 const PaymentsRouter = require("./Routes/payments.route.js");
 const PuchareItemOrderRouter = require("./Routes/puchaseItemOrder.route.js");
 const PucharseOrderRouter = require("./Routes/purchaseorder.route.js");
-const ReturnRegisterRouter = require("./Routes/Return_Register.router.js");
 const RentalRefuntRouter = require("./Routes/rentalRefunt.route")
 
 const app = express();
@@ -66,7 +65,6 @@ app.use("/negativeRecord", NegativeRecordRouter);
 app.use("/payments", PaymentsRouter);
 app.use("/PuchaseItemOrder", PuchareItemOrderRouter);
 app.use("/PuchaseOrder", PucharseOrderRouter);
-app.use("/retunrRegister", ReturnRegisterRouter);
 app.use("/rentalrefurnt", RentalRefuntRouter);
 
 

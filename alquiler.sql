@@ -71,7 +71,7 @@ CREATE TABLE Colores (
 CREATE TABLE Accesorios (
     IdAccesorio INT AUTO_INCREMENT PRIMARY KEY,
     Descripcion VARCHAR(50) NOT NULL,
-    PrecioAccesorio DECIMAL(10, 2) NOT NULL
+    
 );
 
 -- relacion con tiendas, clientes 3*

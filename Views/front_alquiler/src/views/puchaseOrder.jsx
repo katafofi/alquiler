@@ -126,6 +126,7 @@ const PuchaseOrder = () => {
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
+
       const data = await response.json();
       console.log(data);
     } catch (error) {
@@ -150,6 +151,7 @@ const PuchaseOrder = () => {
               FechaCompra: "",
               IdAlquiler: "",
               IdEmpleado: "",
+              Total: ""
             });
           }
         } catch (error) {
@@ -190,6 +192,7 @@ const PuchaseOrder = () => {
       FechaCompra: news.FechaCompra,
       IdAlquiler: news.IdAlquiler,
       IdEmpleado: news.IdEmpleado,
+      Total: news.Total
     });
   };
 
@@ -209,6 +212,7 @@ const PuchaseOrder = () => {
         FechaCompra: "",
         IdAlquiler: "",
         IdEmpleado: "",
+        Total: ""
       });
     } catch (error) {
       console.log(error);
@@ -249,6 +253,7 @@ const PuchaseOrder = () => {
           FechaCompra: news.FechaCompra,
           IdAlquiler: news.IdAlquiler,
           IdEmpleado: news.IdEmpleado,
+          Total: news.Total
         }),
       }
     );
@@ -264,6 +269,7 @@ const PuchaseOrder = () => {
       FechaCompra: "",
       IdAlquiler: "",
       IdEmpleado: "",
+      Total: ""
     });
   };
 
@@ -363,6 +369,17 @@ const PuchaseOrder = () => {
                   options={options2}
                   onChange={handleSelect}
                 />
+
+                <InputCataComponente
+                  value={news.Total}
+                  onChange={handleInput}
+                  placeholder={"Ingrese Total"}
+                  id={"Total"}
+                  type={"number"}
+                  name={"Total"}
+                  label={"Total"}
+                />
+
                 <ButtonCataComponente
                   type="submit"
                   className="btn btn-primary btn-block"
@@ -384,6 +401,7 @@ const PuchaseOrder = () => {
                 "IdAlquiler",
                 "IdEmpleado",
                 "IdOrdenCompra",
+                "Total",
                 "createdAt",
                 "updatedAt",
               ]}

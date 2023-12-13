@@ -81,6 +81,12 @@ const NavbarCataComponente = () => {
                             <li className="nav-item">
                                 <Link to={'/payments'}> pagos </Link>
                             </li>
+                            <li className='nav-item'>
+                                <Link to={'/reports'}> Reportes </Link>
+                            </li>
+                            <li className='nav-item'>
+                                <Link to={'/rentalrefurnt'}> Devolicion de alquiler </Link>
+                            </li>
                         </ul>
                     </div>
                 </div>
