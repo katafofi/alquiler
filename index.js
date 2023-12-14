@@ -2,6 +2,7 @@ const sequelize = require("./db");
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
+const path = require('path');
 const syncModels = require("./syncModels");
 
 //aca agregas mas rutas
@@ -30,8 +31,8 @@ const PucharseOrderRouter = require("./Routes/purchaseorder.route.js");
 const RentalRefuntRouter = require("./Routes/rentalRefunt.route")
 
 const app = express();
-app.use(bodyParser.json());
-
+app.use(bodyParser.json({ limit: '40mb'}));
+app.use(bodyParser.urlencoded({ extended: true, limit: '40mb'}))
 //config de que puedo aceptar
 const corsOptions = {
   origin: "*",
@@ -42,6 +43,7 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
+app.use("/assets", express.static(path.join(__dirname, "assets")))
 //aca agregas mas rutas a una ruta
 app.use("/employe", EmployeRouter);
 app.use("/expense_employe", ExpenseEmployeRouter);

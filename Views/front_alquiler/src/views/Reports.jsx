@@ -29,9 +29,8 @@ const spent = async () => {
 
 const Reports = () => {
     return (<>
-        <ButtonCataComponente title={'Abonos'} type={'button'} onClick={() => {subsidies_balances()}}></ButtonCataComponente>
+        <ButtonCataComponente title={'Abonos y Totales'} type={'button'} onClick={() => {subsidies_balances()}}></ButtonCataComponente>
         <ButtonCataComponente title={'Gastos'} type={'button'} onClick={() => {spent()}}></ButtonCataComponente>
-        
     </>)
 }
 

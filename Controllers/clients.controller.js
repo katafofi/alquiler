@@ -17,6 +17,9 @@ const CreateClients = async (req, res) => {
 
   const FotoDocumento = req.files && req.files['FotoDocumento'] ? req.files['FotoDocumento'][0].path : null;
   const FotoServicioPublico = req.files && req.files['FotoServicioPublico'] ? req.files['FotoServicioPublico'][0].path : null;
+  
+  console.log(FotoDocumento)
+  console.log(FotoServicioPublico)
   //organizar que se guarden son los dos que vienen desde el cb multer
   try {
     const ClientsCreate = await  Clients.create({
@@ -132,8 +135,8 @@ const FindAllClients = async (req, res) => {
     const result = await Clients.findAll();
 
     const clientsFilepath = await Promise.all(result.map(async (client) => {
-       client.FotoDocumento ? client.FotoDocumentoPath = await bufferToFile(client.FotoDocumento, `/assets/${client.Cedula}_${client.Nombre}`) : null
-       client.FotoServicioPublico ? client.FotoServicioPublicoPath = await bufferToFile(client.FotoServicioPublico, `/assets/${client.Cedula}_${client.Nombre}`) : null
+       client.FotoDocumento = await bufferToFile(client.FotoDocumento, `FotoDocumento_${client.Cedula}_${client.Nombre}.pdf`)
+       client.FotoServicioPublico = await bufferToFile(client.FotoServicioPublico, `FotoServicioPublico_${client.Cedula}_${client.Nombre}.pdf`)
        return client
     }))
 

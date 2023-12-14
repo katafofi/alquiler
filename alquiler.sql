@@ -143,7 +143,6 @@ CREATE TABLE RegistrosNegativos (
 CREATE TABLE Articulos (
     IdArticulo INT AUTO_INCREMENT PRIMARY KEY,
     NombreArticulo VARCHAR (100) NOT NULL,
-    PrecioArticulo DECIMAL(10, 2) NOT NULL,
     IdCategoria INT NOT NULL,
     IdColor INT NOT NULL,
     IdTalla INT NOT NULL,

@@ -9,6 +9,8 @@ import SearchCataComponente from "../components/provider/Search/Search";
 
 const Clients = () => {
   const [forms, setForm] = useState([]);
+  const [fotoDocumento, setFotoDocumento] = useState(null);
+  const [fotoServicioPublico, setFotoServicioPublico] = useState(null);
   const [news, setNews] = useState({
     //IdCategoria
     Nombre: "",
@@ -81,8 +83,8 @@ const Clients = () => {
               Telefono: "",
               ReferenciaPersonalNombre: "",
               ReferenciaPersonalTelefono: "",
-              FotoDocumento: "",
-              FotoServicioPublico: "",
+              FotoDocumento: null,
+              FotoServicioPublico: null,
               Fecha: "",
             });
           }
@@ -129,20 +131,36 @@ const Clients = () => {
       Telefono: news.Telefono,
       ReferenciaPersonalNombre: news.ReferenciaPersonalNombre,
       ReferenciaPersonalTelefono: news.ReferenciaPersonalTelefono,
-      FotoDocumento: news.FotoDocumento,
-      FotoServicioPublico: news.FotoServicioPublico,
+      FotoDocumento: fotoDocumento,
+      FotoServicioPublico: fotoServicioPublico,
       Fecha: news.Fecha,
     });
   };
 
   const handleCreate = async () => {
     try {
+
+      const formData = new FormData()
+
+      formData.append("Nombre", news.Nombre)
+      formData.append("Apellido", news.Apellido)
+      formData.append("Cedula", news.Cedula)
+      formData.append("Correo", news.Correo)
+      formData.append("Direccion", news.Direccion)
+      formData.append("Telefono", news.Telefono)
+      formData.append("ReferenciaPersonalNombre", news.ReferenciaPersonalNombre)
+      formData.append("ReferenciaPersonalTelefono", news.ReferenciaPersonalTelefono)
+      formData.append("FotoDocumento", fotoDocumento, fotoDocumento.name)
+      formData.append("FotoServicioPublico", fotoServicioPublico, fotoServicioPublico.name)
+      formData.append("Fecha", news.Fecha)
+
+      for (const entry of formData.entries()) {
+        //console.log(entry);
+      }
+
       const response = await fetch(`${URL}${PORT}/${form}`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(news),
+        body: formData,
       });
       const data = await response.json();
       setForm((prev) => [...prev, data]);
@@ -156,8 +174,8 @@ const Clients = () => {
         Telefono: "",
         ReferenciaPersonalNombre: "",
         ReferenciaPersonalTelefono: "",
-        FotoDocumento: "",
-        FotoServicioPublico: "",
+        FotoDocumento: null,
+        FotoServicioPublico: null,
         Fecha: "",
       });
     } catch (error) {
@@ -186,6 +204,16 @@ const Clients = () => {
     }));
   };
 
+  const handleInputFileDocumentoChange = (event) => {
+    const file = event.target.files[0];
+    setFotoDocumento(file);
+  };
+
+  const handleInputFileServicioPublicoChange = (event) => {
+    const file = event.target.files[0];
+    setFotoServicioPublico(file);
+  };
+
   const handleUpdate = async () => {
     const response = await fetch(
       `${URL}${PORT}/${form}/${selected.IdCliente}`,
@@ -204,8 +232,8 @@ const Clients = () => {
           Telefono: news.Telefono,
           ReferenciaPersonalNombre: news.ReferenciaPersonalNombre,
           ReferenciaPersonalTelefono: news.ReferenciaPersonalTelefono,
-          FotoDocumento: news.FotoDocumento,
-          FotoServicioPublico: news.FotoServicioPublico,
+          FotoDocumento: fotoDocumento,
+          FotoServicioPublico: fotoServicioPublico,
           Fecha: news.Fecha,
         }),
       }
@@ -225,8 +253,8 @@ const Clients = () => {
       Telefono: "",
       ReferenciaPersonalNombre: "",
       ReferenciaPersonalTelefono: "",
-      FotoDocumento: "",
-      FotoServicioPublico: "",
+      FotoDocumento: null,
+      FotoServicioPublico: null,
       Fecha: "",
     });
   };
@@ -266,7 +294,7 @@ const Clients = () => {
   const indexOfFirst = indexOfLast - PerPage;
   const current = forms
     .filter((item) => item?.Cedula?.toString().toLowerCase()
-        .includes(filter.toString().toLowerCase())
+      .includes(filter.toString().toLowerCase())
     )
     .slice(indexOfFirst, indexOfLast);
 
@@ -289,15 +317,16 @@ const Clients = () => {
         <div className="row">
           <div className="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
             <form onSubmit={handleSubmit} className="mb-4">
-              <div className="form-row">
+              {/* AGREGAR SCROLL STYLE EN FORM-ROW */}
+              <div className="form-row" style={{overflowY: 'scroll', height: '23em',lineHeight:'1em'}} >
                 <InputCataComponente
-                  value={news.Nombre} 
+                  value={news.Nombre}
                   onChange={handleInput}
                   placeholder={"Ingrese nombre"}
-                  id={"Nombre"} 
+                  id={"Nombre"}
                   type={"text"}
-                  name={"Nombre"} 
-                  label={"Nombre"} 
+                  name={"Nombre"}
+                  label={"Nombre"}
                 />
 
                 <InputCataComponente
@@ -370,9 +399,8 @@ const Clients = () => {
                   label={"Referencia Personal Telefono"}
                 />
 
-                 <InputCataComponente
-                  value={news.FotoDocumento}
-                  onChange={handleInput}
+                <InputCataComponente
+                  onChange={handleInputFileDocumentoChange}
                   placeholder={"Ingrese URL de foto de documento"}
                   id={"FotoDocumento"}
                   type={"file"}
@@ -381,21 +409,20 @@ const Clients = () => {
                 />
 
                 <InputCataComponente
-                  value={news.FotoServicioPublico}
-                  onChange={handleInput}
+                  onChange={handleInputFileServicioPublicoChange}
                   placeholder={"Ingrese URL de foto de servicio público"}
                   id={"FotoServicioPublico"}
                   type={"file"}
                   name={"FotoServicioPublico"}
                   label={"Foto de Servicio Público"}
-                /> 
+                />
 
                 <InputCataComponente
                   value={news.Fecha}
                   onChange={handleInput}
                   placeholder={"Ingrese fecha"}
                   id={"Fecha"}
-                  type={"date"} // Puedes cambiar el tipo de entrada según tu formato de fecha
+                  type={"date"}
                   name={"Fecha"}
                   label={"Fecha"}
                 />

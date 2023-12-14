@@ -1,9 +1,14 @@
+const fs = require('fs');
+
 const bufferToFile = async (buffer, filepath) => {
-    return new Promise((resolve, reject) => {
-        fs.writeFile(filepath, buffer, 'binary', (err) => {
+    console.log(buffer)
+    console.log(filepath)
+    return await filepath
+    /* return new Promise((resolve, reject) => {
+        fs.writeFile(filepath, buffer, null, (err) => {
             err ? reject(err) : resolve(filepath)
         })
-    })
+    }) */
 }
 
 module.exports = bufferToFile

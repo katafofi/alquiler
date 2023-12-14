@@ -1,5 +1,7 @@
 const excel = require('exceljs');
 const mysql = require('mysql2/promise');
+const { v4: uuidv4 } = require('uuid');
+const path = require('path');
 
 const pool = mysql.createPool({
   host: 'localhost',
@@ -84,10 +86,12 @@ async function exportToExcel() {
 
     // Genera un nombre único para el archivo usando la fecha actual (renombrado a 'reporte')
     const currentDate = new Date().toISOString().split('T')[0];
-    const fileName = `reporte_${currentDate}.xlsx`;
+    const fileName = `reporte_${currentDate}_${uuidv4()}.xlsx`;
+
+    const filepath = path.join(__dirname, fileName)
 
     // Guarda el archivo Excel con el nombre generado
-    await workbook.xlsx.writeFile(fileName);
+    await workbook.xlsx.writeFile(filepath);
     console.log(`Archivo Excel generado exitosamente: ${fileName}`);
   } catch (error) {
     console.error('Error al ejecutar la consulta:', error.message);
@@ -96,5 +100,4 @@ async function exportToExcel() {
   }
 }
 
-// Ejecuta la función para exportar a Excel
-exportToExcel();
+module.exports = exportToExcel

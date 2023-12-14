@@ -27,6 +27,7 @@ import NegativeRecord from './views/NegativeRecord';
 import Payments from './views/Payments';
 import Reports from './views/Reports'
 import RentingRefunt from './views/RentingRefunt';
+import ImagenCataComponente from './components/provider/Imagen/Imagen';
 
 function App() {
  return (
@@ -35,6 +36,7 @@ function App() {
         <NavbarCataComponente />
         <div id="main-container">
           <Routes>
+            <Route exact path='/images/:imageName' element={ <ImagenCataComponente />}></Route>
             <Route exact path='/employe' element={ <Employe /> }></Route>
             <Route exact path='/expense/employe' element={ <ExpenseEmploye /> }></Route>
             <Route exact path='/status/employe' element={ <StatusEmploye /> }></Route>
