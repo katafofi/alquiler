@@ -1,6 +1,6 @@
-create database Alquiler;
+create database Alquiler2;
 
-use Alquiler;
+use Alquiler2;
 -- 1*
 CREATE TABLE Empleados (
   IdEmpleado INT AUTO_INCREMENT PRIMARY KEY,

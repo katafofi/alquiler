@@ -64,7 +64,7 @@ const handleGetByIdPuchaseItemOrder = async (id) => {
     const PORT = "3003";
     const response = await fetch(`${URL}${PORT}/${form}/${id}`);
     const data = await response.json();
-    return data 
+    return data
   } catch (error) {
     console.log(error);
   }
@@ -85,30 +85,43 @@ const handleGetByIdItems = async (id) => {
 };
 
 //const handleGetByIdPuchasePuchaseAccesoriesOrder = async (id) => {
-  //try {
-    //const form = "PuchaseAccesoriesOrder";
-    //const URL = "http://localhost:";
-    //const PORT = "3003";
-    //const response = await fetch(`${URL}${PORT}/${form}/${id}`);
-   // const data = await response.json();
-   // return data
-  //} catch (error) {
-   // console.log(error);
- // }
+//try {
+//const form = "PuchaseAccesoriesOrder";
+//const URL = "http://localhost:";
+//const PORT = "3003";
+//const response = await fetch(`${URL}${PORT}/${form}/${id}`);
+// const data = await response.json();
+// return data
+//} catch (error) {
+// console.log(error);
+// }
 //};
 
 //const handleGetByAccesories = async (id) => {
-  //try {
-   // const form = "Accesories";
-    //const URL = "http://localhost:";
-    //const PORT = "3003";
-    //const response = await fetch(`${URL}${PORT}/${form}/${id}`);
-    //const data = await response.json();
-   //return data
-  //} catch (error) {
-   // console.log(error);
- // }
+//try {
+// const form = "Accesories";
+//const URL = "http://localhost:";
+//const PORT = "3003";
+//const response = await fetch(`${URL}${PORT}/${form}/${id}`);
+//const data = await response.json();
+//return data
+//} catch (error) {
+// console.log(error);
+// }
 //};
+
+const handleGetInvoice = async (id) => {
+  try {
+    const form = "invoice";
+    const URL = "http://localhost:";
+    const PORT = "3003";
+    const response = await fetch(`${URL}${PORT}/${form}/${id}`);
+    const data = await response.json();
+    return data
+  } catch (error) {
+    console.log(error);
+  }
+}
 
 
 const handleGetByIdPuchaseOrder = async (id) => {
@@ -132,7 +145,6 @@ const exportPdf = async (result, responseEmploye, responseRenting, responseClien
   const stream = fs.createWriteStream(outputPath);
   doc.pipe(stream);
   const opcionesFormato = { day: 'numeric', month: 'long', year: 'numeric' };
-
   doc.fontSize(18);
 
   doc.text(`Fecha compra: ${result.FechaCompra}`)
@@ -224,7 +236,7 @@ const generateInvoice = async (req, res) => {
       const responsePuchaseItemOrder = await handleGetByIdPuchaseItemOrder(responsePuchaseOrder?.message?.IdOrdenCompra);
       //const responseItem = await handleGetByIdItems(responseRenting?.message?.IdArticulo);
       //const responsePuchaseAccesoriesOrder = await handleGetByIdPuchasePuchaseAccesoriesOrder(responsePuchaseOrder?.message?.IdOrdenCompra);
-      
+
 
       exportPdf(result, responseEmploye, responseRenting, responseClient, responseStore, responsePuchaseOrder, responsePuchaseItemOrder);
       res.status(200).json({ message: result });
