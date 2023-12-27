@@ -206,57 +206,79 @@ const Clients = () => {
 
   const handleInputFileDocumentoChange = (event) => {
     const file = event.target.files[0];
-    setFotoDocumento(file);
+    if (file && file.type === 'image/jpg' || file.type === 'image/jpeg') {
+      setFotoDocumento(file);
+    } else {
+      alert('Please select a valid JPG file.'+ file.type);
+      event.target.value = null;
+    }
   };
 
   const handleInputFileServicioPublicoChange = (event) => {
     const file = event.target.files[0];
-    setFotoServicioPublico(file);
+
+    if (file && file.type === 'image/jpg' || file.type === 'image/jpeg') {
+      setFotoServicioPublico(file);
+    } else {
+      alert(file.type + 'Por favor seleccionar un arhico en formato JPG ya que tienen calidad y es imagen segura otro tipo no sera permitido a no ser que sea evaluado por seguridad');
+      event.target.value = null;
+    }
   };
 
   const handleUpdate = async () => {
-    const response = await fetch(
-      `${URL}${PORT}/${form}/${selected.IdCliente}`,
-      {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          IdCliente: news.IdCliente,
-          Nombre: news.Nombre,
-          Apellido: news.Apellido,
-          Cedula: news.Cedula,
-          Correo: news.Correo,
-          Direccion: news.Direccion,
-          Telefono: news.Telefono,
-          ReferenciaPersonalNombre: news.ReferenciaPersonalNombre,
-          ReferenciaPersonalTelefono: news.ReferenciaPersonalTelefono,
-          FotoDocumento: fotoDocumento,
-          FotoServicioPublico: fotoServicioPublico,
-          Fecha: news.Fecha,
-        }),
+    try {
+      const formData = new FormData();
+
+      formData.append("Nombre", news.Nombre);
+      formData.append("Apellido", news.Apellido);
+      formData.append("Cedula", news.Cedula);
+      formData.append("Correo", news.Correo);
+      formData.append("Direccion", news.Direccion);
+      formData.append("Telefono", news.Telefono);
+      formData.append("ReferenciaPersonalNombre", news.ReferenciaPersonalNombre);
+      formData.append("ReferenciaPersonalTelefono", news.ReferenciaPersonalTelefono);
+      formData.append("Fecha", news.Fecha);
+
+      if (fotoDocumento) {
+        formData.append("FotoDocumento", fotoDocumento, fotoDocumento.name);
       }
-    );
-    const data = await response.json();
-    setForm((prev) =>
-      prev.map((estado) => (estado.IdCliente == data.IdCliente ? data : estado))
-    );
-    setSelected(null);
-    setNews({
-      IdCliente: "",
-      Nombre: "",
-      Apellido: "",
-      Cedula: "",
-      Correo: "",
-      Direccion: "",
-      Telefono: "",
-      ReferenciaPersonalNombre: "",
-      ReferenciaPersonalTelefono: "",
-      FotoDocumento: null,
-      FotoServicioPublico: null,
-      Fecha: "",
-    });
+      if (fotoServicioPublico) {
+        formData.append("FotoServicioPublico", fotoServicioPublico, fotoServicioPublico.name);
+      }
+
+      const response = await fetch(
+        `${URL}${PORT}/${form}/${selected.IdCliente}`,
+        {
+          method: "PATCH",
+          body: formData,
+        }
+      );
+
+      const data = await response.json();
+
+      setForm((prev) =>
+        prev.map((estado) => (estado.IdCliente === data.IdCliente ? data : estado))
+      );
+
+      setSelected(null);
+
+      setNews({
+        IdCliente: "",
+        Nombre: "",
+        Apellido: "",
+        Cedula: "",
+        Correo: "",
+        Direccion: "",
+        Telefono: "",
+        ReferenciaPersonalNombre: "",
+        ReferenciaPersonalTelefono: "",
+        FotoDocumento: null,
+        FotoServicioPublico: null,
+        Fecha: "",
+      });
+    } catch (error) {
+      console.error("Error al actualizar:", error);
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -318,7 +340,7 @@ const Clients = () => {
           <div className="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
             <form onSubmit={handleSubmit} className="mb-4">
               {/* AGREGAR SCROLL STYLE EN FORM-ROW */}
-              <div className="form-row" style={{overflowY: 'scroll', height: '23em',lineHeight:'1em'}} >
+              <div className="form-row" style={{ overflowY: 'scroll', height: '23em', lineHeight: '1em' }} >
                 <InputCataComponente
                   value={news.Nombre}
                   onChange={handleInput}

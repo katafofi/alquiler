@@ -314,7 +314,7 @@ const PuchaseOrder = () => {
 
   return (
     <>
-      <div className="container mt-4">
+      <div className="container mt-4"> 
         <div className="row">
           <div className="col">
             <TitleCataComponente title="Orden Compra" size="h6" />
@@ -388,7 +388,7 @@ const PuchaseOrder = () => {
               </div>
             </form>
           </div>
-          <div className="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
+          <div className="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8" style={{ overflow: 'auto', maxHeight: '500px' }}>
             <TabletCataComponente
               data={current}
               handleDelete={handleDelete}

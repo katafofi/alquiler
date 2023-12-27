@@ -28,42 +28,49 @@ import Payments from './views/Payments';
 import Reports from './views/Reports'
 import RentingRefunt from './views/RentingRefunt';
 import ImagenCataComponente from './components/provider/Imagen/Imagen';
+import ReportsNegative from './views/ReportsNegative';
+import PuchareItemOrder from './views/PuchareItemOrder';
+import Renting from './views/renting';
 
 function App() {
- return (
-  <div className='App'>
-    <Router>
+  return (
+    <div className='App'>
+      <Router>
         <NavbarCataComponente />
         <div id="main-container">
           <Routes>
-            <Route exact path='/images/:imageName' element={ <ImagenCataComponente />}></Route>
-            <Route exact path='/employe' element={ <Employe /> }></Route>
-            <Route exact path='/expense/employe' element={ <ExpenseEmploye /> }></Route>
-            <Route exact path='/status/employe' element={ <StatusEmploye /> }></Route>
-            <Route exact path='/categorys' element={ <Categorys />}></Route>
-            <Route exact path='/clients' element= { <Clients />}></Route>
-           <Route exact path='/status/pay' element= { <StatusPay />}></Route>
-           <Route exact path='/status/register/negative' element= { <StatusRegisterNegative />}></Route>
-           <Route exact path='/sizes' element= { <Sizes />}></Route>
-           <Route exact path='/payment/type' element= { < PaymentType />}></Route>
-           <Route exact path='/accesories' element= { < Accesories />}></Route>
-           <Route exact path='/store' element= { < Store />}></Route>  
-           <Route exact path='/puchase/accesories/order' element={ < PuchaseAccesoriesOrder  />}></Route> 
-           <Route exact path='/puchase/order' element= { < PuchaseOrder />}></Route>
-           <Route exact path='/accesories/inventory' element= { < AccesoriesInventory />}></Route>
-           <Route exact path='/colors' element= { < Colors />}></Route>
-           <Route exact path='/item/inventory' element= { < ItemInventory/>}></Route>
-           <Route exact path='/item' element= { < Item/>}></Route>
-           <Route exact path='/negative/record' element= { < NegativeRecord/>}></Route>
-           <Route exact path='/payments' element= { < Payments/>}></Route>
-           <Route exact path='/reports' element= { < Reports/>}></Route>
-           <Route exact path='/rentalrefurnt' element= { < RentingRefunt/>}></Route>
-         </Routes>
+
+            <Route exact path='/reportsnegative' element={<ReportsNegative />}></Route>
+            <Route exact path='/images/:imageName' element={<ImagenCataComponente />}></Route>
+            <Route exact path='/employe' element={<Employe />}></Route>
+            <Route exact path='/expense/employe' element={<ExpenseEmploye />}></Route>
+            <Route exact path='/status/employe' element={<StatusEmploye />}></Route>
+            <Route exact path='/categorys' element={<Categorys />}></Route>
+            <Route exact path='/clients' element={<Clients />}></Route>
+            <Route exact path='/status/pay' element={<StatusPay />}></Route>
+            <Route exact path='/status/register/negative' element={<StatusRegisterNegative />}></Route>
+            <Route exact path='/sizes' element={<Sizes />}></Route>
+            <Route exact path='/payment/type' element={< PaymentType />}></Route>
+            <Route exact path='/accesories' element={< Accesories />}></Route>
+            <Route exact path='/store' element={< Store />}></Route>
+            <Route exact path='/puchase/accesories/order' element={< PuchaseAccesoriesOrder />}></Route>
+            <Route exact path='/puchase/order' element={< PuchaseOrder />}></Route>
+            <Route exact path='/accesories/inventory' element={< AccesoriesInventory />}></Route>
+            <Route exact path='/colors' element={< Colors />}></Route>
+            <Route exact path='/item/inventory' element={< ItemInventory />}></Route>
+            <Route exact path='/item' element={< Item />}></Route>
+            <Route exact path='/negative/record' element={< NegativeRecord />}></Route>
+            <Route exact path='/payments' element={< Payments />}></Route>
+            <Route exact path='/reports' element={< Reports />}></Route>
+            <Route exact path='/rentalrefurnt' element={< RentingRefunt />}></Route>
+            <Route exact path='/puchase/item/order' element={< PuchareItemOrder />}></Route>
+            <Route exact path='/renting' element={< Renting />}></Route>
+          </Routes>
         </div>
         <FooterCataComponente />
-    </Router>
-  </div>
- )
+      </Router>
+    </div>
+  )
 }
 
 export default App

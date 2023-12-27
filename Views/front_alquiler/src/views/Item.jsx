@@ -12,7 +12,6 @@ const Item = () => {
   const [news, setNews] = useState({
     //IdArticulo
     Descripcion: "",
-    PrecioArticulo: "",
     IdCategoria: "",
     IdColor: "",
     IdTalla: "",
@@ -120,7 +119,6 @@ const Item = () => {
         setNews({
           IdArticulo: "",
           Descripcion: "",
-          PrecioArticulo: "",
           IdCategoria: "",
           IdColor: "",
           IdTalla: "",
@@ -152,7 +150,6 @@ const Item = () => {
     setNews({
       IdArticulo: news.IdArticulo,
       Descripcion: news.Descripcion,
-      PrecioArticulo: news.PrecioArticulo,
       IdCategoria: news.IdCategoria,
       IdColor: news.IdColor,
       IdTalla: news.IdTalla,
@@ -173,7 +170,6 @@ const Item = () => {
       setNews({
         IdArticulo: "",
         Descripcion: "",
-        PrecioArticulo: "",
         IdCategoria: "",
         IdColor: "",
         IdTalla: "",
@@ -215,7 +211,6 @@ const Item = () => {
         body: JSON.stringify({
           IdArticulo: news.IdArticulo,
           Descripcion: news.Descripcion,
-          PrecioArticulo: news.PrecioArticulo,
           IdCategoria: news.IdCategoria,
           IdColor: news.IdColor,
           IdTalla: news.IdTalla,
@@ -232,7 +227,6 @@ const Item = () => {
     setNews({
       IdArticulo: "",
       Descripcion: "",
-      PrecioArticulo: "",
       IdCategoria: "",
       IdColor: "",
       IdTalla: "",
@@ -290,7 +284,7 @@ const Item = () => {
           </div>
         </div>
         <div className="row">
-          <div className="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
+          <div className="col-md-6">
             <form onSubmit={handleSubmit} className="mb-4">
               <div className="form-row">
                 <InputCataComponente
@@ -301,16 +295,6 @@ const Item = () => {
                   type={"text"}
                   name={"Descripcion"}
                   label={"Descripcion"}
-                />
-
-                <InputCataComponente
-                  value={news.PrecioArticulo}
-                  onChange={handleInput}
-                  placeholder={"Ingrese precio"}
-                  id={"PrecioArticulo"}
-                  type={"number"}
-                  name={"PrecioArticulo"}
-                  label={"PrecioArticulo"}
                 />
 
                 <SelectCataComponente
@@ -347,31 +331,33 @@ const Item = () => {
               </div>
             </form>
           </div>
-          <div className="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
-            <TabletCataComponente
-              data={current}
-              handleDelete={handleDelete}
-              handleEdit={handleEdit}
-              handleDeleteM={handleDeleteM}
-              idField={"IdArticulo"}
-              Fields={[
-                "Descripcion",
-                "PrecioArticulo",
-                "IdCategoria",
-                "IdColor",
-                "IdTalla",
-              ]}
-            />
-            <PaginateCataComponente
-              data={forms}
-              PerPage={PerPage}
-              handlePageChange={handlePageChange}
-            />
+          <div className="col-md-6">
+            <div className="form-row" style={{ overflowY: 'scroll', height: '23em' }}>
+              <TabletCataComponente
+                data={current}
+                handleDelete={handleDelete}
+                handleEdit={handleEdit}
+                handleDeleteM={handleDeleteM}
+                idField={"IdArticulo"}
+                Fields={[
+                  "Descripcion",
+                  "IdCategoria",
+                  "DescripcionColor",
+                  "IdCategoria",
+                  "IdColor",
+                  "IdTalla",
+                ]}
+              />
+              <PaginateCataComponente
+                data={forms}
+                PerPage={PerPage}
+                handlePageChange={handlePageChange}
+              />
+            </div>
           </div>
         </div>
       </div>
     </>
   );
 };
-
 export default Item;

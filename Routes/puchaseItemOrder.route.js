@@ -15,6 +15,6 @@ router.delete('/:IdArticuloOrdenCompra', PuchareItemOrderController.DeletePuchar
 
 router.post('/delete/all', PuchareItemOrderController.DeleteMultiPuchareItemOrder)
 
-router.get('/:IdOrdenCompra', PuchareItemOrderController.FindOnePuchareItemOrderById)
+router.get('/:IdArticuloOrdenCompra', PuchareItemOrderController.FindOnePuchareItemOrderById)
 
 module.exports = router

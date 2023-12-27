@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import ButtonCataComponente from "../Button/Button";
+import ImagenCataComponente from "../Imagen/Imagen";
 
 const TabletCataComponente = ({
   data,
@@ -84,11 +85,7 @@ const TabletCataComponente = ({
                     )
                   ) : e === "FotoDocumento" || e === "FotoServicioPublico" ? (
                     provider[e] ? (
-                      <img
-                        src={"http:/localhost:3003/assets/" + provider[e]}
-                        alt={provider[e]}
-                        srcSet={"http:/localhost:3003/assets/" + provider[e]}
-                      />
+                      <ImagenCataComponente name={provider[e].replace('.jpg', '')}></ImagenCataComponente>
                     ) : null
                   ) : (
                     provider[e]

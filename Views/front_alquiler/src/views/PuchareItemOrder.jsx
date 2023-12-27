@@ -11,7 +11,7 @@ const PuchareItemOrder = () => {
   const [forms, setForm] = useState([]);
   const [news, setNews] = useState({
     //IdArticuloOrdenCompra 
-    cantidad: "",
+    Cantidad: "",
     IdOrdenCompra:"",
     IdArticulo:""
   });
@@ -21,12 +21,10 @@ const PuchareItemOrder = () => {
   const [options, setOptions] = useState([]);
   const [options2, setOptions2] = useState([]);
   const [currentPage, setCurrentPage] = useState([]);
-  const [optionsSelectedFilter, setOptionsSelectedFilter] = useState([]);
-  const [optionSelectFilter, setOptionSelectFilter] = useState("");
   const [filter, setFilter] = useState("")
 
   const PerPage = 10;
-  const form = "PuchareItemOrder";
+  const form = "PuchaseItemOrder";
 
   const URL = "http://localhost:";
   const PORT = "3003";
@@ -56,95 +54,63 @@ const PuchareItemOrder = () => {
       const response = await fetch(`${URL}${PORT}/${form}`);
       const data = await response.json();
       setForm(data);
-      const availableOptions = ["IdOrdenCompra", "FechaCompra", "IdEmpleado", "IdAlquiler"];
-      const newOptionsSelectedFilter = availableOptions.map(option => ({
-        value: option,
-        label: option,
+      } catch (error) {
+      console.error(error);
+    }
+  };
+  const handleGetOrdenCompra = async () => {
+    try {
+      const response = await fetch(`${URL}${PORT}/PuchaseOrder`);
+      const data = await response.json();
+      const newOptions = data.map((element) => ({
+        value: element.IdOrdenCompra, //lo que selecciona en el back
+        label: element.FechaCompra+' - '+element.IdOrdenCompra //lo que se ve en el selector
       }));
-      setOptionsSelectedFilter(newOptionsSelectedFilter);
+      setOptions2(newOptions);
     } catch (error) {
       console.log(error);
     }
   };
-/*{
-  const handleGetOneTienda = async (IdTienda) => {
-    const response = await fetch(`${URL}${PORT}/Store/${IdTienda}`);
-    const data = await response.json();
-    return data.message.Nombre + " " + data.message.Nit;
-  };
-
-
-  const handleGetOneCliente = async (IdCliente) => {
-    const response = await fetch(`${URL}${PORT}/clients/${IdCliente}`);
-    const data = await response.json();
-    return data.message.Nombre + " " + data.message.Apellido;
-  };
-}*/
   const handleGetArticulo = async () => {
     try {
       const response = await fetch(`${URL}${PORT}/item`);
       const data = await response.json();
-      const newOptions = await Promise.all(
-        data.map(async (element) => {
-          const client = await handleGetOneCliente(element.IdCliente);
-          const tienda = await handleGetOneTienda(element.IdTienda);
-          return {
-            value: element.IdAlquiler,
-            label: `${client} - ${tienda} - ${element.IdAlquiler}`,
-          };
-        })
-      );
-      setOptions2(newOptions);
-    } catch (error) {
-      console.error("Error in handleGetAlquiler:", error);
-    }
-  };
-
-  const handleGetEmpleado = async () => {
-    try {
-      const response = await fetch(`${URL}${PORT}/employe`);
-      const data = await response.json();
       const newOptions = data.map((element) => ({
-        value: element.IdEmpleado, //lo que selecciona en el back
-        label:
-          element.Nombre + " " + element.Apellido + " - " + element.IdEmpleado, //lo que se ve en el selector
+        value: element.IdArticulo, //lo que selecciona en el back
+        label: element.Descripcion+' - '+element.IdArticulo //lo que se ve en el selector
       }));
       setOptions(newOptions);
     } catch (error) {
       console.log(error);
     }
   };
-
+    
   const handleDelete = async (id) => {
-    if (window.prompt("Ingrese la credencial de autorizacion", 0) == "202312") {
-      if (window.confirm("¿Estás seguro de que quieres eliminar?")) {
+   
         try {
           const response = await fetch(`${URL}${PORT}/${form}/${id}`, {
             method: "DELETE",
           });
           console.log(response);
-          setForm((prev) => prev.filter((info) => info.IdOrdenCompra != id));
+          setForm((prev) => prev.filter((info) => info.IdArticuloOrdenCompra != id));
           setDeleted(true);
-          if (selected && selected.IdOrdenCompra == id) {
+          if (selected && selected.IdArticuloOrdenCompra == id) {
             setSelected(null);
             setNews({
-              IdOrdenCompra: "",
-              FechaCompra: "",
-              IdAlquiler: "",
-              IdEmpleado: "",
+              IdArticuloOrdenCompra: "",
+              Cantidad: "",
+             IdOrdenCompra:"",
+             IdArticulo:""
             });
           }
         } catch (error) {
           console.log(error);
         }
-      }
-    } else {
-      alert("No esta permitido para las credenciales por defecto.");
-    }
+    
   };
 
   const handleDeleteM = async (ids) => {
-    if (window.prompt("Ingrese la credencial de autorizacion", 0) == "202312") {
+    
       if (window.confirm("¿Estás seguro de que quieres eliminar?")) {
         try {
           const response = await fetch(`${URL}${PORT}/${form}/delete/all`, {
@@ -160,18 +126,16 @@ const PuchareItemOrder = () => {
           console.log(error);
         }
       }
-    } else {
-      alert("No esta permitido para las credenciales por defecto.");
-    }
+    
   };
 
   const handleEdit = async (news) => {
     setSelected(news);
     setNews({
-      IdOrdenCompra: news.IdOrdenCompra,
-      FechaCompra: news.FechaCompra,
-      IdAlquiler: news.IdAlquiler,
-      IdEmpleado: news.IdEmpleado,
+        IdArticuloOrdenCompra: news.IdArticuloOrdenCompra,
+        Cantidad: news.Cantidad,
+        IdOrdenCompra:news.IdOrdenCompra,
+        IdArticulo: news.IdArticulo      
     });
   };
 
@@ -187,21 +151,22 @@ const PuchareItemOrder = () => {
       const data = await response.json();
       setForm((prev) => [...prev, data]);
       setNews({
-        IdOrdenCompra: "",
-        FechaCompra: "",
-        IdAlquiler: "",
-        IdEmpleado: "",
+        IdArticuloOrdenCompra: "",
+              Cantidad: "",
+             IdOrdenCompra:"",
+             IdArticulo:""
+       
       });
     } catch (error) {
       console.log(error);
     }
   };
 
-  const handleInputSearch = (e) => {
-    const { name, value } = e.target;
-    setNews((prev) => ({ ...prev, [name]: value }));
-    if (name === "filter") {
-      setFilter(value);
+const handleInputSearch = (e) => {
+const { name, value } = e.target;
+   setNews((prev) => ({ ...prev, [name]: value }));
+   if (name === "filter") {
+      setFilter(value)
     }
   };
 
@@ -220,32 +185,32 @@ const PuchareItemOrder = () => {
 
   const handleUpdate = async () => {
     const response = await fetch(
-      `${URL}${PORT}/${form}/${selected.IdOrdenCompra}`,
+      `${URL}${PORT}/${form}/${selected.IdArticuloOrdenCompra}`,
       {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          IdOrdenCompra: news.IdOrdenCompra,
-          FechaCompra: news.FechaCompra,
-          IdAlquiler: news.IdAlquiler,
-          IdEmpleado: news.IdEmpleado,
+            Cantidad: news.Cantidad,
+            IdOrdenCompra:news.IdOrdenCompra,
+            IdArticulo: news.IdArticulo   
         }),
       }
     );
     const data = await response.json();
     setForm((prev) =>
       prev.map((estado) =>
-        estado.IdOrdenCompra == data.IdOrdenCompra ? data : estado
+        estado.IdArticuloOrdenCompra == data.IdArticuloOrdenCompra ? data : estado
       )
     );
     setSelected(null);
-    setNewEmploye({
-      IdOrdenCompra: "",
-      FechaCompra: "",
-      IdAlquiler: "",
-      IdEmpleado: "",
+    setNews({
+        IdArticuloOrdenCompra: "",
+        Cantidad: "",
+       IdOrdenCompra:"",
+       IdArticulo:""
+        
     });
   };
 
@@ -253,9 +218,7 @@ const PuchareItemOrder = () => {
     e.preventDefault();
 
     if (selected) {
-      if (
-        window.prompt("Ingrese la credencial de autorizacion", 0) == "202312"
-      ) {
+     
         if (window.confirm("¿Estás seguro de que quieres actualizar este?")) {
           try {
             handleUpdate();
@@ -263,9 +226,7 @@ const PuchareItemOrder = () => {
             console.error("Error al actualizar:", error);
           }
         }
-      } else {
-        alert("No esta permitido para las credenciales por defecto.");
-      }
+     
     } else {
       try {
         handleCreate();
@@ -275,110 +236,98 @@ const PuchareItemOrder = () => {
     }
   };
 
-  const handlePageChange = (selectedPage) => {
+ const handlePageChange = (selectedPage) => {
     setCurrentPage(selectedPage);
-    setFilter("");
+    setFilter("")
   };
 
   const indexOfLast = (currentPage + 1) * PerPage;
   const indexOfFirst = indexOfLast - PerPage;
-  const current = forms
-    .filter((item) => 
-      item.IdOrdenCompra.toString().toLowerCase().includes(filter.toString().toLowerCase())
-    ).slice(indexOfFirst, indexOfLast);
-  //const current = forms.filter((item) => item.IdAlquiler.toString().toLowerCase().includes(filter.toString().toLowerCase())).slice(indexOfFirst, indexOfLast)
+  const current = forms.filter((item) => item.IdOrdenCompra.toString().toLowerCase().includes(filter.toString().toLowerCase())).slice(indexOfFirst, indexOfLast);
+
 
   return (
     <>
-      <div className="container mt-4">
-        <div className="row">
-          <div className="col">
-            <TitleCataComponente title="Orden Compra" size="h6" />
-            
-            <SelectCataComponente
+    <div className="container mt-4">
+     <div className="row">
+       <div className="col">
+         <TitleCataComponente title="articulo Orden Compra" size="h6" />
+         <SearchCataComponente 
+           value={filter}
+           onChange={handleInputSearch}
+           type={"search"}
+           name={"filter"}
+           id={"filter"}
+           placeholder={"Filtrar articulo orden compra"} //no es necesario 
+         />
+       </div>
+     </div>
+     <div className="row">
+       <div className="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
+         <form onSubmit={handleSubmit} className="mb-4">
+           <div className="form-row"> 
+
+    <InputCataComponente
+    value={news.Cantidad}
+    onChange={handleInput}
+    placeholder={"Ingrese Cantidad"}
+    id={"Cantidad"}
+    type={"number"}
+    name={"Cantidad"}
+    label={"Cantidad"}
+  />     
+ 
+       
+  <           SelectCataComponente
               required
-              style={{ 'width': '100px'}}
-              label={"- Seleccionar un campo -"}
-              name={"Campos a filtrar"}
-              value={optionSelectFilter}
-              options={optionsSelectedFilter}
+              label={"- Seleccionar orden de compra"}
+              name={"IdOrdenCompra"}
+              value={news.IdOrdenCompra}
+              options={options2}
               onChange={handleSelect}
             />
-            
-            <SearchCataComponente
-              value={filter}
-              onChange={handleInputSearch}
-              type={"search"}
-              name={"filter"}
-              id={"filter"}
-              placeholder={"Filtrar por orden compra"}
-            />
-          </div>
-        </div>
-        <div className="row">
-          <div className="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
-            <form onSubmit={handleSubmit} className="mb-4">
-              <div className="form-row">
-                <InputCataComponente
-                  value={news.FechaCompra}
-                  onChange={handleInput}
-                  placeholder={"Ingrese FechaCompra"}
-                  id={"FechaCompra"}
-                  type={"date"}
-                  name={"FechaCompra"}
-                  label={"FechaCompra"}
-                />
 
-                <SelectCataComponente
-                  required
-                  label={"- Seleccionar empleado -"}
-                  name={"IdEmpleado"}
-                  value={news.IdEmpleado}
-                  options={options}
-                  onChange={handleSelect}
-                />
-                <SelectCataComponente
-                  required
-                  label={"- Seleccionar alquiler -"}
-                  name={"IdAlquiler"}
-                  value={news.IdAlquiler}
-                  options={options2}
-                  onChange={handleSelect}
-                />
-                <ButtonCataComponente
-                  type="submit"
-                  className="btn btn-primary btn-block"
-                  title="Guardar"
-                />
-              </div>
-            </form>
-          </div>
-          <div className="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
-            <TabletCataComponente
-              data={current}
-              handleDelete={handleDelete}
-              handleEdit={handleEdit}
-              handleDeleteM={handleDeleteM}
-              idField={" IdOrdenCompra"}
-              Fields={[
-                "FechaCompra",
-                "IdAlquiler",
-                "IdEmpleado",
-                "IdOrdenCompra",
-                "createdAt",
-                "updatedAt",
-              ]}
+
+          <SelectCataComponente
+              required
+              label={" Seleccionar un Accesorio -"}
+              name={"IdArticulo"}
+              value={news.IdArticulo}
+              options={options}
+              onChange={handleSelect}
             />
-            <PaginateCataComponente
-              data={forms}
-              PerPage={PerPage}
-              handlePageChange={handlePageChange}
-            />
-          </div>
-        </div>
-      </div>
+
+             <ButtonCataComponente
+               type="submit"
+               className="btn btn-primary btn-block"
+               title="Guardar"
+             />
+           </div>
+         </form>
+       </div>
+       <div className="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
+         <TabletCataComponente
+           data={current}
+           handleDelete={handleDelete}
+           handleEdit={handleEdit}
+           handleDeleteM={handleDeleteM}
+           idField={"IdArticuloOrdenCompra"}
+           Fields={[
+            "Cantidad",
+            "IdOrdenCompra",
+            "IdArticulo"
+           ]}
+         />
+         <PaginateCataComponente
+           data={forms}
+           PerPage={PerPage}
+           handlePageChange={handlePageChange}
+         />
+       </div>
+     </div>
+   </div>
     </>
-  );
-};
+ );
+}
 
 export default PuchareItemOrder;

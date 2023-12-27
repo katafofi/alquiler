@@ -1,10 +1,13 @@
 const Item = require("../Models/item.model");
+const Colors = require("../Models/colors.model");
+
 
 
 const createItem = async (req, res) => {
   const { 
     Descripcion,
     IdColor,
+    //DescripcionColor,
     IdTalla,
     IdCategoria
     
@@ -14,6 +17,7 @@ const createItem = async (req, res) => {
     const ItemCreate = await Item.create({
       Descripcion,
       IdColor,
+      //DescripcionColor,
       IdTalla,
       IdCategoria
       
@@ -89,8 +93,9 @@ const findOneItemById = async (req, res) => {
   const { IdArticulo } = req.params;
   try {
     const result = await Item.findOne({ where: { IdArticulo } });
-
+ 
     if (!result) {
+    
       res.status(404).json({ error: "Artículo no encontrado" });
     } else {
       res.status(200).json({ message: result });
@@ -99,10 +104,13 @@ const findOneItemById = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
-
+//CAMBIE
 const findAllItem = async (req, res) => {
   try {
     const result = await Item.findAll();
+   result.forEach((item,index) => {
+      item.IdColor = 9;      
+  });
     res.status(200).json(result);
   } catch (error) {
     res.status(500).json({ message: error.message });

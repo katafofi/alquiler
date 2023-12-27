@@ -2,14 +2,14 @@ const PuchareItemOrder= require("../Models/puchase_item_order.model");
 
 const CreatePuchareItemOrder = async (req, res) => {
   const {
-    cantidad,
+    Cantidad,
     IdOrdenCompra,
     IdArticulo
   } = req.body;
 
   try {
     const PuchareItemOrderCreate = await  PuchareItemOrder.create({
-        cantidad,
+        Cantidad,
         IdOrdenCompra,
         IdArticulo
     });
@@ -20,10 +20,10 @@ const CreatePuchareItemOrder = async (req, res) => {
 };
 
 const UpdatePuchareItemOrder = async (req, res) => {
-  const { IdArticuloOrdenCompra  } = req.params;
+  const {IdArticuloOrdenCompra } = req.params;
 
   const {
-    cantidad,
+    Cantidad,
     IdOrdenCompra,
     IdArticulo
   } = req.body;
@@ -31,7 +31,7 @@ const UpdatePuchareItemOrder = async (req, res) => {
   try {
     const [result] = await PuchareItemOrder.update(
       {
-        cantidad,
+        Cantidad,
         IdOrdenCompra,
         IdArticulo
       },
@@ -78,9 +78,9 @@ const DeleteMultiPuchareItemOrder = async(req, res) => {
 };
 
 const FindOnePuchareItemOrderById = async (req, res) => {
-  const { IdOrdenCompra } = req.params;
+  const { IdArticuloOrdenCompra } = req.params;
   try {
-    const result = await PuchareItemOrder.findAll({ where: { IdOrdenCompra } })
+    const result = await PuchareItemOrder.findAll({ where: { IdArticuloOrdenCompra } })
     
     if(result == 0){
         res.status(404).json({ error: "articulo orden compra no encontrado"});

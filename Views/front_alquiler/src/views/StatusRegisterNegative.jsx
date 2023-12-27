@@ -221,6 +221,7 @@ const [selected, setSelected] = useState(null);
            <div className="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
              <form onSubmit={handleSubmit} className="mb-4">
                <div className="form-row">
+                
              
                  <InputCataComponente
                    value={news.Descripcion}
@@ -242,7 +243,9 @@ const [selected, setSelected] = useState(null);
                </div>
              </form>
            </div>
-           <div className="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
+           
+           <div className="form-row" style={{overflowY: 'scroll', height: '23em',lineHeight:'1em'}} >
+            
              <TabletCataComponente
                data={current}
                handleDelete={handleDelete}

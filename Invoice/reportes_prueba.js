@@ -20,7 +20,7 @@ async function exportToExcel() {
   try {
     // Consulta para idestadopago = 1
     const [result1] = await connection.query(`
-      SELECT 
+    SELECT 
         P.FechadPago, 
         OC.IdOrdenCompra,
         P.Valor AS abonado_saldo, 
@@ -32,26 +32,24 @@ async function exportToExcel() {
       INNER JOIN tipopagos AS TP ON (P.IdTipoPago = TP.IdTipoPago)
       INNER JOIN estadopagos AS EP ON (P.IdEstadoPago = EP.IdEstadoPago)
       INNER JOIN ordencompras AS OC ON (P.IdOrdenCompra = OC.IdOrdenCompra)
-      WHERE DATE(P.FechadPago) = CURDATE()  -- Filtra por la fecha actual
-        AND EP.IdEstadoPago = 1;  -- Filtra por idestadopago igual a 1
+      WHERE EP.IdEstadoPago = 1;  -- Filtra por idestadopago igual a 1
     `);
 
     // Consulta para idestadopago = 2
     const [result2] = await connection.query(`
-      SELECT 
-        P.FechadPago, 
-        OC.IdOrdenCompra,
-        P.Valor AS abonado_saldo, 
-        OC.Total AS total_alquiler,
-        EP.Descripcion AS estadopago, 
-        TP.Descripcion AS tipopago, 
-        p.createdAt
-      FROM pagos AS P
-      INNER JOIN tipopagos AS TP ON (P.IdTipoPago = TP.IdTipoPago)
-      INNER JOIN estadopagos AS EP ON (P.IdEstadoPago = EP.IdEstadoPago)
-      INNER JOIN ordencompras AS OC ON (P.IdOrdenCompra = OC.IdOrdenCompra)
-      WHERE DATE(P.FechadPago) = CURDATE()  -- Filtra por la fecha actual
-        AND EP.IdEstadoPago = 2;  -- Filtra por idestadopago igual a 2
+    SELECT 
+    P.FechadPago, 
+    OC.IdOrdenCompra,
+    P.Valor AS abonado_saldo, 
+    OC.Total AS total_alquiler,
+    EP.Descripcion AS estadopago, 
+    TP.Descripcion AS tipopago, 
+    p.createdAt
+  FROM pagos AS P
+  INNER JOIN tipopagos AS TP ON (P.IdTipoPago = TP.IdTipoPago)
+  INNER JOIN estadopagos AS EP ON (P.IdEstadoPago = EP.IdEstadoPago)
+  INNER JOIN ordencompras AS OC ON (P.IdOrdenCompra = OC.IdOrdenCompra)
+  WHERE EP.IdEstadoPago = 2;  -- Filtra por idestadopago igual a 2
     `);
 
     const workbook = new excel.Workbook();

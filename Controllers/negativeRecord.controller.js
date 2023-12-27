@@ -2,13 +2,13 @@ const NegativeRecord = require("../Models/negativeRecord.model");
 
 const CreateNegativeRecord = async (req, res) => {
   const {
-    IdOrdenCompra,
+    IdCliente,
     IdEstadoRegistroNegativo
   } = req.body;
 
   try {
     const NegativeRecordCreate = await  NegativeRecord.create({
-        IdOrdenCompra,
+        IdCliente,
         IdEstadoRegistroNegativo
     });
     res.status(200).json(NegativeRecordCreate);
@@ -21,14 +21,14 @@ const UpdateNegativeRecord = async (req, res) => {
   const { IdRegistroNegativo } = req.params;
 
   const {
-    IdOrdenCompra,
+    IdCliente,
     IdEstadoRegistroNegativo
   } = req.body;
 
   try {
     const [result] = await NegativeRecord.update(
       {
-        IdOrdenCompra,
+        IdCliente,
         IdEstadoRegistroNegativo
       },
       {

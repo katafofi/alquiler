@@ -64,7 +64,7 @@ const handleGetByIdPuchaseItemOrder = async (id) => {
     const PORT = "3003";
     const response = await fetch(`${URL}${PORT}/${form}/${id}`);
     const data = await response.json();
-    return data
+    return data 
   } catch (error) {
     console.log(error);
   }
@@ -84,6 +84,33 @@ const handleGetByIdItems = async (id) => {
   }
 };
 
+//const handleGetByIdPuchasePuchaseAccesoriesOrder = async (id) => {
+  //try {
+    //const form = "PuchaseAccesoriesOrder";
+    //const URL = "http://localhost:";
+    //const PORT = "3003";
+    //const response = await fetch(`${URL}${PORT}/${form}/${id}`);
+   // const data = await response.json();
+   // return data
+  //} catch (error) {
+   // console.log(error);
+ // }
+//};
+
+//const handleGetByAccesories = async (id) => {
+  //try {
+   // const form = "Accesories";
+    //const URL = "http://localhost:";
+    //const PORT = "3003";
+    //const response = await fetch(`${URL}${PORT}/${form}/${id}`);
+    //const data = await response.json();
+   //return data
+  //} catch (error) {
+   // console.log(error);
+ // }
+//};
+
+
 const handleGetByIdPuchaseOrder = async (id) => {
   try {
     const form = "PuchaseOrder";
@@ -98,30 +125,29 @@ const handleGetByIdPuchaseOrder = async (id) => {
 };
 
 const exportPdf = async (result, responseEmploye, responseRenting, responseClient, responseStore, responsePuchaseOrder, responsePuchaseItemOrder) => {
-   console.log(result)
-   const doc = new PDFDocument();
-    
-   const outputPath = './Invoice/out2.pdf';
-   const stream = fs.createWriteStream(outputPath);
-   doc.pipe(stream);
+  console.log(responseRenting)
+  const doc = new PDFDocument();
 
-   const opcionesFormato = { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit', timeZoneName: 'short', timeZone: 'UTC' };
+  const outputPath = './Invoice/out2.pdf';
+  const stream = fs.createWriteStream(outputPath);
+  doc.pipe(stream);
+  const opcionesFormato = { day: 'numeric', month: 'long', year: 'numeric' };
 
-   doc.fontSize(18);
+  doc.fontSize(18);
 
-    doc.text(`Fecha compra: ${result.FechaCompra}`)
+  doc.text(`Fecha compra: ${result.FechaCompra}`)
     .moveDown(0.5);
-    doc.text(`Id Orden: ${result.IdOrdenCompra}`)
+  doc.text(`Id Orden: ${result.IdOrdenCompra}`)
     .moveDown(0.5);
-    doc.text(`Empleado: ${responseEmploye.message.Nombre} ${responseEmploye.message.Apellido}`)
+  doc.text(`Empleado: ${responseEmploye.message.Nombre} ${responseEmploye.message.Apellido}`)
     .moveDown(0.5);
-    doc.text(`
+  doc.text(`
         Fecha Inicial: ${new Date(responseRenting.message.FechaInicialAlquiler).toLocaleDateString('es-ES', opcionesFormato)}  
         Fecha final: ${new Date(responseRenting.message.FechaFinlAlquiler).toLocaleDateString('es-ES', opcionesFormato)} 
         Id alquiler es: ${result.IdAlquiler}
     `)
     .moveDown(0.5);
-    doc.text(`
+  doc.text(`
         Tienda: ${responseStore.message.Nit}  
         Nombre: ${responseStore.message.Nombre} 
         Direccion: ${responseStore.message.Direccion} 
@@ -129,7 +155,7 @@ const exportPdf = async (result, responseEmploye, responseRenting, responseClien
         Correo: ${responseStore.message.Correo}
     `)
     .moveDown(0.5);
-    doc.text(`
+  doc.text(`
         IdCliente: ${responseClient.message.IdCliente}
         Nombre: ${responseClient.message.Nombre}
         Apellido: ${responseClient.message.Apellido}
@@ -140,67 +166,73 @@ const exportPdf = async (result, responseEmploye, responseRenting, responseClien
         ReferenciaPersonalNombre: ${responseClient.message.ReferenciaPersonalNombre}
         ReferenciaPersonalTelefono: ${responseClient.message.ReferenciaPersonalTelefono}
         Fecha: ${responseClient.message.Fecha}
-    `).moveDown(0,5)
+    `).moveDown(0, 5)
 
-    let total = 0
+  let total = 0
 
-    function formatprecing(number) {
-      return number.toLocaleString('co-ES');
+  function formatprecing(number) {
+    return number.toLocaleString('co-ES');
+  }
+
+  function formatprecing(number) {
+    return number.toLocaleString('co-ES');
+  }
+
+  doc.text('Cantidad | Id Articulo | Descripcion').moveDown(0, 2);
+
+  await Promise?.all(responsePuchaseItemOrder?.message?.map(async (name, key) => {
+    try {
+      const ArticulosDetails = await handleGetByIdItems(name.IdArticulo);
+      doc.text(`${name.Cantidad} | ${ArticulosDetails.message.IdArticulo} | ${ArticulosDetails.message.Descripcion}`)
+    } catch (error) {
+      console.error(`Error for ${name.IdArticulo}:`, error);
     }
+  }));
 
-    doc.text('Cantidad | Id Articulo | Descripcion | Precio | Subtotal').moveDown(0, 2);
+  doc.text(`Total: $ ${formatprecing(Math.round(parseFloat(result.Total)))}`).moveDown(0, 5);
 
-    await Promise.all(responsePuchaseItemOrder.message.map(async (name, key) => {
-      try {
-        const ArticulosDetails = await handleGetByIdItems(name.IdArticulo);
-        const subtotal = name.Cantidad * ArticulosDetails.message.PrecioArticulo
-        total += subtotal
-            doc.text(`${name.Cantidad} | ${ArticulosDetails.message.IdArticulo} | ${ArticulosDetails.message.Descripcion} | ${formatprecing(Math.round(parseFloat(ArticulosDetails.message.PrecioArticulo)))} | ${formatprecing(Math.round(parseFloat(subtotal)))}`)
-      } catch (error) {
-        console.error(`Error for ${name.IdArticulo}:`, error);
-      }
-    }));
-
-    doc.text(`Total: $ ${formatprecing(Math.round(parseFloat(total)))}`).moveDown(0, 5);
-
-    doc.text(`
+  doc.text(`
           Politicas: colocarlas...
 
 
         `).moveDown(0, 5);
 
-   doc.end();
-   stream.on('finish', () => {
-     console.log(`PDF created at: ${outputPath}`);
-   });
-   
-   stream.on('error', (err) => {
-     console.error(`Error creating PDF: ${err}`);
-   });
+
+  doc.end();
+  stream.on('finish', () => {
+    console.log(`PDF created at: ${outputPath}`);
+  });
+
+  stream.on('error', (err) => {
+    console.error(`Error creating PDF: ${err}`);
+  });
 }
 
 const generateInvoice = async (req, res) => {
-  const { id } = req.body
+  const { id } = req.body;
   const result = await PuchaseOrder.findOne({ where: { IdOrdenCompra: id } });
+
   try {
-    if (result === 0) {
-      res.status(404).json({ error: "Orden de compra no eliminada o encontrada" });
+    if (!result) {
+      res.status(404).json({ error: "Orden de compra no encontrada" });
     } else {
-      const responseEmploye = await handleGetByIdEmploye(result.IdEmpleado)      
-      const responseRenting = await handleGetByIdAlquiler(result.IdAlquiler)      
-      const responseClient = await handleGetByIdClient(responseRenting?.message?.IdCliente)
-      const responseStore = await handleGetByIdStore(responseRenting?.message?.IdTienda)
-      const responsePuchaseOrder = await handleGetByIdPuchaseOrder(responseRenting?.message?.IdAlquiler)
-      const responsePuchaseItemOrder = await handleGetByIdPuchaseItemOrder(responsePuchaseOrder?.message?.IdOrdenCompra)
+      const responseEmploye = await handleGetByIdEmploye(result.IdEmpleado);
+      const responseRenting = await handleGetByIdAlquiler(result.IdAlquiler);
+      const responseClient = await handleGetByIdClient(responseRenting?.message?.IdCliente);
+      const responseStore = await handleGetByIdStore(responseRenting?.message?.IdTienda);
+      const responsePuchaseOrder = await handleGetByIdPuchaseOrder(result.IdOrdenCompra);
+      const responsePuchaseItemOrder = await handleGetByIdPuchaseItemOrder(responsePuchaseOrder?.message?.IdOrdenCompra);
+      //const responseItem = await handleGetByIdItems(responseRenting?.message?.IdArticulo);
+      //const responsePuchaseAccesoriesOrder = await handleGetByIdPuchasePuchaseAccesoriesOrder(responsePuchaseOrder?.message?.IdOrdenCompra);
       
-      exportPdf(result, responseEmploye, responseRenting, responseClient, responseStore, responsePuchaseOrder, responsePuchaseItemOrder)
+
+      exportPdf(result, responseEmploye, responseRenting, responseClient, responseStore, responsePuchaseOrder, responsePuchaseItemOrder);
       res.status(200).json({ message: result });
     }
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
-}
-
+};
 const createPurchaseOrder = async (req, res) => {
   const { FechaCompra, IdAlquiler, IdEmpleado, Total } = req.body;
 

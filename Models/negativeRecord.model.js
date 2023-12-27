@@ -8,7 +8,7 @@ const NegativeRecord = database.define('RegistroNegativo', {
         autoIncrement: true,
     },
 
-    IdOrdenCompra: {
+    IdCliente: {
         type: Sequelize.INTEGER,
         allowNull: false,
         unique: true

@@ -249,7 +249,7 @@ const RentingRefunt = () => {
       <div className="container mt-4">
         <div className="row">
           <div className="col">
-            <TitleCataComponente title="Alquiler" size="h6" />
+            <TitleCataComponente title="Devoluciones de alquiler" size="h6" />
 
             <SearchCataComponente
               value={filter}

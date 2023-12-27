@@ -11,13 +11,13 @@ const NegativeRecord = () => {
   const [forms, setForm] = useState([]);
   const [news, setNews] = useState({
     //IdRegistroNegativo
-    IdOrdenCompra: "",
+    IdCliente: "",
     IdEstadoRegistroNegativo: "",
   });
   const [selected, setSelected] = useState(null);
   const [deleted, setDeleted] = useState(false);
   const [deletedM, setDeletedM] = useState(false);
-  const [options, setOptions] = useState([]);
+  const [optionsCliente, setOptionsCliente] = useState([]);
   const [optionsRegistroNegativo, setOptionsRegistroNegativo] = useState([]);
   const [currentPage, setCurrentPage] = useState([]);
   const [filter, setFilter] = useState("");
@@ -30,21 +30,21 @@ const NegativeRecord = () => {
 
   useEffect(() => {
     handleGet();
-    handleGetOrdenCompra();
+    handleGetCliente();
     handleGetEstadoRegistroNegativo();
   }, [selected]);
 
   useEffect(() => {
     handleGet();
-    handleGetOrdenCompra();
-    handleGetEstadoRegistroNegativo();
+    handleGetCliente();
+    handleGetEstadoRegistroNegativo()
     setDeleted(false);
   }, [deleted]);
 
   useEffect(() => {
     handleGet();
-    handleGetOrdenCompra();
-    handleGetEstadoRegistroNegativo();
+    handleGetCliente();
+    handleGetEstadoRegistroNegativo()
     setDeletedM(false);
   }, [deletedM]);
 
@@ -58,26 +58,15 @@ const NegativeRecord = () => {
     }
   };
 
-  const handleGetOneEmpleado = async (IdEmpleado) => {
-    const response = await  fetch(`${URL}${PORT}/employe/${IdEmpleado}`);
-    const data = await response.json();
-    return data.message.Nombre + " " + data.message.Apellido;
-  }
-
-  const handleGetOrdenCompra = async () => {
+  const handleGetCliente = async () => {
     try {
-      const response = await fetch(`${URL}${PORT}/PuchaseOrder`);
+      const response = await fetch(`${URL}${PORT}/Clients`);
       const data = await response.json();
-      const newOptions = await Promise.all(
-        data.map(async (element) => {
-          const employe = await handleGetOneEmpleado(element.IdEmpleado);
-          return {
-            value: element.IdOrdenCompra, //lo que selecciona en el back
-            label: employe + " - orden de compra:" + element.IdOrdenCompra, //lo que se ve en el selector
-          };
-        })
-      )
-      setOptions(newOptions);
+      const newOptions = data.map((element) => ({
+        value: element. IdCliente, //lo que selecciona en el back
+        label: element.Cedula + " " + element.IdCliente, //lo que se ve en el selector
+      }));
+      setOptionsCliente(newOptions);
     } catch (error) {
       console.log(error);
     }
@@ -111,7 +100,7 @@ const NegativeRecord = () => {
             setSelected(null);
             setNews({
               IdRegistroNegativo: "",
-              IdOrdenCompra: "",
+              IdCliente: "",
               IdEstadoRegistroNegativo: "",
             });
           }
@@ -147,7 +136,7 @@ const NegativeRecord = () => {
     setSelected(news);
     setNews({
       IdRegistroNegativo: news.IdRegistroNegativo,
-      IdOrdenCompra: news.IdOrdenCompra,
+      IdCliente: news.IdCliente,
       IdEstadoRegistroNegativo: news.IdEstadoRegistroNegativo,
     });
   };
@@ -165,7 +154,7 @@ const NegativeRecord = () => {
       setForm((prev) => [...prev, data]);
       setNews({
         IdRegistroNegativo: "",
-        IdOrdenCompra: "",
+        IdCliente: "",
         IdEstadoRegistroNegativo: "",
       });
     } catch (error) {
@@ -204,7 +193,7 @@ const NegativeRecord = () => {
         },
         body: JSON.stringify({
           IdRegistroNegativo:news.IdRegistroNegativo,
-          IdOrdenCompra: news.IdOrdenCompra,
+          IdCliente: news.IdCliente,
           IdEstadoRegistroNegativo: news.IdEstadoRegistroNegativo,
         }),
       }
@@ -218,7 +207,7 @@ const NegativeRecord = () => {
     setSelected(null);
     setNews({
       IdRegistroNegativo: "",
-      IdOrdenCompra: "",
+      IdCliente: "",
       IdEstadoRegistroNegativo: "",
     });
   };
@@ -287,10 +276,10 @@ const NegativeRecord = () => {
 
                 <SelectCataComponente
                   required
-                  label={"- Seleccionar Orden de compra -"}
-                  name={"IdOrdenCompra"}
-                  value={news.IdOrdenCompra}
-                  options={options}
+                  label={"- Seleccionar cliente -"}
+                  name={"IdCliente"}
+                  value={news.IdCliente}
+                  options={optionsCliente}
                   onChange={handleSelect}
                 />
                 <SelectCataComponente
@@ -318,7 +307,7 @@ const NegativeRecord = () => {
               handleDeleteM={handleDeleteM}
               idField={"IdRegistroNegativo"}
               Fields={[
-                "IdOrdenCompra",
+                "IdCliente",
               "IdEstadoRegistroNegativo"
               ]}
             />

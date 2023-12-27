@@ -10,36 +10,48 @@ const NavbarCataComponente = () => {
     };
 
     const dropdownItems = {
-        employee: [
+        empleado: [
             { to: '/employe', label: 'Empleado' },
             { to: '/expense/employe', label: 'Gastos del Empleado' },
+        ],
+        cliente: [
+        
+            { to: '/clients', label: 'Clientes' },
+            { to: '/negative/record', label: 'califica tu cliente' },
         ],
         configuration: [
             { to: '/accesories', label: 'Accesorios' },
             { to: '/status/employe', label: 'Estados del Empleado' },
             { to: '/categorys', label: 'Categoría' },
-            { to: '/clients', label: 'Clientes' },
             { to: '/status/pay', label: 'Estado pago' },
             { to: '/sizes', label: 'Tallas' },
             { to: '/store', label: 'Tienda' },
             { to: '/colors', label: 'Colores' },
-            { to: '/item', label: 'Artículos' },
-            { to: '/negative/record', label: 'Registro negativo' },
+            { to: '/item', label: 'Artículos' },            
             { to: '/status/register/negative', label: 'Estado registro negativo' },
             { to: '/payment/type', label: 'Tipos de pago' },
-            { to: '/puchase/order', label: 'Orden compra' },
+          
         ],
         inventory: [
-            { to: '/item/inventory', label: 'Inventario de artículos' },
+            { to: '/renting', label: 'Alquiler' },
             { to: '/accesories/inventory', label: 'Inventario de accesorios' },
+            { to: '/item/inventory', label: 'Alquileres' },
         ],
         rental: [
-            { to: '/item/inventory', label: 'Alquileres' },
+            { to: '/renting', label: 'Alquiler' },
+            { to: '/puchase/order', label: 'Orden compra' },
             { to: '/puchase/accesories/order', label: 'Orden compra accesorios' },
+            { to: '/puchase/item/order', label: 'Orden compra articulo ' },
             { to: '/payments', label: 'Pagos' },
         ],
         devolution: [
             { to: '/rentalrefurnt', label: 'Devolucion de alquileres' },
+        ],
+        reportes: [
+            { to: '/reports', label: 'reportes' },
+        ],
+        reportsNegative: [
+            { to: '/reportsNegative', label: 'Consultar negatividad' },
         ]
     };
 

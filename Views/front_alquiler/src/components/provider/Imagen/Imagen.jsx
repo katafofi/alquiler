@@ -1,20 +1,23 @@
 import React from 'react';
+import { useParams } from 'react-router-dom';
 
-const ImagenCataComponente = ({ match }) => {
-   const imageName = match.params.imageName;
-   console.log(imageName)
-   const imageUrl = `http://localhost:3000/assets/${imageName}.pdf`;
-   console.log(imageUrl)
+const ImagenCataComponente = (props) => {
+  const { imageName } = useParams();
 
-  /*  
-  - Actualizar archivos....
-  - Correos...
-  - realizar correccion de cotizacion... */
+  const imageNames = imageName ? imageName : props.name
+  const imageUrl = `http://localhost:3003/assets/${imageNames}.jpg`;
+
+  const open = () => {
+    window.open(`/images/${imageNames}`, '_blank');
+  }
+
+  const imageStyle = {
+    width: props.name ? 100 : 'auto'
+  };
 
   return (
     <div>
-      <h2>Imagen: {imageName}</h2>
-      <img src={imageUrl} alt={imageName} />
+      <img style={imageStyle} src={imageUrl} alt={imageName} onClick={() => { open() }} />
     </div>
   );
 }

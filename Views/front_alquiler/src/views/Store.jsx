@@ -257,7 +257,7 @@ const Store = () => {
           </div>
         </div>
         <div className="row">
-          <div className="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
+        <div className="form-row" style={{ overflowY: 'scroll', height: '23em' }}>
             <form onSubmit={handleSubmit} className="mb-4">
               <div className="form-row">
                 <InputCataComponente
@@ -324,20 +324,17 @@ const Store = () => {
               </div>
             </form>
           </div>
-          <div className="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
+          <div
+            className="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"
+            style={{ overflow: "auto", maxHeight: "500px" }}
+          >
             <TabletCataComponente
               data={current}
               handleDelete={handleDelete}
               handleEdit={handleEdit}
               handleDeleteM={handleDeleteM}
               idField={"IdTienda"}
-              Fields={[
-                "Nombre",
-                "Nit",
-                "Direccion",
-                "Telefono",
-                "Correo",
-              ]}
+              Fields={["Nombre", "Nit", "Direccion", "Telefono", "Correo"]}
             />
             <PaginateCataComponente
               data={forms}

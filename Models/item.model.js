@@ -12,11 +12,8 @@ const Item = database.define("Articulo", {
     allowNull: false,
     unique: true,
     },
-    PrecioArticulo: {
-      type: Sequelize.DECIMAL(10, 2),
-      allowNull: false,
-    },
-    IdCategoria: {
+      
+      IdCategoria: {
       type: Sequelize.INTEGER,
       allowNull: false,
     },
@@ -25,6 +22,8 @@ const Item = database.define("Articulo", {
     type: Sequelize.INTEGER,
     allowNull: false,
   },
+ 
+
   IdTalla: {
     type: Sequelize.INTEGER,
     allowNull: false,

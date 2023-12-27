@@ -4,8 +4,8 @@ const bufferToFile = require('../provider/bufferToFile');
 
 const CreateClients = async (req, res) => {
   const {
-    Nombre,  
-    Apellido,  
+    Nombre,
+    Apellido,
     Correo,
     Cedula,
     Direccion,
@@ -17,23 +17,23 @@ const CreateClients = async (req, res) => {
 
   const FotoDocumento = req.files && req.files['FotoDocumento'] ? req.files['FotoDocumento'][0].path : null;
   const FotoServicioPublico = req.files && req.files['FotoServicioPublico'] ? req.files['FotoServicioPublico'][0].path : null;
-  
+
   console.log(FotoDocumento)
   console.log(FotoServicioPublico)
   //organizar que se guarden son los dos que vienen desde el cb multer
   try {
-    const ClientsCreate = await  Clients.create({
-     Nombre,  
-    Apellido,
-    Cedula,  
-    Correo,
-    Direccion,
-    Telefono,
-    ReferenciaPersonalNombre,
-    ReferenciaPersonalTelefono,
-    FotoDocumento,
-    FotoServicioPublico,
-    Fecha
+    const ClientsCreate = await Clients.create({
+      Nombre,
+      Apellido,
+      Cedula,
+      Correo,
+      Direccion,
+      Telefono,
+      ReferenciaPersonalNombre,
+      ReferenciaPersonalTelefono,
+      FotoDocumento,
+      FotoServicioPublico,
+      Fecha
     });
     res.status(200).json(ClientsCreate);
   } catch (error) {
@@ -42,28 +42,29 @@ const CreateClients = async (req, res) => {
 };
 
 const UpdateClients = async (req, res) => {
-  const { IdCliente } = req.params;
-
-  const {
-    Nombre,  
-    Apellido,
-    Cedula,  
-    Correo,
-    Direccion,
-    Telefono,
-    ReferenciaPersonalNombre,
-    ReferenciaPersonalTelefono,
-    FotoDocumento,
-    FotoServicioPublico,
-    Fecha
-  } = req.body;
 
   try {
+    const { IdCliente } = req.params;
+
+    const {
+      Nombre,
+      Apellido,
+      Cedula,
+      Correo,
+      Direccion,
+      Telefono,
+      ReferenciaPersonalNombre,
+      ReferenciaPersonalTelefono,
+      Fecha
+    } = req.body;
+
+    const FotoDocumento = req.files && req.files['FotoDocumento'] ? req.files['FotoDocumento'][0].path : null;
+    const FotoServicioPublico = req.files && req.files['FotoServicioPublico'] ? req.files['FotoServicioPublico'][0].path : null;
     const [result] = await Clients.update(
       {
-        Nombre,  
+        Nombre,
         Apellido,
-        Cedula,  
+        Cedula,
         Correo,
         Direccion,
         Telefono,
@@ -77,10 +78,10 @@ const UpdateClients = async (req, res) => {
         where: { IdCliente },
       }
     );
-    if(result == 0){
-        res.status(404).json({ error: "Cliente no actualizada o encontrada"});
-    }else{
-        res.status(201).json({ message: "Cliente actualizado"});
+    if (result == 0) {
+      res.status(404).json({ error: "Cliente no actualizada o encontrada" });
+    } else {
+      res.status(201).json({ message: "Cliente actualizado" });
     }
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -89,26 +90,26 @@ const UpdateClients = async (req, res) => {
 
 const DeleteClients = async (req, res) => {
   const { IdCliente } = req.params;
-  const result = await Clients.destroy({where: { IdCliente} })
+  const result = await Clients.destroy({ where: { IdCliente } })
   try {
-    if(result == 0){
-        res.status(404).json({ error: "Cliente eliminado no encontrado por favor valide bien los datos ingresados"});
-    }else{
-        res.status(201).json({ message: "Cliente eliminado con exito"});
+    if (result == 0) {
+      res.status(404).json({ error: "Cliente eliminado no encontrado por favor valide bien los datos ingresados" });
+    } else {
+      res.status(201).json({ message: "Cliente eliminado con exito" });
     }
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
-const DeleteMultipleClients = async(req, res) => {
+const DeleteMultipleClients = async (req, res) => {
   const Idclientes = req.body
-  const result = await Clients.destroy({where: { IdCliente: Idclientes }})
+  const result = await Clients.destroy({ where: { IdCliente: Idclientes } })
   try {
-    if(result == 0){
-        res.status(404).json({ error: "Clientes no eliminados o encontrados"});
-    }else{
-        res.status(201).json({ message: "Clientes eliminados"});
+    if (result == 0) {
+      res.status(404).json({ error: "Clientes no eliminados o encontrados" });
+    } else {
+      res.status(201).json({ message: "Clientes eliminados" });
     }
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -118,12 +119,12 @@ const DeleteMultipleClients = async(req, res) => {
 const FindOneClientsById = async (req, res) => {
   const { IdCliente } = req.params;
   try {
-    const result = await Clients.findOne({ where: { IdCliente} })
-    
-    if(result == 0){
-        res.status(404).json({ error: "Cliente  no encontrado"});
-    }else{
-        res.status(200).json({ message: result});
+    const result = await Clients.findOne({ where: { IdCliente } })
+
+    if (result == 0) {
+      res.status(404).json({ error: "Cliente  no encontrado" });
+    } else {
+      res.status(200).json({ message: result });
     }
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -135,9 +136,9 @@ const FindAllClients = async (req, res) => {
     const result = await Clients.findAll();
 
     const clientsFilepath = await Promise.all(result.map(async (client) => {
-       client.FotoDocumento = await bufferToFile(client.FotoDocumento, `FotoDocumento_${client.Cedula}_${client.Nombre}.pdf`)
-       client.FotoServicioPublico = await bufferToFile(client.FotoServicioPublico, `FotoServicioPublico_${client.Cedula}_${client.Nombre}.pdf`)
-       return client
+      client.FotoDocumento = await bufferToFile(client.FotoDocumento, `FotoDocumento_${client.Cedula}_${client.Nombre}.jpg`)
+      client.FotoServicioPublico = await bufferToFile(client.FotoServicioPublico, `FotoServicioPublico_${client.Cedula}_${client.Nombre}.jpg`)
+      return client
     }))
 
     res.status(200).json(clientsFilepath);
@@ -151,7 +152,7 @@ const all = {
   UpdateClients,
   DeleteClients,
   DeleteMultipleClients,
-  FindOneClientsById ,
+  FindOneClientsById,
   FindAllClients
 };
 
