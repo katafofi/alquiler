@@ -25,7 +25,7 @@ async function syncModels() {
   const ClientsStatusRegisterNegativeNegativeRecord = require("./Models/negativeRecord.model.js");
   const Renting = require("./Models/renting.model.js");
   const StatusEmployeEmploye = require("./Models/employe_status.model.js");
-  const RentingRefunt =require("./Models/rental_refunt.model.js");
+  const RentingRefunt = require("./Models/rental_refunt.model.js");
 
   // TABLA relacional 1:M Eliminación en cascada
   Employe.hasMany(ExpensesEmploye, {
@@ -119,7 +119,7 @@ async function syncModels() {
     }
   );
 
-   //tabla relacion de 1:1
+  //tabla relacion de 1:1
   StatusEmployeEmploye.hasOne(Employe, {
     foreignKey: "IdEstadoEmpleado",
     sourceKey: "IdEstadoEmpleado",
@@ -129,13 +129,13 @@ async function syncModels() {
     foreignKey: "IdAlquiler",
     onDelete: "RESTRICT",
   });
-  
+
   RentingRefunt.belongsTo(Employe, {
     foreignKey: "IdEmpleado",
     onDelete: "RESTRICT",
   });
- 
-  await database.sync({ alter: false , force: false }); // false prod y true dev
+
+  await database.sync({ alter: false, force: false }); // false prod y true dev
 }
 
 module.exports = syncModels;
