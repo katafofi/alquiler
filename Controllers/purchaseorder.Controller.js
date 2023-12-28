@@ -1,5 +1,7 @@
 const PuchaseOrder = require("../Models/purchase_order.model");
 const PDFDocument = require('pdfkit');
+const { createHtmlInvoice } = require('../Invoice/invoiceLayout.js');
+var pdfCreator = require('html-pdf');
 const fs = require('fs')
 
 const handleGetByIdEmploye = async (id) => {
@@ -137,6 +139,30 @@ const handleGetByIdPuchaseOrder = async (id) => {
   }
 };
 
+const handleGetInvoiceById = async (id) => {
+  try {
+    const form = "invoice";
+    const URL = "http://localhost:";
+    const PORT = "3003";
+    const response = await fetch(`${URL}${PORT}/${form}/${id}`);
+    const data = await response.json();
+    return data
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+const exportPdf2 = async (invoice) => {
+  // console.log('INvoice:', invoice)
+  // console.log('Layout:', invoiceLayout)
+  const options = { format: 'Letter' };
+  const htmlInvoice = createHtmlInvoice(invoice);
+  pdfCreator.create(htmlInvoice, options).toFile('./Invoice/Factura de prueba.pdf', function (err, res) {
+    if (err) return console.log(err);
+    console.log(res);
+  });
+}
+
 const exportPdf = async (result, responseEmploye, responseRenting, responseClient, responseStore, responsePuchaseOrder, responsePuchaseItemOrder) => {
   console.log(responseRenting)
   const doc = new PDFDocument();
@@ -228,18 +254,21 @@ const generateInvoice = async (req, res) => {
     if (!result) {
       res.status(404).json({ error: "Orden de compra no encontrada" });
     } else {
-      const responseEmploye = await handleGetByIdEmploye(result.IdEmpleado);
-      const responseRenting = await handleGetByIdAlquiler(result.IdAlquiler);
-      const responseClient = await handleGetByIdClient(responseRenting?.message?.IdCliente);
-      const responseStore = await handleGetByIdStore(responseRenting?.message?.IdTienda);
-      const responsePuchaseOrder = await handleGetByIdPuchaseOrder(result.IdOrdenCompra);
-      const responsePuchaseItemOrder = await handleGetByIdPuchaseItemOrder(responsePuchaseOrder?.message?.IdOrdenCompra);
+      const responseInvoice = await handleGetInvoiceById(result.IdOrdenCompra);
+      exportPdf2(responseInvoice)
+      // console.log("Hola:", responseInvoice)
+      // const responseEmploye = await handleGetByIdEmploye(result.IdEmpleado);
+      // const responseRenting = await handleGetByIdAlquiler(result.IdAlquiler);
+      // const responseClient = await handleGetByIdClient(responseRenting?.message?.IdCliente);
+      // const responseStore = await handleGetByIdStore(responseRenting?.message?.IdTienda);
+      // const responsePuchaseOrder = await handleGetByIdPuchaseOrder(result.IdOrdenCompra);
+      // const responsePuchaseItemOrder = await handleGetByIdPuchaseItemOrder(responsePuchaseOrder?.message?.IdOrdenCompra);
       //const responseItem = await handleGetByIdItems(responseRenting?.message?.IdArticulo);
       //const responsePuchaseAccesoriesOrder = await handleGetByIdPuchasePuchaseAccesoriesOrder(responsePuchaseOrder?.message?.IdOrdenCompra);
 
 
-      exportPdf(result, responseEmploye, responseRenting, responseClient, responseStore, responsePuchaseOrder, responsePuchaseItemOrder);
-      res.status(200).json({ message: result });
+      // exportPdf(result, responseEmploye, responseRenting, responseClient, responseStore, responsePuchaseOrder, responsePuchaseItemOrder);
+      // res.status(200).json({ message: result });
     }
   } catch (error) {
     res.status(500).json({ message: error.message });
