@@ -1,59 +1,55 @@
 import { Preview, print } from 'react-html2pdf';
+import Table from 'react-bootstrap/Table';
 import './InvoicePreview.css'
-import ButtonCataComponente from '../Button/Button';
+import { Button } from 'react-bootstrap';
 
-const InvoicePreview = ({ }) => {
+const InvoicePreview = () => {
   const name = 'Angie Ramos Jimenez'
   return (
-    <>
-      <div>
-        <ButtonCataComponente title='Generar PDF' className="btn btn-primary btn-block" onClick={() => print("a", "jsx-template")}></ButtonCataComponente>
-      </div>
-      <div className='invoice-modal'>
-        <Preview id={"jsx-template"}>
-          <div className='invoice-cont'>
-            <header>
+    <div>
 
+      <Preview id={'jsx-template'} >
+        <div>
+          <header>
+            <div >
+              <img src="" alt="" />
               <div >
-                <img src="" alt="" />
-                <div >
-                  <div>
-                    <p>VENTA Y ALQUILER DE VESTIDOS PARA NOVIA, COCTEL, GRADOS QUINCE AÑOS Y PRIMERA COMUNIÓN</p>
-                    <p className="name-cursive">{name}</p>
-                  </div>
+                <div>
+                  <p>VENTA Y ALQUILER DE VESTIDOS PARA NOVIA, COCTEL, GRADOS QUINCE AÑOS Y PRIMERA COMUNIÓN</p>
+                  <p>{name}</p>
                 </div>
               </div>
-              <small>Transv. 78 L No. 68 - 03 Sur 2do. Piso . Bosa Piamonte . Cel: 320 805 6350 - 320 805 8884</small>
+            </div>
+            <p>Transv. 78 L No. 68 - 03 Sur 2do. Piso . Bosa Piamonte . Cel: 320 805 6350 - 320 805 8884</p>
 
-              <div>
-                <table>
-                  <thead>
-                    <tr className='flex flex-col gap-5'>
-                      <th rowSpan="2">Fecha</th>
-                      <th>Dia</th>
-                      <th>Mes</th>
-                      <th>Año</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>3</td>
-                      <td>Dic</td>
-                      <td>2023</td>
-                    </tr>
-                  </tbody>
-                </table>
-                <table>
-                  <tbody>
-                    <tr>
-                      <td>Orden de trabajo</td>
-                      <td>5709</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </header>
-            <main>
+            <div>
+              <Table striped bordered hover>
+                <thead>
+                  <tr>
+                    <th>Dia</th>
+                    <th>Mes</th>
+                    <th>Año</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>3</td>
+                    <td>Dic</td>
+                    <td>2023</td>
+                  </tr>
+                </tbody>
+              </Table>
+              <table>
+                <tbody>
+                  <tr>
+                    <td>Orden de trabajo</td>
+                    <td>5709</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </header>
+          {/* <main>
               <table>
                 <tbody>
                   <tr>
@@ -164,11 +160,11 @@ const InvoicePreview = ({ }) => {
                 <h3>SALDO $</h3>
                 <p>70000</p>
               </div>
-            </footer>
-          </div>
-        </Preview>
-      </div>
-    </>
+            </footer> */}
+        </div>
+      </Preview>
+      <Button onClick={() => print("a", "jsx-template")}>Generar PDF</Button>
+    </div>
   )
 }
 

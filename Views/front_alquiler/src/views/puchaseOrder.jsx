@@ -6,7 +6,6 @@ import TabletCataComponente from "../components/provider/Table/Table";
 import PaginateCataComponente from "../components/provider/Paginate/Paginate";
 import { SelectCataComponente } from "../components/provider/Select/Select";
 import SearchCataComponente from "../components/provider/Search/Search";
-import InvoicePreview from "../components/provider/Invoice/InvoicePreview";
 
 const PuchaseOrder = () => {
   const [forms, setForm] = useState([]);

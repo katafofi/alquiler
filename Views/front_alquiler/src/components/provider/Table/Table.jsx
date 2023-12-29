@@ -68,8 +68,8 @@ const TabletCataComponente = ({
                   onChange={() => handleItemSelect(provider[idField])}
                 />
               </td>
-              {Fields.map((e) => (
-                <td>
+              {Fields.map((e, index) => (
+                <td key={index}>
                   {e === "IdEstadoEmpleado" ? (
                     provider[e] === 1 ? (
                       <p style={{ backgroundColor: "green", color: "white" }}>
