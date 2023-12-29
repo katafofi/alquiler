@@ -1,0 +1,77 @@
+/* .invoice-btn {
+    cursor: pointer;
+    width: 100px;
+    height: 100px;
+    background-color: red;
+} */
+
+/* header {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: center;
+    
+}
+
+header div{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: 20px;
+    align-items: center;
+    justify-content: space-between;
+    width: 80%;
+    margin-top: 20px;
+}
+
+header div div {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    
+}
+
+header div div p {
+    margin: 0;
+    padding: 0;
+    font-size: 12px;
+}
+
+header img{
+    width: 200px;
+}
+
+header table {
+    display: flex;
+    flex-flow: row nowrap;
+}
+
+table {
+    margin: 0 auto;
+    border-collapse: collapse;
+    border: 1px solid #000;
+}
+
+tr, td, th{
+    border: 1px solid #000;
+}
+
+main {
+    margin-top: 10px;
+    flexflow: row nowrap;
+    gap: 10px;
+}
+
+main table {
+    margin-bottom: 10px;
+}
+
+footer {
+    display: flex;
+    flexflow: row nowrap;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+} */
+
+

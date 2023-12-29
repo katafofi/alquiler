@@ -25,6 +25,7 @@ const PuchaseOrder = () => {
   const [optionSelectFilter, setOptionSelectFilter] = useState("");
   const [filter, setFilter] = useState("")
 
+
   const PerPage = 10;
   const form = "PuchaseOrder";
 
@@ -114,25 +115,6 @@ const PuchaseOrder = () => {
     }
   };
 
-  const generateVoice = async (id) => {
-    try {
-      const response = await fetch(`${URL}${PORT}/${form}/invoice`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ id }),
-      });
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-
-      const data = await response.json();
-      console.log(data);
-    } catch (error) {
-      console.error("Error:", error.message);
-    }
-  };
 
   const handleDelete = async (id) => {
     if (window.prompt("Ingrese la credencial de autorizacion", 0) == "202312") {
@@ -307,28 +289,26 @@ const PuchaseOrder = () => {
   const indexOfLast = (currentPage + 1) * PerPage;
   const indexOfFirst = indexOfLast - PerPage;
   const current = forms
-    .filter((item) => 
+    .filter((item) =>
       item.IdOrdenCompra.toString().toLowerCase().includes(filter.toString().toLowerCase())
     ).slice(indexOfFirst, indexOfLast);
   //const current = forms.filter((item) => item.IdAlquiler.toString().toLowerCase().includes(filter.toString().toLowerCase())).slice(indexOfFirst, indexOfLast)
 
   return (
     <>
-      <div className="container mt-4"> 
+      <div className="container mt-4">
         <div className="row">
           <div className="col">
             <TitleCataComponente title="Orden Compra" size="h6" />
-            
             <SelectCataComponente
               required
-              style={{ 'width': '100px'}}
+              style={{ 'width': '100px' }}
               label={"- Seleccionar un campo -"}
               name={"Campos a filtrar"}
               value={optionSelectFilter}
               options={optionsSelectedFilter}
               onChange={handleSelect}
             />
-            
             <SearchCataComponente
               value={filter}
               onChange={handleInputSearch}
@@ -394,7 +374,6 @@ const PuchaseOrder = () => {
               handleDelete={handleDelete}
               handleEdit={handleEdit}
               handleDeleteM={handleDeleteM}
-              generateVoice={generateVoice}
               idField={"IdOrdenCompra"}
               Fields={[
                 "FechaCompra",
@@ -414,6 +393,7 @@ const PuchaseOrder = () => {
           </div>
         </div>
       </div>
+
     </>
   );
 };

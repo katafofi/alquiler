@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import ButtonCataComponente from "../Button/Button";
 import ImagenCataComponente from "../Imagen/Imagen";
+import { Link } from "react-router-dom";
+import InvoicePreview from "../../../views/Invoice/InvoicePreview";
 
 const TabletCataComponente = ({
   data,
@@ -9,9 +11,11 @@ const TabletCataComponente = ({
   idField,
   Fields,
   handleDeleteM,
-  generateVoice,
+  generateInvoice,
 }) => {
   const [selectedItems, setSelectedItems] = useState([]);
+  const [invoiceModalActive, setInvoiceModalActive] = useState(false)
+  const [idSelected, setIdSelected] = useState(null)
 
   const handleItemSelect = (itemId) => {
     if (selectedItems.includes(itemId)) {
@@ -59,6 +63,7 @@ const TabletCataComponente = ({
         </thead>
         <tbody>
           {data.map((provider, id) => (
+
             <tr key={id}>
               <td>
                 <input
@@ -67,8 +72,8 @@ const TabletCataComponente = ({
                   onChange={() => handleItemSelect(provider[idField])}
                 />
               </td>
-              {Fields.map((e) => (
-                <td>
+              {Fields.map((e, index) => (
+                <td key={index}>
                   {e === "IdEstadoEmpleado" ? (
                     provider[e] === 1 ? (
                       <p style={{ backgroundColor: "green", color: "white" }}>
@@ -114,11 +119,16 @@ const TabletCataComponente = ({
                   <ButtonCataComponente
                     title={"Generar factura"}
                     type={"button"}
-                    onClick={() => generateVoice(provider[idField])}
+                    onClick={() => {
+                      setIdSelected(provider[idField])
+                      setInvoiceModalActive(!invoiceModalActive)
+                    }}
                   ></ButtonCataComponente>
                 )}
               </td>
             </tr>
+
+
           ))}
         </tbody>
       </table>
@@ -133,6 +143,11 @@ const TabletCataComponente = ({
           </button>
         </div>
       )}
+      <InvoicePreview
+        id={idSelected}
+        invoiceModalActive={invoiceModalActive}
+        setInvoiceModalActive={setInvoiceModalActive}
+      />
     </div>
   );
 };
