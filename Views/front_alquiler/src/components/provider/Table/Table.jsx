@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import ButtonCataComponente from "../Button/Button";
 import ImagenCataComponente from "../Imagen/Imagen";
 import { Link } from "react-router-dom";
+import InvoicePreview from "../../../views/Invoice/InvoicePreview";
 
 const TabletCataComponente = ({
   data,
@@ -13,6 +14,8 @@ const TabletCataComponente = ({
   generateInvoice,
 }) => {
   const [selectedItems, setSelectedItems] = useState([]);
+  const [invoiceModalActive, setInvoiceModalActive] = useState(false)
+  const [idSelected, setIdSelected] = useState(null)
 
   const handleItemSelect = (itemId) => {
     if (selectedItems.includes(itemId)) {
@@ -60,6 +63,7 @@ const TabletCataComponente = ({
         </thead>
         <tbody>
           {data.map((provider, id) => (
+
             <tr key={id}>
               <td>
                 <input
@@ -112,16 +116,19 @@ const TabletCataComponente = ({
                 </button>
                 &nbsp;
                 {idField == "IdOrdenCompra" && (
-                  <Link to={`/invoicePreview`}>
-
-                    <ButtonCataComponente
-                      title={"Generar factura"}
-                      type={"button"}
-                    ></ButtonCataComponente>
-                  </Link>
+                  <ButtonCataComponente
+                    title={"Generar factura"}
+                    type={"button"}
+                    onClick={() => {
+                      setIdSelected(provider[idField])
+                      setInvoiceModalActive(!invoiceModalActive)
+                    }}
+                  ></ButtonCataComponente>
                 )}
               </td>
             </tr>
+
+
           ))}
         </tbody>
       </table>
@@ -136,6 +143,11 @@ const TabletCataComponente = ({
           </button>
         </div>
       )}
+      <InvoicePreview
+        id={idSelected}
+        invoiceModalActive={invoiceModalActive}
+        setInvoiceModalActive={setInvoiceModalActive}
+      />
     </div>
   );
 };

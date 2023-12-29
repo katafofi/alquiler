@@ -2,7 +2,7 @@ import './App.css'
 import "/node_modules/bootstrap/dist/css/bootstrap.min.css";
 import { Outlet } from 'react-router-dom';
 import NavbarCataComponente from './components/provider/Layout/Navbar/Navbar';
-// import FooterCataComponente from './components/provider/Layout/Footer/Footer';
+import FooterCataComponente from './components/provider/Layout/Footer/Footer';
 
 
 function App() {
@@ -10,7 +10,7 @@ function App() {
     <div className='App'>
       <NavbarCataComponente />
       <Outlet />
-      {/* <FooterCataComponente /> */}
+      <FooterCataComponente />
     </div>
   )
 }

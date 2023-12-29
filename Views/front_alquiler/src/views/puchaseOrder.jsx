@@ -25,6 +25,7 @@ const PuchaseOrder = () => {
   const [optionSelectFilter, setOptionSelectFilter] = useState("");
   const [filter, setFilter] = useState("")
 
+
   const PerPage = 10;
   const form = "PuchaseOrder";
 
@@ -114,23 +115,6 @@ const PuchaseOrder = () => {
     }
   };
 
-  const generateVoice = async (id) => {
-    try {
-      const response = await fetch(`${URL}${PORT}/invoice/${id}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ id }),
-      });
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-      const data = await response.json();
-    } catch (error) {
-      console.error("Error:", error.message);
-    }
-  };
 
   const handleDelete = async (id) => {
     if (window.prompt("Ingrese la credencial de autorizacion", 0) == "202312") {
@@ -390,7 +374,6 @@ const PuchaseOrder = () => {
               handleDelete={handleDelete}
               handleEdit={handleEdit}
               handleDeleteM={handleDeleteM}
-              generateVoice={generateVoice}
               idField={"IdOrdenCompra"}
               Fields={[
                 "FechaCompra",
@@ -410,6 +393,7 @@ const PuchaseOrder = () => {
           </div>
         </div>
       </div>
+
     </>
   );
 };

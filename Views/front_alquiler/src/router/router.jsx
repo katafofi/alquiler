@@ -97,10 +97,6 @@ const router = createBrowserRouter([
         element: <AccesoriesInventory />,
       },
       {
-        path: "/invoicePreview",
-        element: <InvoicePreview />,
-      },
-      {
         path: "/colors",
         element: <Colors />,
       },
@@ -111,6 +107,10 @@ const router = createBrowserRouter([
       {
         path: "/item",
         element: <Item />,
+      },
+      {
+        path: "/invoicePreview",
+        element: <InvoicePreview />,
       },
       {
         path: "/negative/record",

@@ -1,94 +1,105 @@
-import { Preview, print } from 'react-html2pdf';
 import Table from 'react-bootstrap/Table';
 import './InvoicePreview.css'
 import { Button } from 'react-bootstrap';
+import { useRef } from 'react';
+import ReactToPrint from "react-to-print";
+import { useInvoiceData } from '../../hooks/invoiceHooks.js';
+import Modal from 'react-bootstrap/Modal';
 
-const InvoicePreview = () => {
-  const name = 'Angie Ramos Jimenez'
+const InvoicePreview = ({ id, invoiceModalActive, setInvoiceModalActive, }) => {
+  const [invoiceData, error] = useInvoiceData(id);
+  const invoiceRef = useRef(null)
+
   return (
-    <div>
-
-      <Preview id={'jsx-template'} >
+    <Modal show={invoiceModalActive} onHide={() => setInvoiceModalActive(false)}>
+      {invoiceData && (
         <div>
-          <header>
-            <div >
-              <img src="" alt="" />
+          <ReactToPrint
+            trigger={() => <Button>Generar PDF</Button>}
+            content={() => invoiceRef.current}
+            documentTitle='Factura'
+            pageStyle={'print'}
+          />
+          <div ref={invoiceRef}>
+            <header>
               <div >
-                <div>
-                  <p>VENTA Y ALQUILER DE VESTIDOS PARA NOVIA, COCTEL, GRADOS QUINCE AÑOS Y PRIMERA COMUNIÓN</p>
-                  <p>{name}</p>
+                <img src="" alt="" />
+                <div >
+                  <div>
+                    <p>VENTA Y ALQUILER DE VESTIDOS PARA NOVIA, COCTEL, GRADOS QUINCE AÑOS Y PRIMERA COMUNIÓN</p>
+                    <p>Angie Ramos Jimenez</p>
+                  </div>
                 </div>
               </div>
-            </div>
-            <p>Transv. 78 L No. 68 - 03 Sur 2do. Piso . Bosa Piamonte . Cel: 320 805 6350 - 320 805 8884</p>
+              <p>Transv. 78 L No. 68 - 03 Sur 2do. Piso . Bosa Piamonte . Cel: 320 805 6350 - 320 805 8884</p>
 
-            <div>
-              <Table striped bordered hover>
-                <thead>
-                  <tr>
-                    <th>Dia</th>
-                    <th>Mes</th>
-                    <th>Año</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>3</td>
-                    <td>Dic</td>
-                    <td>2023</td>
-                  </tr>
-                </tbody>
-              </Table>
-              <table>
-                <tbody>
-                  <tr>
-                    <td>Orden de trabajo</td>
-                    <td>5709</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </header>
-          {/* <main>
+              <div>
+                <Table striped bordered hover>
+                  <thead>
+                    <tr>
+                      <th>Dia</th>
+                      <th>Mes</th>
+                      <th>Año</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>{invoiceData.FechaCompra.getDay()}</td>
+                      <td>{invoiceData.FechaCompra.getMonth()}</td>
+                      <td>{invoiceData.FechaCompra.getYear()}</td>
+                    </tr>
+                  </tbody>
+                </Table>
+                <table>
+                  <tbody>
+                    <tr>
+                      <td>Orden de trabajo</td>
+                      <td>{invoiceData.IdOrdenCompra}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </header>
+            <main>
               <table>
                 <tbody>
                   <tr>
                     <td>Nombre:</td>
-                    <td colSpan="4">Daniel Alejandro Castaño Zapata</td>
+                    <td colSpan="4">{invoiceData.Cliente.Nombre} {invoiceData.Cliente.Apellido}</td>
                     <td>Cel:</td>
-                    <td>3208367828</td>
+                    <td>{invoiceData.Cliente.Telefono}</td>
                   </tr>
                   <tr>
                     <td>Direccion:</td>
-                    <td colSpan="6">cll 65 sur #81 A 10</td>
+                    <td colSpan="6">{invoiceData.Cliente.Direccion}</td>
                   </tr>
                   <tr>
                     <td>Barrio:</td>
-                    <td colSpan="6">Bosa Antonia Santos</td>
+                    <td colSpan="6"></td>
                   </tr>
                   <tr>
                     <td>Ref:</td>
-                    <td colSpan="4">Carmen Chiquiyo</td>
+                    <td colSpan="4">{invoiceData.Cliente.ReferenciaPersonalNombre}</td>
                     <td>Tel:</td>
-                    <td>3205539176</td>
+                    <td>{invoiceData.Cliente.ReferenciaPersonalTelefono}</td>
                   </tr>
                   <tr>
                     <td>Fecha Retirado:</td>
                     <td>Día</td>
-                    <td>4</td>
+                    <td>{invoiceData.FechaInicialAlquiler.getDay()}</td>
                     <td>Mes</td>
-                    <td>Dic</td>
+                    <td>{invoiceData.FechaInicialAlquiler.getMonth()}</td>
                     <td>Año</td>
-                    <td>23</td>
+                    <td>{invoiceData.FechaInicialAlquiler.getYear()}</td>
                   </tr>
                   <tr>
                     <td>Fecha devolución:</td>
                     <td>Día</td>
-                    <td>4</td>
+                    <td>{invoiceData.FechaFinlAlquiler.getDay()}</td>
                     <td>Mes</td>
-                    <td>Dic</td>
+                    <td>{invoiceData.FechaFinlAlquiler.getMonth()}</td>
                     <td>Año</td>
-                    <td>23</td>
+                    <td>{invoiceData.FechaFinlAlquiler.getYear()}</td>
                   </tr>
                 </tbody>
               </table>
@@ -100,32 +111,26 @@ const InvoicePreview = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>1</td>
-                    <td>Vestido</td>
-                  </tr>
-                  <tr>
-                    <td>1</td>
-                    <td>Vestido</td>
-                  </tr>
+                  {invoiceData.resultPurchareItemOrder.map((order, key) => (
+                    <tr key={key}>
+                      <td>${order[key]}</td>
+                      <td>${order.Descripcion}</td>
+                    </tr>))}
                 </tbody>
               </table>
               <table>
                 <thead>
                   <tr>
                     <th>CANT</th>
-                    <th>ARTICULO</th>
+                    <th>ACCESORIO</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>1</td>
-                    <td>Pulsera</td>
-                  </tr>
-                  <tr>
-                    <td>1</td>
-                    <td>Pulsera</td>
-                  </tr>
+                  {invoiceData.resultPurchaseAccesoriesOrder.map((order, key) => (
+                    <tr key={key}>
+                      <td>${order[key]}</td>
+                      <td>${order.Descripcion}</td>
+                    </tr>))}
                 </tbody>
               </table>
             </main>
@@ -153,18 +158,19 @@ const InvoicePreview = () => {
                 </table>
               </div>
               <div>
+                <p>Fecha ultimo abono: {invoiceData.lastCredit}</p>
                 <h3>TOTAL $</h3>
-                <p>70000</p>
+                <p>{invoiceData.Total}</p>
                 <h3>ABONO $</h3>
-                <p>70000</p>
+                <p>{invoiceData.credit}</p>
                 <h3>SALDO $</h3>
-                <p>70000</p>
+                <p>{invoiceData.balance}</p>
               </div>
-            </footer> */}
+            </footer>
+          </div>
         </div>
-      </Preview>
-      <Button onClick={() => print("a", "jsx-template")}>Generar PDF</Button>
-    </div>
+      )}
+    </Modal>
   )
 }
 
