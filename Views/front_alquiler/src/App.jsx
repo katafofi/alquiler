@@ -31,6 +31,7 @@ import ImagenCataComponente from './components/provider/Imagen/Imagen';
 import ReportsNegative from './views/ReportsNegative';
 import PuchareItemOrder from './views/PuchareItemOrder';
 import Renting from './views/renting';
+import InvoicePreview from './components/provider/Invoice/InvoicePreview';
 
 function App() {
   return (
@@ -39,7 +40,6 @@ function App() {
         <NavbarCataComponente />
         <div id="main-container">
           <Routes>
-
             <Route exact path='/reportsnegative' element={<ReportsNegative />}></Route>
             <Route exact path='/images/:imageName' element={<ImagenCataComponente />}></Route>
             <Route exact path='/employe' element={<Employe />}></Route>
@@ -54,8 +54,9 @@ function App() {
             <Route exact path='/accesories' element={< Accesories />}></Route>
             <Route exact path='/store' element={< Store />}></Route>
             <Route exact path='/puchase/accesories/order' element={< PuchaseAccesoriesOrder />}></Route>
-            <Route exact path='/puchase/order' element={< PuchaseOrder />}></Route>
+            <Route exact path='/puchase/order' element={<PuchaseOrder />}></Route>
             <Route exact path='/accesories/inventory' element={< AccesoriesInventory />}></Route>
+            <Route exact path='/invoicePreview' element={<InvoicePreview />}></Route>
             <Route exact path='/colors' element={< Colors />}></Route>
             <Route exact path='/item/inventory' element={< ItemInventory />}></Route>
             <Route exact path='/item' element={< Item />}></Route>

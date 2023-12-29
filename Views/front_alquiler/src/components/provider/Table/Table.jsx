@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import ButtonCataComponente from "../Button/Button";
 import ImagenCataComponente from "../Imagen/Imagen";
+import { Link } from "react-router-dom";
 
 const TabletCataComponente = ({
   data,
@@ -9,7 +10,7 @@ const TabletCataComponente = ({
   idField,
   Fields,
   handleDeleteM,
-  generateVoice,
+  generateInvoice,
 }) => {
   const [selectedItems, setSelectedItems] = useState([]);
 
@@ -111,11 +112,13 @@ const TabletCataComponente = ({
                 </button>
                 &nbsp;
                 {idField == "IdOrdenCompra" && (
-                  <ButtonCataComponente
-                    title={"Generar factura"}
-                    type={"button"}
-                    onClick={() => generateVoice(provider[idField])}
-                  ></ButtonCataComponente>
+                  <Link to={`/invoicePreview`}>
+
+                    <ButtonCataComponente
+                      title={"Generar factura"}
+                      type={"button"}
+                    ></ButtonCataComponente>
+                  </Link>
                 )}
               </td>
             </tr>
