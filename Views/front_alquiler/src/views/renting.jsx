@@ -94,7 +94,6 @@ const Renting = () => {
       const response = await fetch(`${URL}${PORT}/${form}/${id}`, {
         method: "DELETE",
       });
-      console.log(response);
       setForm((prev) => prev.filter((info) => info.IdAlquiler != id));
       setDeleted(true);
       if (selected && selected.IdAlquiler == id) {
@@ -121,7 +120,6 @@ const Renting = () => {
         },
         body: JSON.stringify(ids),
       });
-      console.log(response);
       setDeletedM(true);
     } catch (error) {
       console.log(error);
@@ -248,7 +246,6 @@ const Renting = () => {
         .includes(filter.toString().toLowerCase())
     )
     .slice(indexOfFirst, indexOfLast);
-  console.log;
   return (
     <>
       <div className="container mt-4">

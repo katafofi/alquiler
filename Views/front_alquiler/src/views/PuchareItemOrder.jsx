@@ -12,8 +12,8 @@ const PuchareItemOrder = () => {
   const [news, setNews] = useState({
     //IdArticuloOrdenCompra 
     Cantidad: "",
-    IdOrdenCompra:"",
-    IdArticulo:""
+    IdOrdenCompra: "",
+    IdArticulo: ""
   });
   const [selected, setSelected] = useState(null);
   const [deleted, setDeleted] = useState(false);
@@ -54,7 +54,7 @@ const PuchareItemOrder = () => {
       const response = await fetch(`${URL}${PORT}/${form}`);
       const data = await response.json();
       setForm(data);
-      } catch (error) {
+    } catch (error) {
       console.error(error);
     }
   };
@@ -64,7 +64,7 @@ const PuchareItemOrder = () => {
       const data = await response.json();
       const newOptions = data.map((element) => ({
         value: element.IdOrdenCompra, //lo que selecciona en el back
-        label: element.FechaCompra+' - '+element.IdOrdenCompra //lo que se ve en el selector
+        label: element.FechaCompra + ' - ' + element.IdOrdenCompra //lo que se ve en el selector
       }));
       setOptions2(newOptions);
     } catch (error) {
@@ -77,65 +77,65 @@ const PuchareItemOrder = () => {
       const data = await response.json();
       const newOptions = data.map((element) => ({
         value: element.IdArticulo, //lo que selecciona en el back
-        label: element.Descripcion+' - '+element.IdArticulo //lo que se ve en el selector
+        label: element.Descripcion + ' - ' + element.IdArticulo //lo que se ve en el selector
       }));
       setOptions(newOptions);
     } catch (error) {
       console.log(error);
     }
   };
-    
+
   const handleDelete = async (id) => {
-   
-        try {
-          const response = await fetch(`${URL}${PORT}/${form}/${id}`, {
-            method: "DELETE",
-          });
-          console.log(response);
-          setForm((prev) => prev.filter((info) => info.IdArticuloOrdenCompra != id));
-          setDeleted(true);
-          if (selected && selected.IdArticuloOrdenCompra == id) {
-            setSelected(null);
-            setNews({
-              IdArticuloOrdenCompra: "",
-              Cantidad: "",
-             IdOrdenCompra:"",
-             IdArticulo:""
-            });
-          }
-        } catch (error) {
-          console.log(error);
-        }
-    
+
+    try {
+      const response = await fetch(`${URL}${PORT}/${form}/${id}`, {
+        method: "DELETE",
+      });
+      console.log(response);
+      setForm((prev) => prev.filter((info) => info.IdArticuloOrdenCompra != id));
+      setDeleted(true);
+      if (selected && selected.IdArticuloOrdenCompra == id) {
+        setSelected(null);
+        setNews({
+          IdArticuloOrdenCompra: "",
+          Cantidad: "",
+          IdOrdenCompra: "",
+          IdArticulo: ""
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+
   };
 
   const handleDeleteM = async (ids) => {
-    
-      if (window.confirm("¿Estás seguro de que quieres eliminar?")) {
-        try {
-          const response = await fetch(`${URL}${PORT}/${form}/delete/all`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(ids),
-          });
-          console.log(response);
-          setDeletedM(true);
-        } catch (error) {
-          console.log(error);
-        }
+
+    if (window.confirm("¿Estás seguro de que quieres eliminar?")) {
+      try {
+        const response = await fetch(`${URL}${PORT}/${form}/delete/all`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(ids),
+        });
+        console.log(response);
+        setDeletedM(true);
+      } catch (error) {
+        console.log(error);
       }
-    
+    }
+
   };
 
   const handleEdit = async (news) => {
     setSelected(news);
     setNews({
-        IdArticuloOrdenCompra: news.IdArticuloOrdenCompra,
-        Cantidad: news.Cantidad,
-        IdOrdenCompra:news.IdOrdenCompra,
-        IdArticulo: news.IdArticulo      
+      IdArticuloOrdenCompra: news.IdArticuloOrdenCompra,
+      Cantidad: news.Cantidad,
+      IdOrdenCompra: news.IdOrdenCompra,
+      IdArticulo: news.IdArticulo
     });
   };
 
@@ -152,20 +152,20 @@ const PuchareItemOrder = () => {
       setForm((prev) => [...prev, data]);
       setNews({
         IdArticuloOrdenCompra: "",
-              Cantidad: "",
-             IdOrdenCompra:"",
-             IdArticulo:""
-       
+        Cantidad: "",
+        IdOrdenCompra: "",
+        IdArticulo: ""
+
       });
     } catch (error) {
       console.log(error);
     }
   };
 
-const handleInputSearch = (e) => {
-const { name, value } = e.target;
-   setNews((prev) => ({ ...prev, [name]: value }));
-   if (name === "filter") {
+  const handleInputSearch = (e) => {
+    const { name, value } = e.target;
+    setNews((prev) => ({ ...prev, [name]: value }));
+    if (name === "filter") {
       setFilter(value)
     }
   };
@@ -192,9 +192,9 @@ const { name, value } = e.target;
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-            Cantidad: news.Cantidad,
-            IdOrdenCompra:news.IdOrdenCompra,
-            IdArticulo: news.IdArticulo   
+          Cantidad: news.Cantidad,
+          IdOrdenCompra: news.IdOrdenCompra,
+          IdArticulo: news.IdArticulo
         }),
       }
     );
@@ -206,11 +206,11 @@ const { name, value } = e.target;
     );
     setSelected(null);
     setNews({
-        IdArticuloOrdenCompra: "",
-        Cantidad: "",
-       IdOrdenCompra:"",
-       IdArticulo:""
-        
+      IdArticuloOrdenCompra: "",
+      Cantidad: "",
+      IdOrdenCompra: "",
+      IdArticulo: ""
+
     });
   };
 
@@ -218,15 +218,15 @@ const { name, value } = e.target;
     e.preventDefault();
 
     if (selected) {
-     
-        if (window.confirm("¿Estás seguro de que quieres actualizar este?")) {
-          try {
-            handleUpdate();
-          } catch (error) {
-            console.error("Error al actualizar:", error);
-          }
+
+      if (window.confirm("¿Estás seguro de que quieres actualizar este?")) {
+        try {
+          handleUpdate();
+        } catch (error) {
+          console.error("Error al actualizar:", error);
         }
-     
+      }
+
     } else {
       try {
         handleCreate();
@@ -236,7 +236,7 @@ const { name, value } = e.target;
     }
   };
 
- const handlePageChange = (selectedPage) => {
+  const handlePageChange = (selectedPage) => {
     setCurrentPage(selectedPage);
     setFilter("")
   };
@@ -248,86 +248,86 @@ const { name, value } = e.target;
 
   return (
     <>
-    <div className="container mt-4">
-     <div className="row">
-       <div className="col">
-         <TitleCataComponente title="articulo Orden Compra" size="h6" />
-         <SearchCataComponente 
-           value={filter}
-           onChange={handleInputSearch}
-           type={"search"}
-           name={"filter"}
-           id={"filter"}
-           placeholder={"Filtrar articulo orden compra"} //no es necesario 
-         />
-       </div>
-     </div>
-     <div className="row">
-       <div className="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
-         <form onSubmit={handleSubmit} className="mb-4">
-           <div className="form-row"> 
-
-    <InputCataComponente
-    value={news.Cantidad}
-    onChange={handleInput}
-    placeholder={"Ingrese Cantidad"}
-    id={"Cantidad"}
-    type={"number"}
-    name={"Cantidad"}
-    label={"Cantidad"}
-  />     
- 
-       
-  <           SelectCataComponente
-              required
-              label={"- Seleccionar orden de compra"}
-              name={"IdOrdenCompra"}
-              value={news.IdOrdenCompra}
-              options={options2}
-              onChange={handleSelect}
+      <div className="container mt-4">
+        <div className="row">
+          <div className="col">
+            <TitleCataComponente title="articulo Orden Compra" size="h6" />
+            <SearchCataComponente
+              value={filter}
+              onChange={handleInputSearch}
+              type={"search"}
+              name={"filter"}
+              id={"filter"}
+              placeholder={"Filtrar articulo orden compra"} //no es necesario 
             />
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
+            <form onSubmit={handleSubmit} className="mb-4">
+              <div className="form-row">
+
+                <InputCataComponente
+                  value={news.Cantidad}
+                  onChange={handleInput}
+                  placeholder={"Ingrese Cantidad"}
+                  id={"Cantidad"}
+                  type={"number"}
+                  name={"Cantidad"}
+                  label={"Cantidad"}
+                />
 
 
-          <SelectCataComponente
-              required
-              label={" Seleccionar un Accesorio -"}
-              name={"IdArticulo"}
-              value={news.IdArticulo}
-              options={options}
-              onChange={handleSelect}
+                <           SelectCataComponente
+                  required
+                  label={"- Seleccionar orden de compra"}
+                  name={"IdOrdenCompra"}
+                  value={news.IdOrdenCompra}
+                  options={options2}
+                  onChange={handleSelect}
+                />
+
+
+                <SelectCataComponente
+                  required
+                  label={" Seleccionar un Accesorio -"}
+                  name={"IdArticulo"}
+                  value={news.IdArticulo}
+                  options={options}
+                  onChange={handleSelect}
+                />
+
+                <ButtonCataComponente
+                  type="submit"
+                  className="btn btn-primary btn-block"
+                  title="Guardar"
+                />
+              </div>
+            </form>
+          </div>
+          <div className="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
+            <TabletCataComponente
+              data={current}
+              handleDelete={handleDelete}
+              handleEdit={handleEdit}
+              handleDeleteM={handleDeleteM}
+              idField={"IdArticuloOrdenCompra"}
+              Fields={[
+                "Cantidad",
+                "IdOrdenCompra",
+                "IdArticulo"
+              ]}
             />
-
-             <ButtonCataComponente
-               type="submit"
-               className="btn btn-primary btn-block"
-               title="Guardar"
-             />
-           </div>
-         </form>
-       </div>
-       <div className="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
-         <TabletCataComponente
-           data={current}
-           handleDelete={handleDelete}
-           handleEdit={handleEdit}
-           handleDeleteM={handleDeleteM}
-           idField={"IdArticuloOrdenCompra"}
-           Fields={[
-            "Cantidad",
-            "IdOrdenCompra",
-            "IdArticulo"
-           ]}
-         />
-         <PaginateCataComponente
-           data={forms}
-           PerPage={PerPage}
-           handlePageChange={handlePageChange}
-         />
-       </div>
-     </div>
-   </div>
+            <PaginateCataComponente
+              data={forms}
+              PerPage={PerPage}
+              handlePageChange={handlePageChange}
+            />
+          </div>
+        </div>
+      </div>
     </>
- );
+  );
 }
 
 export default PuchareItemOrder;
