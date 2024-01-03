@@ -3,13 +3,12 @@ import ButtonCataComponente from "../../components/provider/Button/Button";
 import InputCataComponente from "../../components/provider/Input/Input";
 import { SelectCataComponente } from "../../components/provider/Select/Select";
 
-
 const NewPurchaseOrder = (
   {
     rentalStatus,
-    setRentalStatus,
     updateActiveKeys,
-    updateRentalStatus
+    updateRentalStatus,
+    setIdPurchaseOrder
   }
 ) => {
   const [news, setNews] = useState({
@@ -17,11 +16,11 @@ const NewPurchaseOrder = (
     FechaCompra: "",
     IdAlquiler: rentalStatus.rent.IdAlquiler,
     IdEmpleado: "",
+    Total: "",
   });
   const [options, setOptions] = useState([]);
-  const [options2, setOptions2] = useState([]);
 
-  const nextKeys = ['2', '3']
+  const nextKeys = ['2', '3', '4']
 
   const form = "PuchaseOrder";
   const URL = "http://localhost:";
@@ -31,38 +30,6 @@ const NewPurchaseOrder = (
     handleGetEmpleado();
   }, []);
 
-
-  const handleGetOneTienda = async (IdTienda) => {
-    const response = await fetch(`${URL}${PORT}/Store/${IdTienda}`);
-    const data = await response.json();
-    return data.message.Nombre + " " + data.message.Nit;
-  };
-
-  const handleGetOneCliente = async (IdCliente) => {
-    const response = await fetch(`${URL}${PORT}/clients/${IdCliente}`);
-    const data = await response.json();
-    return data.message.Nombre + " " + data.message.Apellido;
-  };
-
-  // const handleGetAlquiler = async () => {
-  //   try {
-  //     const response = await fetch(`${URL}${PORT}/renting`);
-  //     const data = await response.json();
-  //     const newOptions = await Promise.all(
-  //       data.map(async (element) => {
-  //         const client = await handleGetOneCliente(element.IdCliente);
-  //         const tienda = await handleGetOneTienda(element.IdTienda);
-  //         return {
-  //           value: element.IdAlquiler,
-  //           label: `${client} - ${tienda} - ${element.IdAlquiler}`,
-  //         };
-  //       })
-  //     );
-  //     setOptions2(newOptions);
-  //   } catch (error) {
-  //     console.error("Error in handleGetAlquiler:", error);
-  //   }
-  // };
 
   const handleGetEmpleado = async () => {
     try {
@@ -78,8 +45,6 @@ const NewPurchaseOrder = (
       console.log(error);
     }
   };
-
-
 
 
   const handleInput = (e) => {
@@ -118,6 +83,7 @@ const NewPurchaseOrder = (
       if (data) {
         updateRentalStatus({ purchaseOrder: data })
         updateActiveKeys(nextKeys)
+        setIdPurchaseOrder(data.IdOrdenCompra)
       }
     } catch (error) {
       console.error("Error al crear:", error);

@@ -33,6 +33,7 @@ const Rental = () => {
   const [activeKeys, setActiveKeys] = useState(['0'])
   const [keyStatus, setKeyStatus] = useState(defaultKeyStatus)
   const [rentalStatus, setRentalStatus] = useState(null)
+  const [idPurchaseOrder, setIdPurchaseOrder] = useState(null)
 
   const getActiveKeys = () => keyStatus
     .filter(el => el.active)
@@ -51,9 +52,9 @@ const Rental = () => {
       ...newData
     })
 
-  useEffect(() => {
-    console.log(rentalStatus)
-  }, [rentalStatus])
+  // useEffect(() => {
+  //   console.log(rentalStatus)
+  // }, [rentalStatus])
 
   useEffect(() => {
     setActiveKeys(getActiveKeys())
@@ -61,8 +62,7 @@ const Rental = () => {
 
 
   return (
-    <Container fluid>
-      {/* <button onClick={handleButton}>Abrir</button> */}
+    <Container fluid className='mb-5'>
       <Accordion activeKey={activeKeys}>
         <Accordion.Item eventKey="0">
           <Accordion.Header>Alquiler</Accordion.Header>
@@ -75,39 +75,55 @@ const Rental = () => {
         </Accordion.Item>
         <Accordion.Item eventKey="1">
           <Accordion.Header>Orden de compra</Accordion.Header>
-          {
-            rentalStatus
-              ?
-              <Accordion.Body>
+          <Accordion.Body>
+            {
+              rentalStatus
+                ?
                 <NewPurchaseOrder
                   rentalStatus={rentalStatus}
-                  setRentalStatus={setRentalStatus}
                   updateActiveKeys={updateActiveKeys}
                   updateRentalStatus={updateRentalStatus}
+                  setIdPurchaseOrder={setIdPurchaseOrder}
                 />
-              </Accordion.Body>
-              :
-              <Accordion.Body>
+                :
                 <p>Cargando...</p>
-              </Accordion.Body>
-          }
+            }
+          </Accordion.Body>
         </ Accordion.Item>
         <Accordion.Item eventKey="2">
           <Accordion.Header>Articulos</Accordion.Header>
           <Accordion.Body>
-            <NewArticlesOrder updateActiveKeys={updateActiveKeys} />
+            {rentalStatus?.purchaseOrder
+              ?
+              <NewArticlesOrder
+                rentalStatus={rentalStatus}
+              />
+              :
+              <p>Cargando...</p>
+            }
           </Accordion.Body>
         </ Accordion.Item>
         <Accordion.Item eventKey="3">
           <Accordion.Header>Accesorios</Accordion.Header>
           <Accordion.Body>
-            <NewAccesoriesOrder updateActiveKeys={updateActiveKeys} />
+            {rentalStatus?.purchaseOrder
+              ?
+              <NewAccesoriesOrder
+                rentalStatus={rentalStatus}
+              />
+              :
+              <p>Cargando...</p>
+            }
           </Accordion.Body>
         </ Accordion.Item>
         <Accordion.Item eventKey="4">
           <Accordion.Header>Generar orden de compra</Accordion.Header>
           <Accordion.Body>
-            <NewInvoice updateActiveKeys={updateActiveKeys} />
+            {idPurchaseOrder
+              ?
+              <NewInvoice idPurchaseOrder={idPurchaseOrder} />
+              :
+              <p>Cargando...</p>}
           </Accordion.Body>
         </ Accordion.Item>
       </Accordion>

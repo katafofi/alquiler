@@ -10,7 +10,7 @@ function App() {
     <div className='App'>
       <NavbarCataComponente />
       <Outlet />
-      <FooterCataComponente />
+      {/* <FooterCataComponente /> */}
     </div>
   )
 }
