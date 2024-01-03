@@ -26,6 +26,7 @@ import Reports from '../views/Reports';
 import RentingRefunt from '../views/RentingRefunt';
 import PuchareItemOrder from '../views/PuchareItemOrder';
 import Renting from '../views/renting';
+import Rental from "../views/rental/Rental";
 
 const router = createBrowserRouter([
   {
@@ -131,6 +132,10 @@ const router = createBrowserRouter([
       {
         path: "/puchase/item/order",
         element: <PuchareItemOrder />,
+      },
+      {
+        path: "/rental",
+        element: <Rental />,
       },
       {
         path: "/renting",
