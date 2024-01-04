@@ -27,6 +27,7 @@ import RentingRefunt from '../views/RentingRefunt';
 import PuchareItemOrder from '../views/PuchareItemOrder';
 import Renting from '../views/renting';
 import Rental from "../views/rental/Rental";
+import Credit from "../views/credit/Credit";
 
 const router = createBrowserRouter([
   {
@@ -136,6 +137,10 @@ const router = createBrowserRouter([
       {
         path: "/rental",
         element: <Rental />,
+      },
+      {
+        path: "/credit",
+        element: <Credit />,
       },
       {
         path: "/renting",

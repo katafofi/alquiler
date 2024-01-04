@@ -39,6 +39,7 @@ const NavbarCataComponente = () => {
     ],
     rental: [
       { to: '/rental', label: 'Nuevo Alquiler' },
+      { to: '/credit', label: 'Abonos' },
       { to: '/renting', label: 'Alquiler' },
       { to: '/puchase/order', label: 'Orden compra' },
       { to: '/puchase/accesories/order', label: 'Orden compra accesorios' },

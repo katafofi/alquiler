@@ -13,11 +13,11 @@ const InvoicePreview = ({ id, invoiceModalActive, setInvoiceModalActive, }) => {
   const monthNames = ["Ene", "Feb", "Mar", "Abr", "May", "Jun",
     "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
 
-  useEffect(() => {
-    console.log("ID:", id)
-    console.log("Invoice data:", invoiceData)
-    console.log("Date: ", invoiceData)
-  }, [invoiceData])
+  // useEffect(() => {
+  //   console.log("ID:", id)
+  //   console.log("Invoice data:", invoiceData)
+  //   console.log("Date: ", invoiceData)
+  // }, [invoiceData])
 
   return (
     <Modal show={invoiceModalActive} onHide={() => setInvoiceModalActive(false)} size="lg">
