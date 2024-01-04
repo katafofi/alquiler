@@ -19,7 +19,6 @@ const NewAccesoriesOrder = (
   const [addedAccesories, setAddedAccesories] = useState([])
   const [accesories, setAaccesories] = useState([])
   const [options, setOptions] = useState([]);
-  const nextKeys = ['2', '4']
 
   const FORM = "PuchaseAccesoriesOrder";
   const URL = "http://localhost:";

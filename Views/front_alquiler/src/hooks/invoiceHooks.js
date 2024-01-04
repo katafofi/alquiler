@@ -7,7 +7,7 @@ const calcCredit = (payments, Total) => {
     credit += parseFloat(payment.Valor)
   })
   const balance = parseFloat(Total) - parseFloat(credit);
-  const lastCredit = (new Date(payments.slice(-1)[0].FechadPago)).toLocaleDateString();
+  const lastCredit = (new Date(payments.slice(-1)[0].FechadPago)).toLocaleDateString('es-CO', { timeZone: 'UTC' });
   return { credit, balance, lastCredit };
 }
 

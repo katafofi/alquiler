@@ -5,6 +5,7 @@ import NewPurchaseOrder from './NewPurchaseOrder'
 import NewAccesoriesOrder from './NewAccesoriesOrder'
 import NewInvoice from './NewInvoice'
 import { useEffect, useState } from 'react'
+import RentalPayment from './RentalPayment'
 
 const defaultKeyStatus = [
   {
@@ -25,6 +26,10 @@ const defaultKeyStatus = [
   },
   {
     activeKey: '4',
+    active: false,
+  },
+  {
+    activeKey: '5',
     active: false,
   },
 ]
@@ -52,15 +57,12 @@ const Rental = () => {
       ...newData
     })
 
-  // useEffect(() => {
-  //   console.log(rentalStatus)
-  // }, [rentalStatus])
 
   useEffect(() => {
     setActiveKeys(getActiveKeys())
   }, [keyStatus])
 
-
+  // console.log(rentals)
   return (
     <Container fluid className='mb-5'>
       <Accordion activeKey={activeKeys}>
@@ -117,11 +119,30 @@ const Rental = () => {
           </Accordion.Body>
         </ Accordion.Item>
         <Accordion.Item eventKey="4">
+          <Accordion.Header>Pagos</Accordion.Header>
+          <Accordion.Body>
+            {idPurchaseOrder && rentalStatus
+              ?
+              <RentalPayment
+                idPurchaseOrder={idPurchaseOrder}
+                updateActiveKeys={updateActiveKeys}
+                updateRentalStatus={updateRentalStatus}
+                rentalStatus={rentalStatus}
+              />
+              :
+              <p>Cargando...</p>}
+          </Accordion.Body>
+        </ Accordion.Item>
+        <Accordion.Item eventKey="5">
           <Accordion.Header>Generar orden de compra</Accordion.Header>
           <Accordion.Body>
             {idPurchaseOrder
               ?
-              <NewInvoice idPurchaseOrder={idPurchaseOrder} />
+              <NewInvoice
+                idPurchaseOrder={idPurchaseOrder}
+                updateActiveKeys={updateActiveKeys}
+                rentalStatus={rentalStatus}
+              />
               :
               <p>Cargando...</p>}
           </Accordion.Body>

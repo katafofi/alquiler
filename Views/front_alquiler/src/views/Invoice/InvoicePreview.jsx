@@ -1,7 +1,7 @@
 import Table from 'react-bootstrap/Table';
 import './InvoicePreview.css'
 import { Button, Col, Container, Image, Row } from 'react-bootstrap';
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import ReactToPrint from "react-to-print";
 import { useInvoiceData } from '../../hooks/invoiceHooks.js';
 import katmielLogo from '../../assets/katmiel-logo.png'
@@ -10,6 +10,14 @@ import Modal from 'react-bootstrap/Modal';
 const InvoicePreview = ({ id, invoiceModalActive, setInvoiceModalActive, }) => {
   const [invoiceData, error] = useInvoiceData(id);
   const invoiceRef = useRef(null)
+  const monthNames = ["Ene", "Feb", "Mar", "Abr", "May", "Jun",
+    "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
+
+  useEffect(() => {
+    console.log("ID:", id)
+    console.log("Invoice data:", invoiceData)
+    console.log("Date: ", invoiceData)
+  }, [invoiceData])
 
   return (
     <Modal show={invoiceModalActive} onHide={() => setInvoiceModalActive(false)} size="lg">
@@ -53,9 +61,9 @@ const InvoicePreview = ({ id, invoiceModalActive, setInvoiceModalActive, }) => {
                       </thead>
                       <tbody>
                         <tr>
-                          <td>{invoiceData.FechaCompra.getDay()}</td>
-                          <td>{invoiceData.FechaCompra.getMonth()}</td>
-                          <td>{invoiceData.FechaCompra.getYear()}</td>
+                          <td>{invoiceData.FechaCompra.getUTCDate()}</td>
+                          <td>{monthNames[invoiceData.FechaCompra.getUTCMonth()]}</td>
+                          <td>{invoiceData.FechaCompra.getUTCFullYear()}</td>
                         </tr>
                       </tbody>
                     </Table>
@@ -98,20 +106,20 @@ const InvoicePreview = ({ id, invoiceModalActive, setInvoiceModalActive, }) => {
                     <tr>
                       <td>Fecha Retirado:</td>
                       <td>Día</td>
-                      <td>{invoiceData.FechaInicialAlquiler.getDay()}</td>
+                      <td>{invoiceData.FechaInicialAlquiler.getUTCDay()}</td>
                       <td>Mes</td>
-                      <td>{invoiceData.FechaInicialAlquiler.getMonth()}</td>
+                      <td>{monthNames[invoiceData.FechaInicialAlquiler.getUTCMonth()]}</td>
                       <td>Año</td>
-                      <td>{invoiceData.FechaInicialAlquiler.getYear()}</td>
+                      <td>{invoiceData.FechaInicialAlquiler.getUTCFullYear()}</td>
                     </tr>
                     <tr>
                       <td>Fecha devolución:</td>
                       <td>Día</td>
-                      <td>{invoiceData.FechaFinlAlquiler.getDay()}</td>
+                      <td>{invoiceData.FechaFinlAlquiler.getUTCDay()}</td>
                       <td>Mes</td>
-                      <td>{invoiceData.FechaFinlAlquiler.getMonth()}</td>
+                      <td>{monthNames[invoiceData.FechaFinlAlquiler.getUTCMonth()]}</td>
                       <td>Año</td>
-                      <td>{invoiceData.FechaFinlAlquiler.getYear()}</td>
+                      <td>{invoiceData.FechaFinlAlquiler.getUTCFullYear()}</td>
                     </tr>
                   </tbody>
                 </Table >
@@ -126,8 +134,8 @@ const InvoicePreview = ({ id, invoiceModalActive, setInvoiceModalActive, }) => {
                     <tbody>
                       {invoiceData.resultPurchareItemOrder.map((order, key) => (
                         <tr key={key}>
-                          <td>${order[key]}</td>
-                          <td>${order.Descripcion}</td>
+                          <td>{order.Cantidad}</td>
+                          <td>{order.Descripcion}</td>
                         </tr>))}
                     </tbody>
                   </Table>
@@ -143,8 +151,8 @@ const InvoicePreview = ({ id, invoiceModalActive, setInvoiceModalActive, }) => {
                     <tbody>
                       {invoiceData.resultPurchaseAccesoriesOrder.map((order, key) => (
                         <tr key={key}>
-                          <td>${order[key]}</td>
-                          <td>${order.Descripcion}</td>
+                          <td>{order.cantidad}</td>
+                          <td>{order.Descripcion}</td>
                         </tr>))}
                     </tbody>
                   </Table>
