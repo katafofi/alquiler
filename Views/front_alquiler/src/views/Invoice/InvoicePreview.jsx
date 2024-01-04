@@ -34,25 +34,26 @@ const InvoicePreview = ({ id, invoiceModalActive, setInvoiceModalActive, }) => {
               <header>
                 <div >
                   <Row>
-                    <Col>
-                      <Image src={katmielLogo} alt="Katmiel Logo" />
+                    <Col xs={2}>
+                      <div className='img-cont'>
+                        <Image src={katmielLogo} className='img-fluid' alt="Katmiel Logo" />
+                      </div>
                     </Col>
-                    <Col >
-                      <div>
+                    <Col xs={10}>
+                      <div className='flex-center'>
                         <p>VENTA Y ALQUILER DE VESTIDOS PARA NOVIA, COCTEL, GRADOS QUINCE AÑOS Y PRIMERA COMUNIÓN</p>
-                        <p>Angie Ramos Jimenez</p>
+                        <p className='f-family-DancingScript'>Angie Ramos Jimenez</p>
                       </div>
                     </Col>
                   </Row>
                 </div>
-                <p>Transv. 78 L No. 68 - 03 Sur 2do. Piso . Bosa Piamonte . Cel: 320 805 6350 - 320 805 8884</p>
+                <div className='flex-center'>
+                  <p>Transv. 78 L No. 68 - 03 Sur 2do. Piso . Bosa Piamonte . Cel: 320 805 6350 - 320 805 8884</p>
+                </div>
                 <Row>
                   <Col>
                     <Table striped bordered hover size="sm">
                       <thead>
-                        <tr >
-                          <td colSpan={3}>Fecha</td>
-                        </tr>
                         <tr>
                           <th>Dia</th>
                           <th>Mes</th>
@@ -123,73 +124,81 @@ const InvoicePreview = ({ id, invoiceModalActive, setInvoiceModalActive, }) => {
                     </tr>
                   </tbody>
                 </Table >
-                {invoiceData.resultPurchareItemOrder &&
-                  <Table striped bordered hover size='sm'>
-                    <thead>
-                      <tr>
-                        <th>CANT</th>
-                        <th>ARTICULO</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {invoiceData.resultPurchareItemOrder.map((order, key) => (
-                        <tr key={key}>
-                          <td>{order.Cantidad}</td>
-                          <td>{order.Descripcion}</td>
-                        </tr>))}
-                    </tbody>
-                  </Table>
-                }
-                {invoiceData.resultPurchaseAccesoriesOrder &&
-                  <Table striped bordered hover size='sm'>
-                    <thead>
-                      <tr>
-                        <th>CANT</th>
-                        <th>ACCESORIO</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {invoiceData.resultPurchaseAccesoriesOrder.map((order, key) => (
-                        <tr key={key}>
-                          <td>{order.cantidad}</td>
-                          <td>{order.Descripcion}</td>
-                        </tr>))}
-                    </tbody>
-                  </Table>
-                }
+                <Row>
+                  {invoiceData.resultPurchareItemOrder.length > 0 &&
+                    <Col>
+                      <Table striped bordered hover size='sm'>
+                        <thead>
+                          <tr>
+                            <th>CANT</th>
+                            <th>ARTICULO</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {invoiceData.resultPurchareItemOrder.map((order, key) => (
+                            <tr key={key}>
+                              <td>{order.Cantidad}</td>
+                              <td>{order.Descripcion}</td>
+                            </tr>))}
+                        </tbody>
+                      </Table>
+                    </Col>
+                  }
+                  {invoiceData.resultPurchaseAccesoriesOrder.length > 0 &&
+                    <Col>
+                      <Table striped bordered hover size='sm'>
+                        <thead>
+                          <tr>
+                            <th>CANT</th>
+                            <th>ACCESORIO</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {invoiceData.resultPurchaseAccesoriesOrder.map((order, key) => (
+                            <tr key={key}>
+                              <td>{order.cantidad}</td>
+                              <td>{order.Descripcion}</td>
+                            </tr>))}
+                        </tbody>
+                      </Table>
+                    </Col>
+                  }
+                </Row>
               </main>
               <footer>
                 <Row>
                   <Col xs="9">
-                    <p className='fs-6'>El cliente esta en la obligación de responder por las prendas ya descritas<br />
-                      El retardo en la devolución de las prendas ocasionara<br />
-                      <strong>MULTA DE $10.000 DIARIOS.</strong><br />
-                      El cliente esta obligado a llevar las prendas estipuladas en esta factura.<br />
-                      <strong>Por Ningún Motivo se Hará Devolución de Dinero Ni Transferencia de Saldos a Otra Factura.</strong><br />
-                      La entrega de las prendas será en la fecha esTablecida en esta factura.<br />
-                      Después de las 3 pm para la entrega de las prendas favor traer fotocopia de cédula de la persona quien venga a
-                      mirarlas y un recibo público de agua o luz.</p>
-                    <Table size='sm'>
-                      <tbody>
-                        <tr>
-                          <td>Firma:</td>
-                          <td></td>
-                        </tr>
-                        <tr>
-                          <td>CC:</td>
-                          <td></td>
-                        </tr>
-                      </tbody>
-                    </Table>
+                    <small className='fs-6'>El cliente esta en la obligación de responder por las prendas ya descritas. El retardo en la devolución de las prendas ocasionara. <strong>MULTA DE $10.000 DIARIOS. </strong>El cliente esta obligado a llevar las prendas estipuladas en esta factura. <strong>Por Ningún Motivo se Hará Devolución de Dinero Ni Transferencia de Saldos a Otra Factura. </strong>La entrega de las prendas será en la fecha esTablecida en esta factura. Después de las 3 pm para la entrega de las prendas favor traer fotocopia de cédula de la persona quien venga a mirarlas y un recibo público de agua o luz.</small>
+                    <div className='mt-3'>
+                      <Table size='sm'>
+                        <tbody>
+                          <tr>
+                            <td>Firma:</td>
+                            <td></td>
+                          </tr>
+                          <tr>
+                            <td>CC:</td>
+                            <td></td>
+                          </tr>
+                        </tbody>
+                      </Table>
+                    </div>
                   </Col>
                   <Col xs='3'>
-                    <p>Fecha ultimo abono: {invoiceData.lastCredit}</p>
-                    <h3>TOTAL $</h3>
-                    <p>{invoiceData.Total}</p>
-                    <h3>ABONO $</h3>
-                    <p>{invoiceData.credit}</p>
-                    <h3>SALDO $</h3>
-                    <p>{invoiceData.balance}</p>
+                    <p>
+                      <small>
+                        <strong>Fecha ultimo abono:</strong> {invoiceData.lastCredit}
+                      </small>
+                    </p>
+                    <p>
+                      <small><strong>TOTAL: </strong>{invoiceData.Total}$</small>
+                    </p>
+                    <p>
+                      <small><strong>ABONO: </strong>{invoiceData.credit}$</small>
+                    </p>
+                    <p>
+                      <small><strong>SALDO: </strong>{invoiceData.balance}$</small>
+                    </p>
                   </Col>
                 </Row>
               </footer>

@@ -31,8 +31,6 @@ const NewPayments = (
 
   const nextKeys = ['5']
 
-  console.log(rentalStatus)
-
   useEffect(() => {
     handleGetEstadoPago();
     handleGetTipoPago();
