@@ -62,60 +62,54 @@ const Clients = () => {
   };
 
   const handleDelete = async (id) => {
-    if (window.prompt("Ingrese la credencial de autorizacion", 0) == "202312") {
-      if (window.confirm("¿Estás seguro de que quieres eliminar?")) {
-        try {
-          const response = await fetch(`${URL}${PORT}/${form}/${id}`, {
-            method: "DELETE",
+
+    if (window.confirm("¿Estás seguro de que quieres eliminar?")) {
+      try {
+        const response = await fetch(`${URL}${PORT}/${form}/${id}`, {
+          method: "DELETE",
+        });
+        console.log(response);
+        setForm((prev) => prev.filter((info) => info.IdCliente != id));
+        setDeleted(true);
+        if (selected && selected.IdCliente == id) {
+          setSelected(null);
+          setNews({
+            IdCliente: "",
+            Nombre: "",
+            Apellido: "",
+            Cedula: "",
+            Correo: "",
+            Direccion: "",
+            Telefono: "",
+            ReferenciaPersonalNombre: "",
+            ReferenciaPersonalTelefono: "",
+            FotoDocumento: null,
+            FotoServicioPublico: null,
+            Fecha: "",
           });
-          console.log(response);
-          setForm((prev) => prev.filter((info) => info.IdCliente != id));
-          setDeleted(true);
-          if (selected && selected.IdCliente == id) {
-            setSelected(null);
-            setNews({
-              IdCliente: "",
-              Nombre: "",
-              Apellido: "",
-              Cedula: "",
-              Correo: "",
-              Direccion: "",
-              Telefono: "",
-              ReferenciaPersonalNombre: "",
-              ReferenciaPersonalTelefono: "",
-              FotoDocumento: null,
-              FotoServicioPublico: null,
-              Fecha: "",
-            });
-          }
-        } catch (error) {
-          console.log(error);
         }
+      } catch (error) {
+        console.log(error);
       }
-    } else {
-      alert("No esta permitido para las credenciales por defecto.");
     }
+
   };
 
   const handleDeleteM = async (ids) => {
-    if (window.prompt("Ingrese la credencial de autorizacion", 0) == "202312") {
-      if (window.confirm("¿Estás seguro de que quieres eliminar?")) {
-        try {
-          const response = await fetch(`${URL}${PORT}/${form}/delete/all`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(ids),
-          });
-          console.log(response);
-          setDeletedM(true);
-        } catch (error) {
-          console.log(error);
-        }
+    if (window.confirm("¿Estás seguro de que quieres eliminar?")) {
+      try {
+        const response = await fetch(`${URL}${PORT}/${form}/delete/all`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(ids),
+        });
+        console.log(response);
+        setDeletedM(true);
+      } catch (error) {
+        console.log(error);
       }
-    } else {
-      alert("No esta permitido para las credenciales por defecto.");
     }
   };
 
@@ -150,8 +144,8 @@ const Clients = () => {
       formData.append("Telefono", news.Telefono)
       formData.append("ReferenciaPersonalNombre", news.ReferenciaPersonalNombre)
       formData.append("ReferenciaPersonalTelefono", news.ReferenciaPersonalTelefono)
-      formData.append("FotoDocumento", fotoDocumento, fotoDocumento.name)
-      formData.append("FotoServicioPublico", fotoServicioPublico, fotoServicioPublico.name)
+      if (fotoDocumento) formData.append("FotoDocumento", fotoDocumento, fotoDocumento.name)
+      if (fotoServicioPublico) formData.append("FotoServicioPublico", fotoServicioPublico, fotoServicioPublico.name)
       formData.append("Fecha", news.Fecha)
 
       for (const entry of formData.entries()) {
@@ -209,7 +203,7 @@ const Clients = () => {
     if (file && file.type === 'image/jpg' || file.type === 'image/jpeg') {
       setFotoDocumento(file);
     } else {
-      alert('Please select a valid JPG file.'+ file.type);
+      alert('Please select a valid JPG file.' + file.type);
       event.target.value = null;
     }
   };
@@ -285,19 +279,16 @@ const Clients = () => {
     e.preventDefault();
 
     if (selected) {
-      if (
-        window.prompt("Ingrese la credencial de autorizacion", 0) == "202312"
-      ) {
-        if (window.confirm("¿Estás seguro de que quieres actualizar este?")) {
-          try {
-            handleUpdate();
-          } catch (error) {
-            console.error("Error al actualizar:", error);
-          }
+
+      if (window.confirm("¿Estás seguro de que quieres actualizar este?")) {
+        try {
+          handleUpdate();
+        } catch (error) {
+          console.error("Error al actualizar:", error);
         }
-      } else {
-        alert("No esta permitido para las credenciales por defecto.");
       }
+
+
     } else {
       try {
         handleCreate();

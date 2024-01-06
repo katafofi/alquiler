@@ -21,6 +21,8 @@ const NegativeRecord = () => {
   const [optionsRegistroNegativo, setOptionsRegistroNegativo] = useState([]);
   const [currentPage, setCurrentPage] = useState([]);
   const [filter, setFilter] = useState("");
+  const [current, setCurrent] = useState(null);
+  const [tableData, setTableData] = useState(null)
 
   const PerPage = 10;
   const form = "negativeRecord";
@@ -28,10 +30,12 @@ const NegativeRecord = () => {
   const URL = "http://localhost:";
   const PORT = "3003";
 
+  // useEffect(() => {
+  //   console.log("optionsCliente", optionsCliente, "optionsRegistroNegativo", optionsRegistroNegativo, "form", form)
+  // }, [optionsCliente, optionsRegistroNegativo, form])
+
   useEffect(() => {
-    handleGet();
-    handleGetCliente();
-    handleGetEstadoRegistroNegativo();
+    getTableData()
   }, [selected]);
 
   useEffect(() => {
@@ -48,11 +52,40 @@ const NegativeRecord = () => {
     setDeletedM(false);
   }, [deletedM]);
 
+  useEffect(() => {
+    if (forms.length > 0) {
+      setCurrent(forms
+        .filter((item) =>
+          item.IdRegistroNegativo?.toString()
+            .toLowerCase()
+            .includes(filter.toString().toLowerCase())
+        )
+        .slice(indexOfFirst, indexOfLast))
+    }
+  }, [forms])
+
+  const getTableData = async () => {
+    const idData = await handleGet();
+    const clientData = await handleGetCliente();
+    const negativeRecord = await handleGetEstadoRegistroNegativo()
+
+    const newTableData = idData.map(i => {
+      return {
+        ...i,
+        clientData: clientData.filter(j => i.IdCliente === j.IdCliente)[0],
+        negativeRecord: negativeRecord.filter(j => i.IdEstadoRegistroNegativo === j.IdEstadoRegistroNegativo)[0]
+      }
+    })
+    console.log(newTableData)
+  }
+
   const handleGet = async () => {
     try {
       const response = await fetch(`${URL}${PORT}/${form}`);
       const data = await response.json();
+      // console.log("el get:", data)
       setForm(data);
+      return data
     } catch (error) {
       console.log(error);
     }
@@ -62,11 +95,13 @@ const NegativeRecord = () => {
     try {
       const response = await fetch(`${URL}${PORT}/Clients`);
       const data = await response.json();
+      // console.log("Datos cliente:", data)
       const newOptions = data.map((element) => ({
-        value: element. IdCliente, //lo que selecciona en el back
+        value: element.IdCliente, //lo que selecciona en el back
         label: element.Cedula + " " + element.IdCliente, //lo que se ve en el selector
       }));
       setOptionsCliente(newOptions);
+      return data
     } catch (error) {
       console.log(error);
     }
@@ -75,11 +110,13 @@ const NegativeRecord = () => {
     try {
       const response = await fetch(`${URL}${PORT}/StatusRegisterNegative`);
       const data = await response.json();
+      console.log("Registro negativo:", data)
       const newOptions = data.map((element) => ({
-        value: element. IdEstadoRegistroNegativo, //lo que selecciona en el back
+        value: element.IdEstadoRegistroNegativo, //lo que selecciona en el back
         label: element.Descripcion + " " + element.IdEstadoRegistroNegativo, //lo que se ve en el selector
       }));
       setOptionsRegistroNegativo(newOptions);
+      return data
     } catch (error) {
       console.log(error);
     }
@@ -87,27 +124,27 @@ const NegativeRecord = () => {
 
   const handleDelete = async (id) => {
 
-        try {
-          const response = await fetch(`${URL}${PORT}/${form}/${id}`, {
-            method: "DELETE",
-          });
-          console.log(response);
-          setForm((prev) =>
-            prev.filter((info) => info.IdRegistroNegativo != id)
-          );
-          setDeleted(true);
-          if (selected && selected.IdRegistroNegativo == id) {
-            setSelected(null);
-            setNews({
-              IdRegistroNegativo: "",
-              IdCliente: "",
-              IdEstadoRegistroNegativo: "",
-            });
-          }
-        } catch (error) {
-          console.log(error);
-        }
-   
+    try {
+      const response = await fetch(`${URL}${PORT}/${form}/${id}`, {
+        method: "DELETE",
+      });
+      console.log(response);
+      setForm((prev) =>
+        prev.filter((info) => info.IdRegistroNegativo != id)
+      );
+      setDeleted(true);
+      if (selected && selected.IdRegistroNegativo == id) {
+        setSelected(null);
+        setNews({
+          IdRegistroNegativo: "",
+          IdCliente: "",
+          IdEstadoRegistroNegativo: "",
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+
   };
 
   const handleDeleteM = async (ids) => {
@@ -192,7 +229,7 @@ const NegativeRecord = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          IdRegistroNegativo:news.IdRegistroNegativo,
+          IdRegistroNegativo: news.IdRegistroNegativo,
           IdCliente: news.IdCliente,
           IdEstadoRegistroNegativo: news.IdEstadoRegistroNegativo,
         }),
@@ -214,7 +251,7 @@ const NegativeRecord = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    // console.log(selected)
     if (selected) {
       if (
         window.prompt("Ingrese la credencial de autorizacion", 0) == "202312"
@@ -231,7 +268,11 @@ const NegativeRecord = () => {
       }
     } else {
       try {
-        handleCreate();
+        if (current.filter(el => el.IdCliente === parseInt(news.IdCliente)).length > 0) {
+          alert("No esta permitido reportar un usuario mas de una vez.");
+        } else {
+          handleCreate();
+        }
       } catch (error) {
         console.error("Error al crear:", error);
       }
@@ -245,13 +286,9 @@ const NegativeRecord = () => {
 
   const indexOfLast = (currentPage + 1) * PerPage;
   const indexOfFirst = indexOfLast - PerPage;
-  const current = forms
-    .filter((item) =>
-      item.IdRegistroNegativo.toString()
-        .toLowerCase()
-        .includes(filter.toString().toLowerCase())
-    )
-    .slice(indexOfFirst, indexOfLast);
+
+
+
 
   return (
     <>
@@ -299,24 +336,26 @@ const NegativeRecord = () => {
               </div>
             </form>
           </div>
-          <div className="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
-            <TabletCataComponente
-              data={current}
-              handleDelete={handleDelete}
-              handleEdit={handleEdit}
-              handleDeleteM={handleDeleteM}
-              idField={"IdRegistroNegativo"}
-              Fields={[
-                "IdCliente",
-              "IdEstadoRegistroNegativo"
-              ]}
-            />
-            <PaginateCataComponente
-              data={forms}
-              PerPage={PerPage}
-              handlePageChange={handlePageChange}
-            />
-          </div>
+          {current &&
+            <div className="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
+              <TabletCataComponente
+                data={current}
+                handleDelete={handleDelete}
+                handleEdit={handleEdit}
+                handleDeleteM={handleDeleteM}
+                idField={"IdRegistroNegativo"}
+                Fields={[
+                  "IdCliente",
+                  "IdEstadoRegistroNegativo"
+                ]}
+              />
+              <PaginateCataComponente
+                data={forms}
+                PerPage={PerPage}
+                handlePageChange={handlePageChange}
+              />
+            </div>
+          }
         </div>
       </div>
     </>

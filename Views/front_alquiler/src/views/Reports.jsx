@@ -43,12 +43,25 @@ const getReportData = async () => {
   }
 }
 
+const getReportDataWeek = async () => {
+  const FORM = "report/week";
+  const URL = "http://localhost:";
+  const PORT = "3003";
+  try {
+    const response = await fetch(`${URL}${PORT}/${FORM}`);
+    const data = await response.json();
+    return data
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 function formatearFecha(fecha) {
   const fechaFormateada = new Date(fecha).toLocaleDateString('es-CO', { timeZone: 'UTC' })
   return `${fechaFormateada} `;
 }
 
-const createReport = async (data) => {
+const createReport = async (data, reportType) => {
   const libro = XLSX.utils.book_new();
   const hojaDia = XLSX.utils.json_to_sheet(data.dia.map(row => ({
     ...row,
@@ -81,23 +94,42 @@ const createReport = async (data) => {
   XLSX.utils.book_append_sheet(libro, hojaGastos, 'GASTOS');
   XLSX.utils.book_append_sheet(libro, hojaSaldos, 'SALDOS');
 
-  XLSX.writeFile(libro, `reporte.xlsx`);
-}
+  if (reportType === 'semanal') {
+    // Crear una nueva hoja 'CUENTAS SEMANA' con el resultado de SALDO_TOTAL y ABONO_TOTAL
+    const hojaCuentasSemanaNueva = XLSX.utils.json_to_sheet([
+      { SALDO_TOTAL: data.saldoTotal[0].SALDO_TOTAL, ABONO_TOTAL: data.abonoTotal[0].ABONO_TOTAL }, // Agrega SALDO_TOTAL y ABONO_TOTAL como nuevas columnas
+      // Puedes agregar más transformaciones si es necesario
+      ...data.cuentasSemana.map(row => ({
+        ...row,
+        // Puedes agregar más transformaciones si es necesario
+      }
+      )),
+    ]);
+    XLSX.utils.book_append_sheet(libro, hojaCuentasSemanaNueva, 'CUENTAS SEMANA');
+  }
 
+
+
+  XLSX.writeFile(libro, `reporte_${reportType}.xlsx`);
+}
 
 
 const handleReport = async () => {
   const data = await getReportData()
-  createReport(data)
+  createReport(data, "general")
 }
 
-
+const handleReportWeek = async () => {
+  const data = await getReportDataWeek()
+  createReport(data, "semanal")
+}
 
 const Reports = () => {
   return (<>
     <ButtonCataComponente title={'Abonos y Totales'} type={'button'} onClick={() => { subsidies_balances() }}></ButtonCataComponente>
     <ButtonCataComponente title={'Gastos'} type={'button'} onClick={() => { spent() }}></ButtonCataComponente>
     <Button onClick={handleReport}>Generar Reporte</Button>
+    <Button onClick={handleReportWeek}>Generar Reporte Semamal</Button>
   </>)
 }
 
