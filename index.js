@@ -24,6 +24,7 @@ const AccesoriesInventorysRouter = require("./Routes/accesoriesInventory.route")
 const EmployeStatusRouter = require("./Routes/employeStatus.route.js");
 const ItemRouter = require("./Routes/item.route.js");
 const invoiceRouter = require("./Routes/invoice.route.js");
+const reportRouter = require("./Routes/report.route.js");
 const ItemInventoryRouter = require("./Routes/itemInvetory.route.js");
 const NegativeRecordRouter = require("./Routes/negativeRecord.route.js");
 const PaymentsRouter = require("./Routes/payments.route.js");
@@ -66,6 +67,7 @@ app.use("/accesoriesInventory", AccesoriesInventorysRouter);
 app.use("/employeStatus", EmployeStatusRouter);
 app.use("/item", ItemRouter);
 app.use("/invoice", invoiceRouter);
+app.use("/report", reportRouter);
 app.use("/itemInventory", ItemInventoryRouter);
 app.use("/negativeRecord", NegativeRecordRouter);
 app.use("/payments", PaymentsRouter);
