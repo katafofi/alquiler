@@ -6,6 +6,7 @@ import TabletCataComponente from "../components/provider/Table/Table";
 import PaginateCataComponente from "../components/provider/Paginate/Paginate";
 import { SelectCataComponente } from "../components/provider/Select/Select";
 import SearchCataComponente from "../components/provider/Search/Search";
+import { Button, Col, Row, Table } from "react-bootstrap";
 
 const NegativeRecord = () => {
   const [forms, setForm] = useState([]);
@@ -23,16 +24,14 @@ const NegativeRecord = () => {
   const [filter, setFilter] = useState("");
   const [current, setCurrent] = useState(null);
   const [tableData, setTableData] = useState(null)
+  const [clientData, setClientData] = useState(null)
+  const [negativeRecord, setNegativeRecord] = useState(null)
 
   const PerPage = 10;
   const form = "negativeRecord";
-
+  const EMAILFORM = "send-email"
   const URL = "http://localhost:";
   const PORT = "3003";
-
-  // useEffect(() => {
-  //   console.log("optionsCliente", optionsCliente, "optionsRegistroNegativo", optionsRegistroNegativo, "form", form)
-  // }, [optionsCliente, optionsRegistroNegativo, form])
 
   useEffect(() => {
     getTableData()
@@ -64,10 +63,31 @@ const NegativeRecord = () => {
     }
   }, [forms])
 
+
+  const getTableRowById = ({ IdRegistroNegativo, IdCliente, IdEstadoRegistroNegativo }) => {
+    const newClient = clientData.find(el => el.IdCliente == IdCliente)
+    const newNegativeRecord = negativeRecord.find(el => el.IdEstadoRegistroNegativo == IdEstadoRegistroNegativo)
+
+    const newTableData = {
+      IdRegistroNegativo,
+      IdCliente,
+      IdEstadoRegistroNegativo,
+      cedula: newClient.Cedula,
+      name: newClient.Nombre,
+      lastName: newClient.Apellido,
+      description: newNegativeRecord.Descripcion,
+      createdAt: newNegativeRecord.createdAt,
+    }
+    // console.log(newTableData)
+    return newTableData
+  }
+
   const getTableData = async () => {
     const idData = await handleGet();
     const clientData = await handleGetCliente();
+    setClientData(clientData)
     const negativeRecord = await handleGetEstadoRegistroNegativo()
+    setNegativeRecord(negativeRecord)
 
     const newTableData = idData.map(i => {
       return {
@@ -76,7 +96,17 @@ const NegativeRecord = () => {
         negativeRecord: negativeRecord.filter(j => i.IdEstadoRegistroNegativo === j.IdEstadoRegistroNegativo)[0]
       }
     })
-    console.log(newTableData)
+
+    setTableData(newTableData.map(el => ({
+      IdRegistroNegativo: el.IdRegistroNegativo,
+      IdCliente: el.IdCliente,
+      IdEstadoRegistroNegativo: el.IdEstadoRegistroNegativo,
+      cedula: el.clientData.Cedula,
+      name: el.clientData.Nombre,
+      lastName: el.clientData.Apellido,
+      description: el.negativeRecord.Descripcion,
+      createdAt: el.negativeRecord.createdAt,
+    })))
   }
 
   const handleGet = async () => {
@@ -110,7 +140,7 @@ const NegativeRecord = () => {
     try {
       const response = await fetch(`${URL}${PORT}/StatusRegisterNegative`);
       const data = await response.json();
-      console.log("Registro negativo:", data)
+      // console.log("Registro negativo:", data)
       const newOptions = data.map((element) => ({
         value: element.IdEstadoRegistroNegativo, //lo que selecciona en el back
         label: element.Descripcion + " " + element.IdEstadoRegistroNegativo, //lo que se ve en el selector
@@ -129,7 +159,7 @@ const NegativeRecord = () => {
         method: "DELETE",
       });
       console.log(response);
-      setForm((prev) =>
+      setTableData((prev) =>
         prev.filter((info) => info.IdRegistroNegativo != id)
       );
       setDeleted(true);
@@ -169,14 +199,38 @@ const NegativeRecord = () => {
     }
   };
 
-  const handleEdit = async (news) => {
-    setSelected(news);
+  const handleEdit = async ({
+    IdRegistroNegativo,
+    IdCliente,
+    IdEstadoRegistroNegativo,
+  }) => {
+    setSelected({
+      IdRegistroNegativo,
+      IdCliente,
+      IdEstadoRegistroNegativo,
+    });
     setNews({
-      IdRegistroNegativo: news.IdRegistroNegativo,
-      IdCliente: news.IdCliente,
-      IdEstadoRegistroNegativo: news.IdEstadoRegistroNegativo,
+      IdRegistroNegativo: IdRegistroNegativo,
+      IdCliente: IdCliente,
+      IdEstadoRegistroNegativo: IdEstadoRegistroNegativo,
     });
   };
+
+  const sendNegativeRecord = async (emailData) => {
+    try {
+      const response = await fetch(`${URL}${PORT}/${EMAILFORM}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(emailData),
+      });
+      const data = await response.json();
+      return data
+    } catch (error) {
+      console.log("Ha ocurrido un error al enviar el email.", error);
+    }
+  }
 
   const handleCreate = async () => {
     try {
@@ -188,12 +242,14 @@ const NegativeRecord = () => {
         body: JSON.stringify(news),
       });
       const data = await response.json();
-      setForm((prev) => [...prev, data]);
+      const newTableRow = getTableRowById(data)
+      setTableData((prev) => [...prev, newTableRow]);
       setNews({
         IdRegistroNegativo: "",
         IdCliente: "",
         IdEstadoRegistroNegativo: "",
       });
+      return newTableRow
     } catch (error) {
       console.log(error);
     }
@@ -253,25 +309,22 @@ const NegativeRecord = () => {
     e.preventDefault();
     // console.log(selected)
     if (selected) {
-      if (
-        window.prompt("Ingrese la credencial de autorizacion", 0) == "202312"
-      ) {
-        if (window.confirm("¿Estás seguro de que quieres actualizar este?")) {
-          try {
-            handleUpdate();
-          } catch (error) {
-            console.error("Error al actualizar:", error);
-          }
+
+      if (window.confirm("¿Estás seguro de que quieres actualizar este?")) {
+        try {
+          handleUpdate();
+        } catch (error) {
+          console.error("Error al actualizar:", error);
         }
-      } else {
-        alert("No esta permitido para las credenciales por defecto.");
       }
+
     } else {
       try {
-        if (current.filter(el => el.IdCliente === parseInt(news.IdCliente)).length > 0) {
+        if (tableData?.filter(el => el.IdCliente === parseInt(news.IdCliente)).length > 0) {
           alert("No esta permitido reportar un usuario mas de una vez.");
         } else {
-          handleCreate();
+          const data = await handleCreate();
+          const respuesta = await sendNegativeRecord(data)
         }
       } catch (error) {
         console.error("Error al crear:", error);
@@ -287,7 +340,7 @@ const NegativeRecord = () => {
   const indexOfLast = (currentPage + 1) * PerPage;
   const indexOfFirst = indexOfLast - PerPage;
 
-
+  // console.log(current, tableData)
 
 
   return (
@@ -306,8 +359,8 @@ const NegativeRecord = () => {
             />
           </div>
         </div>
-        <div className="row">
-          <div className="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
+        <Row>
+          <Col>
             <form onSubmit={handleSubmit} className="mb-4">
               <div className="form-row">
 
@@ -335,28 +388,38 @@ const NegativeRecord = () => {
                 />
               </div>
             </form>
-          </div>
-          {current &&
-            <div className="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
-              <TabletCataComponente
-                data={current}
-                handleDelete={handleDelete}
-                handleEdit={handleEdit}
-                handleDeleteM={handleDeleteM}
-                idField={"IdRegistroNegativo"}
-                Fields={[
-                  "IdCliente",
-                  "IdEstadoRegistroNegativo"
-                ]}
-              />
-              <PaginateCataComponente
-                data={forms}
-                PerPage={PerPage}
-                handlePageChange={handlePageChange}
-              />
-            </div>
-          }
-        </div>
+          </Col>
+          <Col>
+            {tableData &&
+              <Table>
+                <thead>
+                  <tr>
+                    <th>Fecha</th>
+                    <th>Cedula</th>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>Reporte</th>
+                    <th>Accion</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {tableData.filter(el => el.cedula.includes(filter)).map(el =>
+                    <tr key={el.IdRegistroNegativo}>
+                      <td>{el.createdAt}</td>
+                      <td>{el.cedula}</td>
+                      <td>{el.name}</td>
+                      <td>{el.lastName}</td>
+                      <td>{el.description}</td>
+                      <td>
+                        <Button variant="warning" onClick={() => handleEdit(el)}>Editar</Button>
+                        <Button variant="danger" onClick={() => handleDelete(el.IdRegistroNegativo)}>Eliminar</Button>
+                      </td>
+                    </tr>)}
+                </tbody>
+              </Table>
+            }
+          </Col>
+        </Row>
       </div>
     </>
   );

@@ -6,6 +6,7 @@ import TabletCataComponente from "../../components/provider/Table/Table";
 import PaginateCataComponente from "../../components/provider/Paginate/Paginate";
 import { SelectCataComponente } from "../../components/provider/Select/Select";
 import SearchCataComponente from "../../components/provider/Search/Search";
+import InvoicePreview from "../Invoice/InvoicePreview";
 
 const Credit = () => {
   const [forms, setForm] = useState([]);
@@ -27,6 +28,9 @@ const Credit = () => {
   const [TipoPagoOptions, setTipoPagoOptions] = useState([]);
   const [OrdenCompraOptions, setOrdenCompraOptions] = useState([]);
   const [existPurchaseOrder, setExistPurchaseOrder] = useState(false)
+  const [invoiceModalActive, setInvoiceModalActive] = useState(false)
+  const [newPaymentId, setNewPaymentId] = useState(null)
+
 
   const PerPage = 10;
   const form = "payments";
@@ -185,6 +189,7 @@ const Credit = () => {
         IdTipoPago: "",
         IdOrdenCompra: "",
       });
+      return data
     } catch (error) {
       console.log(error);
     }
@@ -262,7 +267,9 @@ const Credit = () => {
       }
     } else {
       try {
-        handleCreate();
+        const data = await handleCreate();
+        setNewPaymentId(data.IdOrdenCompra)
+        setInvoiceModalActive(true)
       } catch (error) {
         console.error("Error al crear:", error);
       }
@@ -367,9 +374,6 @@ const Credit = () => {
                   options={TipoPagoOptions}
                   onChange={handleSelect}
                 />
-
-
-
                 <ButtonCataComponente
                   type="submit"
                   className="btn btn-primary btn-block"
@@ -399,6 +403,11 @@ const Credit = () => {
           </div>
         </div>
       </div>
+      <InvoicePreview
+        id={newPaymentId}
+        invoiceModalActive={invoiceModalActive}
+        setInvoiceModalActive={setInvoiceModalActive}
+      />
     </>
   );
 }

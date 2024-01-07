@@ -1,5 +1,5 @@
 import ButtonCataComponente from "../components/provider/Button/Button"
-import { Button } from "react-bootstrap";
+import { Button, Col, Container, Row } from "react-bootstrap";
 import * as XLSX from 'xlsx'
 // import ReportPreview from "./report/ReportPreview";
 // import XLSXPopulate from "xlsx-populate";
@@ -125,12 +125,13 @@ const handleReportWeek = async () => {
 }
 
 const Reports = () => {
-  return (<>
-    <ButtonCataComponente title={'Abonos y Totales'} type={'button'} onClick={() => { subsidies_balances() }}></ButtonCataComponente>
-    <ButtonCataComponente title={'Gastos'} type={'button'} onClick={() => { spent() }}></ButtonCataComponente>
-    <Button onClick={handleReport}>Generar Reporte</Button>
-    <Button onClick={handleReportWeek}>Generar Reporte Semamal</Button>
-  </>)
+  return (<Container>
+    <Row><h3>Reportes</h3></Row>
+    <Row>
+      <Col><Button onClick={handleReport}>Generar Reporte</Button></Col>
+      <Col><Button onClick={handleReportWeek}>Generar Reporte Semamal</Button></Col>
+    </Row>
+  </Container>)
 }
 
 export default Reports

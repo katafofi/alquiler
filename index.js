@@ -31,7 +31,7 @@ const PaymentsRouter = require("./Routes/payments.route.js");
 const PuchareItemOrderRouter = require("./Routes/puchaseItemOrder.route.js");
 const PucharseOrderRouter = require("./Routes/purchaseorder.route.js");
 const RentalRefuntRouter = require("./Routes/rentalRefunt.route")
-const ReportsNegative = require("./Routes/reportsnegative.route");
+const sendEmailRouter = require("./Routes/sendEmail.route");
 
 const app = express();
 app.use(bodyParser.json({ limit: '40mb' }));
@@ -48,7 +48,7 @@ app.use(cors(corsOptions));
 
 app.use("/assets", express.static(path.join(__dirname, "assets")))
 //aca agregas mas rutas a una ruta
-app.use("/send-email", ReportsNegative)
+app.use("/send-email", sendEmailRouter)
 app.use("/employe", EmployeRouter);
 app.use("/expense_employe", ExpenseEmployeRouter);
 app.use("/accesories_inventory", InvetarioAccesoriosRouter);
