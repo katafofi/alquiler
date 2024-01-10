@@ -3,19 +3,25 @@ import ButtonCataComponente from "../../components/provider/Button/Button";
 import InputCataComponente from "../../components/provider/Input/Input";
 import { SelectCataComponente } from "../../components/provider/Select/Select";
 import { Button, Col, Container, Row, Table } from "react-bootstrap";
+import { handleDeleteById, handleDeleteM } from "../../utils/requests";
 
 const NewArticlesOrder = (
   {
     rentalStatus,
+    updateActiveKeys,
+    addedArticles,
+    setAddedArticles,
+    addedAccesories,
+    setAddedAccesories,
   }
 ) => {
   const [news, setNews] = useState({
     //IdArticuloOrdenCompra 
     Cantidad: "",
-    IdOrdenCompra: rentalStatus.purchaseOrder.IdOrdenCompra,
+    IdOrdenCompra: "",
     IdArticulo: ""
   });
-  const [addedArticles, setAddedArticles] = useState([])
+
   const [articles, setArticles] = useState([])
   const [options, setOptions] = useState([]);
 
@@ -23,6 +29,8 @@ const NewArticlesOrder = (
   const FORM = "PuchaseItemOrder";
   const URL = "http://localhost:";
   const PORT = "3003";
+
+  const prevKeys = ['1']
 
   useEffect(() => {
     handleGetArticulo();
@@ -76,9 +84,10 @@ const NewArticlesOrder = (
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(news),
+        body: JSON.stringify({ ...news, IdOrdenCompra: rentalStatus.purchaseOrder.IdOrdenCompra }),
       });
       const data = await response.json();
+
       return data
     } catch (error) {
       console.log(error);
@@ -95,6 +104,21 @@ const NewArticlesOrder = (
       console.error("Error al crear:", error);
     }
   };
+
+  const handleReturnToPurchaseOrder = async () => {
+    if (confirm("¿Esta seguro que quiere regresar?\nEsta acción eliminará los articulos y los accesorios agregados.")) {
+      if (addedArticles.length > 0) {
+        await handleDeleteM(addedArticles.map((el) => el.IdArticuloOrdenCompra), "PuchaseItemOrder")
+        setAddedArticles([])
+      }
+      if (addedAccesories.length > 0) {
+        await handleDeleteM(addedAccesories.map((el) => el.IdAccesorioOrdenCompra), "PuchaseAccesoriesOrder")
+        setAddedAccesories([])
+      }
+      await handleDeleteById(rentalStatus.purchaseOrder.IdOrdenCompra, "PuchaseOrder")
+      updateActiveKeys(prevKeys)
+    }
+  }
 
   return (
     <>
@@ -127,6 +151,7 @@ const NewArticlesOrder = (
                   className="btn btn-primary btn-block"
                   title="Agregar"
                 />
+                <Button variant="warning" onClick={handleReturnToPurchaseOrder}>Regresar</Button>
               </div>
             </form>
           </Col>

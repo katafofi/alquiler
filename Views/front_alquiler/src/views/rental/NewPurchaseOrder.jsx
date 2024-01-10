@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import ButtonCataComponente from "../../components/provider/Button/Button";
 import InputCataComponente from "../../components/provider/Input/Input";
 import { SelectCataComponente } from "../../components/provider/Select/Select";
+import { Button } from "react-bootstrap";
+import { handleDeleteById } from "../../utils/requests";
 
 const NewPurchaseOrder = (
   {
@@ -14,15 +16,16 @@ const NewPurchaseOrder = (
   const [news, setNews] = useState({
     //IdOrdenCompra
     FechaCompra: "",
-    IdAlquiler: rentalStatus.rent.IdAlquiler,
+    IdAlquiler: "",
     IdEmpleado: "",
     Total: "",
   });
   const [options, setOptions] = useState([]);
 
   const nextKeys = ['2', '3', '4']
+  const prevKeys = ['0']
 
-  const form = "PuchaseOrder";
+  const FORM = "PuchaseOrder";
   const URL = "http://localhost:";
   const PORT = "3003";
 
@@ -61,13 +64,14 @@ const NewPurchaseOrder = (
   };
 
   const handleCreate = async () => {
+    // setNews({ ...news, IdAlquiler: rentalStatus.rent.IdAlquiler })
     try {
-      const response = await fetch(`${URL}${PORT}/${form}`, {
+      const response = await fetch(`${URL}${PORT}/${FORM}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(news),
+        body: JSON.stringify({ ...news, IdAlquiler: rentalStatus.rent.IdAlquiler }),
       });
       const data = await response.json();
       return data
@@ -90,6 +94,12 @@ const NewPurchaseOrder = (
     }
 
   };
+
+  const handleReturnToRent = async () => {
+    await handleDeleteById(rentalStatus.rent.IdAlquiler, "renting")
+    updateActiveKeys(prevKeys)
+  }
+
 
   return (
     <>
@@ -132,6 +142,8 @@ const NewPurchaseOrder = (
                   className="btn btn-primary btn-block"
                   title="Guardar"
                 />
+
+                <Button variant="warning" onClick={handleReturnToRent}>Regresar</Button>
               </div>
             </form>
           </div>

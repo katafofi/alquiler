@@ -39,6 +39,8 @@ const Rental = () => {
   const [keyStatus, setKeyStatus] = useState(defaultKeyStatus)
   const [rentalStatus, setRentalStatus] = useState(null)
   const [idPurchaseOrder, setIdPurchaseOrder] = useState(null)
+  const [addedAccesories, setAddedAccesories] = useState([])
+  const [addedArticles, setAddedArticles] = useState([])
 
   const getActiveKeys = () => keyStatus
     .filter(el => el.active)
@@ -62,7 +64,6 @@ const Rental = () => {
     setActiveKeys(getActiveKeys())
   }, [keyStatus])
 
-  // console.log(rentals)
   return (
     <Container fluid className='mb-5'>
       <Accordion activeKey={activeKeys}>
@@ -99,6 +100,11 @@ const Rental = () => {
               ?
               <NewArticlesOrder
                 rentalStatus={rentalStatus}
+                updateActiveKeys={updateActiveKeys}
+                addedAccesories={addedAccesories}
+                setAddedAccesories={setAddedAccesories}
+                addedArticles={addedArticles}
+                setAddedArticles={setAddedArticles}
               />
               :
               <p>Cargando...</p>
@@ -112,6 +118,11 @@ const Rental = () => {
               ?
               <NewAccesoriesOrder
                 rentalStatus={rentalStatus}
+                updateActiveKeys={updateActiveKeys}
+                addedAccesories={addedAccesories}
+                setAddedAccesories={setAddedAccesories}
+                addedArticles={addedArticles}
+                setAddedArticles={setAddedArticles}
               />
               :
               <p>Cargando...</p>

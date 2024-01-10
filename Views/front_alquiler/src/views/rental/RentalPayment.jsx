@@ -19,7 +19,7 @@ const NewPayments = (
     Valor: "",
     IdEstadoPago: "",
     IdTipoPago: "",
-    IdOrdenCompra: idPurchaseOrder,
+    IdOrdenCompra: "",
   });
 
   const [EstadoPagoOptions, setEstadoPagoOptions] = useState([]);
@@ -78,13 +78,14 @@ const NewPayments = (
   };
 
   const handleCreate = async () => {
+    console.log("Id orden compra:", idPurchaseOrder)
     try {
       const response = await fetch(`${URL}${PORT}/${FORM}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(news),
+        body: JSON.stringify({ ...news, IdOrdenCompra: idPurchaseOrder }),
       });
       const data = await response.json();
       return data

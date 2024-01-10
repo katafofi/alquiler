@@ -55,6 +55,7 @@ const NewRent = ({ updateActiveKeys, updateRentalStatus }) => {
     e.preventDefault();
     try {
       const data = await handleCreate();
+      console.log(data)
       if (data) {
         updateRentalStatus({ rent: data })
         updateActiveKeys(nextKeys)

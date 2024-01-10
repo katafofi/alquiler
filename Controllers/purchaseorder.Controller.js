@@ -276,7 +276,6 @@ const generateInvoice = async (req, res) => {
 };
 const createPurchaseOrder = async (req, res) => {
   const { FechaCompra, IdAlquiler, IdEmpleado, Total } = req.body;
-
   try {
     const purchaseOrderCreate = await PuchaseOrder.create({
       FechaCompra,
@@ -286,7 +285,7 @@ const createPurchaseOrder = async (req, res) => {
     });
     res.status(201).json(purchaseOrderCreate);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ message: error });
   }
 };
 
