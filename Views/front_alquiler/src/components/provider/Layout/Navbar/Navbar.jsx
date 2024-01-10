@@ -17,7 +17,7 @@ const NavbarCataComponente = () => {
     cliente: [
 
       { to: '/clients', label: 'Clientes' },
-      
+
     ],
     configuration: [
       { to: '/accesories', label: 'Accesorios' },
@@ -45,13 +45,14 @@ const NavbarCataComponente = () => {
     alquiler: [
       { to: '/rental', label: 'Nuevo Alquiler' },
       { to: '/credit', label: 'Abonos' },
-      
+
     ],
     pagos: [
-           { to: '/credit', label: 'pagos' },
-      
+      { to: '/credit', label: 'pagos' },
+
     ],
     devolution: [
+      { to: '/rentalRefund', label: 'Nueva devolución' },
       { to: '/renting', label: 'validacion devoluciones del dia' },
       { to: '/rentalrefurnt', label: 'Devolucion de alquileres' },
       { to: '/negative/record', label: 'califica tu cliente' },

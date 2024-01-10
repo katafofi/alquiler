@@ -42,7 +42,7 @@ const NewRent = ({ updateActiveKeys, updateRentalStatus }) => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(news),
+        body: JSON.stringify({ ...news, IdTienda: TiendaOptions[0].value }),
       });
       const data = await response.json();
       return data
@@ -55,7 +55,6 @@ const NewRent = ({ updateActiveKeys, updateRentalStatus }) => {
     e.preventDefault();
     try {
       const data = await handleCreate();
-      console.log(data)
       if (data) {
         updateRentalStatus({ rent: data })
         updateActiveKeys(nextKeys)
@@ -125,14 +124,14 @@ const NewRent = ({ updateActiveKeys, updateRentalStatus }) => {
                   label={"FechaFinlAlquiler"}
                 />
 
-                <SelectCataComponente
+                {/* <SelectCataComponente
                   required
                   label={"- Seleccionar tienda -"}
                   name={"IdTienda"}
                   value={news.IdTienda}
                   options={TiendaOptions}
                   onChange={handleSelect}
-                />
+                /> */}
 
                 <SelectCataComponente
                   required
