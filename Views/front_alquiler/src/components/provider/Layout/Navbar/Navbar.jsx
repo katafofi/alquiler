@@ -17,7 +17,7 @@ const NavbarCataComponente = () => {
     cliente: [
 
       { to: '/clients', label: 'Clientes' },
-      { to: '/negative/record', label: 'califica tu cliente' },
+      
     ],
     configuration: [
       { to: '/accesories', label: 'Accesorios' },
@@ -30,6 +30,11 @@ const NavbarCataComponente = () => {
       { to: '/item', label: 'Artículos' },
       { to: '/status/register/negative', label: 'Estado registro negativo' },
       { to: '/payment/type', label: 'Tipos de pago' },
+      { to: '/renting', label: 'validacion devoluciones del dia' },
+      { to: '/puchase/order', label: 'Orden compra' },
+      { to: '/puchase/accesories/order', label: 'Orden compra accesorios' },
+      { to: '/puchase/item/order', label: 'Orden compra articulo ' },
+      { to: '/payments', label: 'Pagos' },
 
     ],
     inventory: [
@@ -37,17 +42,19 @@ const NavbarCataComponente = () => {
       { to: '/accesories/inventory', label: 'Inventario de accesorios' },
       { to: '/item/inventory', label: 'Alquileres' },
     ],
-    rental: [
+    alquiler: [
       { to: '/rental', label: 'Nuevo Alquiler' },
       { to: '/credit', label: 'Abonos' },
-      { to: '/renting', label: 'Alquiler' },
-      { to: '/puchase/order', label: 'Orden compra' },
-      { to: '/puchase/accesories/order', label: 'Orden compra accesorios' },
-      { to: '/puchase/item/order', label: 'Orden compra articulo ' },
-      { to: '/payments', label: 'Pagos' },
+      
+    ],
+    pagos: [
+           { to: '/credit', label: 'pagos' },
+      
     ],
     devolution: [
+      { to: '/renting', label: 'validacion devoluciones del dia' },
       { to: '/rentalrefurnt', label: 'Devolucion de alquileres' },
+      { to: '/negative/record', label: 'califica tu cliente' },
     ],
     reportes: [
       { to: '/reports', label: 'reportes' },

@@ -45,7 +45,7 @@ async function generarReporte(req, res) {
     // Realiza la segunda consulta SQL para la hoja 'ABONOS'
     const [rowsAbonos] = await conexion.query(`
       SELECT 
-        P.FechadPago, 
+         
         OC.IdOrdenCompra, 
         OC.Total AS total_alquiler, 
         CASE WHEN EP.IdEstadoPago = 1 THEN P.Valor ELSE 0 END AS ABONO, 
@@ -227,21 +227,31 @@ FROM (
 `);
 
 
-    // Realiza la tercera consulta SQL para la hoja 'SALDOS'
-    const [rowsSaldos] = await conexion.query(`
-      SELECT 
-        P.FechadPago, 
-        OC.IdOrdenCompra, 
-        OC.Total AS total_alquiler, 
-        CASE WHEN EP.IdEstadoPago = 1 THEN P.Valor ELSE 0 END AS ABONO, 
-        CASE WHEN EP.IdEstadoPago = 2 THEN P.Valor ELSE 0 END AS SALDO 
-      FROM pagos AS P 
-      INNER JOIN tipopagos AS TP ON (P.IdTipoPago = TP.IdTipoPago) 
-      INNER JOIN estadopagos AS EP ON (P.IdEstadoPago = EP.IdEstadoPago) 
-      INNER JOIN ordencompras AS OC ON (P.IdOrdenCompra = OC.IdOrdenCompra) 
-      INNER JOIN alquilers AS AL ON (OC.IdAlquiler = AL.IdAlquiler)
-      AND YEARWEEK(P.FechadPago) = YEARWEEK(CURDATE());
-    `);
+   // Realiza la tercera consulta SQL para la hoja 'SALDOS'
+// Establecer configuración de formato de fecha en español
+await conexion.query('SET lc_time_names = "es_ES";');
+
+// Realizar la tercera consulta SQL para la hoja 'SALDOS'
+const [rowsSaldos] = await conexion.query(`
+SELECT 
+    DATE_FORMAT(AL.FechaInicialAlquiler, '%d %b %y') AS fecha_salida,
+    OC.IdOrdenCompra AS Orden,
+    FORMAT(OC.Total, 0) AS valor_factura,
+    FORMAT(CASE WHEN EP.IdEstadoPago = 1 THEN P.Valor ELSE 0 END, 0) AS ABONO,
+    FORMAT(CASE WHEN EP.IdEstadoPago = 2 THEN P.Valor ELSE 0 END, 0) AS SALDO,
+    FORMAT(OC.Total - (CASE WHEN EP.IdEstadoPago = 1 THEN P.Valor ELSE 0 END + CASE WHEN EP.IdEstadoPago = 2 THEN P.Valor ELSE 0 END), 0) AS PENDIENTE_POR_PAGAR
+FROM 
+    pagos AS P 
+    INNER JOIN tipopagos AS TP ON P.IdTipoPago = TP.IdTipoPago
+    INNER JOIN estadopagos AS EP ON P.IdEstadoPago = EP.IdEstadoPago
+    INNER JOIN ordencompras AS OC ON P.IdOrdenCompra = OC.IdOrdenCompra
+    INNER JOIN alquilers AS AL ON OC.IdAlquiler = AL.IdAlquiler
+WHERE 
+    YEAR(AL.FechaInicialAlquiler) = YEAR(CURDATE()) 
+    AND WEEK(AL.FechaInicialAlquiler) = WEEK(CURDATE())
+ORDER BY Orden, PENDIENTE_POR_PAGAR;
+
+`);
 
     // Realiza la cuarta consulta SQL para la hoja 'GASTOS'
     const [rowsGastos] = await conexion.query(`
