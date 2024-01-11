@@ -21,25 +21,26 @@ async function generarReporte(req, res) {
 
   try {
     // Realiza la primera consulta SQL para la hoja 'dia'
+     await conexion.query('SET lc_time_names = "es_ES";');
+
     const [rowsDia] = await conexion.query(`
       SELECT 
-        P.FechadPago, 
-        OC.IdOrdenCompra, 
-        AL.FechaInicialAlquiler, 
-        OC.Total AS total_alquiler, 
-        CASE WHEN EP.IdEstadoPago = 1 THEN P.Valor ELSE 0 END AS ABONO, 
-        CASE WHEN EP.IdEstadoPago = 2 THEN P.Valor ELSE 0 END AS SALDO, 
-        SUM(CASE WHEN EP.IdEstadoPago = 1 THEN P.Valor ELSE 0 END) OVER (PARTITION BY OC.IdOrdenCompra ORDER BY P.FechadPago) AS TotalAbonado, 
-        (OC.Total - COALESCE(SUM(CASE WHEN EP.IdEstadoPago = 1 THEN P.Valor ELSE 0 END) OVER (PARTITION BY OC.IdOrdenCompra ORDER BY P.FechadPago), 0)) - COALESCE(SUM(CASE WHEN EP.IdEstadoPago = 2 THEN P.Valor ELSE 0 END) OVER (PARTITION BY OC.IdOrdenCompra ORDER BY P.FechadPago), 0) AS PendientePorPagar, 
-        EP.Descripcion AS estadopago, 
-        TP.Descripcion AS tipopago, 
-        P.createdAt 
-      FROM 
-        pagos AS P 
-        INNER JOIN tipopagos AS TP ON (P.IdTipoPago = TP.IdTipoPago) 
-        INNER JOIN estadopagos AS EP ON (P.IdEstadoPago = EP.IdEstadoPago) 
-        INNER JOIN ordencompras AS OC ON (P.IdOrdenCompra = OC.IdOrdenCompra) 
-        INNER JOIN alquilers AS AL ON (OC.IdAlquiler = AL.IdAlquiler);
+    DATE_FORMAT(P.FechadPago, '%d %b %Y') AS FECHA,
+    OC.IdOrdenCompra AS ORDEN,
+    DATE_FORMAT(AL.FechaInicialAlquiler, '%d %b %Y') AS FECHA_SALIDA,
+    FORMAT(OC.Total, 2) AS VALOR_FACTURA,
+    FORMAT(CASE WHEN EP.IdEstadoPago = 1 THEN P.Valor ELSE 0 END, 2) AS ABONO, 
+    FORMAT(CASE WHEN EP.IdEstadoPago = 2 THEN P.Valor ELSE 0 END, 2) AS SALDO, 
+    TP.Descripcion AS TIPOPAGO, 
+    P.createdAt 
+FROM 
+    pagos AS P 
+    INNER JOIN tipopagos AS TP ON (P.IdTipoPago = TP.IdTipoPago) 
+    INNER JOIN estadopagos AS EP ON (P.IdEstadoPago = EP.IdEstadoPago) 
+    INNER JOIN ordencompras AS OC ON (P.IdOrdenCompra = OC.IdOrdenCompra) 
+    INNER JOIN alquilers AS AL ON (OC.IdAlquiler = AL.IdAlquiler)
+WHERE 
+    YEARWEEK(P.FechadPago) = YEARWEEK(CURDATE());
     `);
 
     // Realiza la segunda consulta SQL para la hoja 'ABONOS'
@@ -91,7 +92,7 @@ async function generarReporte(req, res) {
         WHERE EP.IdEstadoPago = 2
       ) as M;
       `);
-
+     
 
     // Realiza la tercera consulta SQL para la hoja 'SALDOS'
     const [rowsSaldos] = await conexion.query(`
@@ -146,19 +147,17 @@ const generarReporteSemanal = async (req, res) => {
 
   try {
     // Realiza la primera consulta SQL para la hoja 'dia'
+    await conexion.query('SET lc_time_names = "es_ES";');
     const [rowsDia] = await conexion.query(`
     SELECT 
-    P.FechadPago, 
-    OC.IdOrdenCompra, 
-    AL.FechaInicialAlquiler, 
-    OC.Total AS total_alquiler, 
-    CASE WHEN EP.IdEstadoPago = 1 THEN P.Valor ELSE 0 END AS ABONO, 
-    CASE WHEN EP.IdEstadoPago = 2 THEN P.Valor ELSE 0 END AS SALDO, 
-    SUM(CASE WHEN EP.IdEstadoPago = 1 THEN P.Valor ELSE 0 END) OVER (PARTITION BY OC.IdOrdenCompra ORDER BY P.FechadPago) AS TotalAbonado, 
-    (OC.Total - COALESCE(SUM(CASE WHEN EP.IdEstadoPago = 1 THEN P.Valor ELSE 0 END) OVER (PARTITION BY OC.IdOrdenCompra ORDER BY P.FechadPago), 0)) - COALESCE(SUM(CASE WHEN EP.IdEstadoPago = 2 THEN P.Valor ELSE 0 END) OVER (PARTITION BY OC.IdOrdenCompra ORDER BY P.FechadPago), 0) AS PendientePorPagar, 
-    EP.Descripcion AS estadopago, 
-    TP.Descripcion AS tipopago, 
-    P.createdAt 
+    LPAD(DATE_FORMAT(P.FechadPago, '%d %b %Y'), 15, ' ') AS FECHA,
+    LPAD(OC.IdOrdenCompra, 10, ' ') AS ORDEN,
+    LPAD(DATE_FORMAT(AL.FechaInicialAlquiler, '%d %b %Y'), 15, ' ') AS FECHA_SALIDA,
+    LPAD(FORMAT(OC.Total, 0), 15, ' ') AS VALOR_FACTURA,
+    LPAD(FORMAT(CASE WHEN EP.IdEstadoPago = 1 THEN P.Valor ELSE 0 END, 0), 15, ' ') AS ABONO, 
+    LPAD(FORMAT(CASE WHEN EP.IdEstadoPago = 2 THEN P.Valor ELSE 0 END, 0), 15, ' ') AS SALDO, 
+    LPAD(TP.Descripcion, 20, ' ') AS TIPOPAGO, 
+    LPAD(DATE_FORMAT(P.createdAt, '%d %b %Y'), 20, ' ') AS FECHA_CREACION 
 FROM 
     pagos AS P 
     INNER JOIN tipopagos AS TP ON (P.IdTipoPago = TP.IdTipoPago) 
@@ -166,20 +165,21 @@ FROM
     INNER JOIN ordencompras AS OC ON (P.IdOrdenCompra = OC.IdOrdenCompra) 
     INNER JOIN alquilers AS AL ON (OC.IdAlquiler = AL.IdAlquiler)
 WHERE 
-    YEARWEEK(P.FechadPago) = YEARWEEK(CURDATE());
-
+    YEARWEEK(P.FechadPago) = YEARWEEK(CURDATE())
+ORDER BY ORDEN ASC;
 
     `);
 
     // Realiza la segunda consulta SQL para la hoja 'ABONOS'
+    
     const [rowsAbonos] = await conexion.query(`
-SELECT 
-  P.FechadPago, 
-  OC.IdOrdenCompra, 
-  OC.Total AS total_alquiler, 
-  CASE WHEN EP.IdEstadoPago = 1 THEN P.Valor ELSE 0 END AS ABONO, 
-  CASE WHEN EP.IdEstadoPago = 2 THEN P.Valor ELSE 0 END AS SALDO, 
-  OC.Total - COALESCE(SUM(CASE WHEN EP.IdEstadoPago = 1 THEN P.Valor ELSE 0 END) OVER (PARTITION BY OC.IdOrdenCompra ORDER BY P.FechadPago), 0) - COALESCE(SUM(CASE WHEN EP.IdEstadoPago = 2 THEN P.Valor ELSE 0 END) OVER (PARTITION BY OC.IdOrdenCompra ORDER BY P.FechadPago), 0) AS PendientePorPagar 
+
+    SELECT 
+  DATE_FORMAT(P.FechadPago, '%d %b %Y') AS FECHA,
+  OC.IdOrdenCompra AS ORDEN,
+  FORMAT(OC.Total, 0) AS VALOR_FACTURA,
+  FORMAT(CASE WHEN EP.IdEstadoPago = 1 THEN P.Valor ELSE 0 END, 0) AS ABONO, 
+  FORMAT(CASE WHEN EP.IdEstadoPago = 2 THEN P.Valor ELSE 0 END, 0) AS SALDO
 FROM 
   pagos AS P 
   INNER JOIN tipopagos AS TP ON (P.IdTipoPago = TP.IdTipoPago) 
@@ -187,43 +187,87 @@ FROM
   INNER JOIN ordencompras AS OC ON (P.IdOrdenCompra = OC.IdOrdenCompra) 
 WHERE 
   EP.IdEstadoPago IN (1, 2)
-  AND YEARWEEK(P.FechadPago) = YEARWEEK(CURDATE());
+  AND YEARWEEK(P.FechadPago) = YEARWEEK(CURDATE())
+ORDER BY ORDEN ASC;
+
+
 
 `);
 
     // Realiza la tercera consulta SQL para obtener ABONO_TOTAL
     const [abonoTotal] = await conexion.query(`
-    SELECT SUM(M.ABONO) AS ABONO_TOTAL
-    FROM (
-      SELECT 
-        P.FechadPago, 
-        OC.IdOrdenCompra, 
-        CASE WHEN EP.IdEstadoPago = 1 THEN P.Valor ELSE 0 END AS ABONO
-      FROM pagos AS P 
-        INNER JOIN tipopagos AS TP ON (P.IdTipoPago = TP.IdTipoPago) 
-        INNER JOIN estadopagos AS EP ON (P.IdEstadoPago = EP.IdEstadoPago) 
-        INNER JOIN ordencompras AS OC ON (P.IdOrdenCompra = OC.IdOrdenCompra) 
-      WHERE EP.IdEstadoPago = 1
-        AND YEARWEEK(P.FechadPago) = YEARWEEK(CURDATE())
-    ) as M;
+    SELECT REPLACE(
+      COALESCE(FORMAT(SUM(M.ABONO), 0), 0),
+      ',',
+      '.'
+    ) AS ABONO_TOTAL
+FROM (
+SELECT 
+ P.FechadPago, 
+ OC.IdOrdenCompra, 
+ CASE WHEN EP.IdEstadoPago = 1 THEN P.Valor ELSE 0 END AS ABONO
+FROM pagos AS P 
+ INNER JOIN tipopagos AS TP ON (P.IdTipoPago = TP.IdTipoPago) 
+ INNER JOIN estadopagos AS EP ON (P.IdEstadoPago = EP.IdEstadoPago) 
+ INNER JOIN ordencompras AS OC ON (P.IdOrdenCompra = OC.IdOrdenCompra) 
+WHERE EP.IdEstadoPago = 1
+ AND YEARWEEK(P.FechadPago) = YEARWEEK(CURDATE())
+) AS M;
+
     
     `);
-
+ // REALIZA LA SUMA ENTRE  SALDO TOTAL + ABONO TOTAL DE LA SEMANA 
+ const [granTotal] = await conexion.query(`
+ SELECT FORMAT(ROUND(SUM(Valor)), 0) AS SUMA_GENERAL
+FROM pagos
+WHERE WEEK(FechadPago) = WEEK(CURDATE());
+  `);
     // Realiza la tercera consulta SQL para obtener SALDO_TOTAL
     const [saldoTotal] = await conexion.query(`
-SELECT SUM(M.ABONO) AS SALDO_TOTAL
+    SELECT REPLACE(
+      COALESCE(FORMAT(SUM(M.ABONO), 0), 0),
+      ',',
+      '.'
+    ) AS SALDO_TOTAL
 FROM (
-  SELECT 
-    P.FechadPago, 
-    OC.IdOrdenCompra, 
-    CASE WHEN EP.IdEstadoPago = 2 THEN P.Valor ELSE 0 END AS ABONO
-  FROM pagos AS P 
-    INNER JOIN tipopagos AS TP ON (P.IdTipoPago = TP.IdTipoPago) 
-    INNER JOIN estadopagos AS EP ON (P.IdEstadoPago = EP.IdEstadoPago) 
-    INNER JOIN ordencompras AS OC ON (P.IdOrdenCompra = OC.IdOrdenCompra) 
-  WHERE EP.IdEstadoPago = 2
-   AND YEARWEEK(P.FechadPago) = YEARWEEK(CURDATE())
-) as M;
+SELECT 
+ P.FechadPago, 
+ OC.IdOrdenCompra, 
+ CASE WHEN EP.IdEstadoPago = 2 THEN P.Valor ELSE 0 END AS ABONO
+FROM pagos AS P 
+ INNER JOIN tipopagos AS TP ON (P.IdTipoPago = TP.IdTipoPago) 
+ INNER JOIN estadopagos AS EP ON (P.IdEstadoPago = EP.IdEstadoPago) 
+ INNER JOIN ordencompras AS OC ON (P.IdOrdenCompra = OC.IdOrdenCompra) 
+WHERE EP.IdEstadoPago = 2
+AND YEARWEEK(P.FechadPago) = YEARWEEK(CURDATE())
+) AS M;
+`);
+
+// REALIZAR LA RESTA ENTRE SUMA GENERAL y GASTOS TOTAL
+const [diferenciaTotal] = await conexion.query(`
+SELECT
+  (SELECT FORMAT(SUM(Valor), 2) FROM pagos WHERE WEEK(FechadPago) = WEEK(CURDATE())) AS TotalPagos,
+  (SELECT FORMAT(SUM(Monto), 2) FROM gastosempleados WHERE WEEK(createdAt) = WEEK(CURDATE())) AS TotalGastos,
+  FORMAT((SELECT SUM(Valor) FROM pagos WHERE WEEK(FechadPago) = WEEK(CURDATE())) - (SELECT SUM(Monto) FROM gastosempleados WHERE WEEK(createdAt) = WEEK(CURDATE())), 0) AS TOTAL;
+
+
+
+`);
+
+
+//REALIZA SUMA DE GASTOS TOTAL DE LA SEMANA 
+const [gastoTotal] = await conexion.query(`
+
+SELECT REPLACE(
+  COALESCE(FORMAT(SUM(GE.Monto), 0), 0),
+  ',',
+  '.'
+) AS TOTAL_GASTOS_SEMANA
+FROM gastosempleados AS GE
+INNER JOIN empleados AS E ON GE.IdEmpleado = E.IdEmpleado
+WHERE YEARWEEK(GE.createdAt) = YEARWEEK(CURDATE());
+
+
 `);
 
 
@@ -234,52 +278,54 @@ await conexion.query('SET lc_time_names = "es_ES";');
 // Realizar la tercera consulta SQL para la hoja 'SALDOS'
 const [rowsSaldos] = await conexion.query(`
 SELECT 
-    DATE_FORMAT(AL.FechaInicialAlquiler, '%d %b %y') AS fecha_salida,
-    OC.IdOrdenCompra AS Orden,
-    FORMAT(OC.Total, 0) AS valor_factura,
-    FORMAT(CASE WHEN EP.IdEstadoPago = 1 THEN P.Valor ELSE 0 END, 0) AS ABONO,
-    FORMAT(CASE WHEN EP.IdEstadoPago = 2 THEN P.Valor ELSE 0 END, 0) AS SALDO,
-    FORMAT(OC.Total - (CASE WHEN EP.IdEstadoPago = 1 THEN P.Valor ELSE 0 END + CASE WHEN EP.IdEstadoPago = 2 THEN P.Valor ELSE 0 END), 0) AS PENDIENTE_POR_PAGAR
+    LPAD(DATE_FORMAT(AL.FechaInicialAlquiler, '%d %b %y'), 15, ' ') AS FECHA_SALIDA,
+    LPAD(OC.IdOrdenCompra, 10, ' ') AS ORDEN,
+    LPAD(FORMAT(OC.Total, 0), 15, ' ') AS VALOR_FACTURA,
+    LPAD(FORMAT(CASE WHEN EP.IdEstadoPago = 1 THEN P.Valor ELSE 0 END, 0), 10, ' ') AS ABONO,
+    LPAD(FORMAT(CASE WHEN EP.IdEstadoPago = 2 THEN P.Valor ELSE 0 END, 0), 10, ' ') AS SALDO,
+    LPAD(FORMAT(OC.Total - (CASE WHEN EP.IdEstadoPago = 1 THEN P.Valor ELSE 0 END + CASE WHEN EP.IdEstadoPago = 2 THEN P.Valor ELSE 0 END), 0), 20, ' ') AS PENDIENTE_POR_PAGAR
 FROM 
-    pagos AS P 
-    INNER JOIN tipopagos AS TP ON P.IdTipoPago = TP.IdTipoPago
-    INNER JOIN estadopagos AS EP ON P.IdEstadoPago = EP.IdEstadoPago
-    INNER JOIN ordencompras AS OC ON P.IdOrdenCompra = OC.IdOrdenCompra
-    INNER JOIN alquilers AS AL ON OC.IdAlquiler = AL.IdAlquiler
+    PAGOS AS P 
+    INNER JOIN TIPOPAGOS AS TP ON P.IdTipoPago = TP.IdTipoPago
+    INNER JOIN ESTADOPAGOS AS EP ON P.IdEstadoPago = EP.IdEstadoPago
+    INNER JOIN ORDENCOMPRAS AS OC ON P.IdOrdenCompra = OC.IdOrdenCompra
+    INNER JOIN ALQUILERS AS AL ON OC.IdAlquiler = AL.IdAlquiler
 WHERE 
     YEAR(AL.FechaInicialAlquiler) = YEAR(CURDATE()) 
     AND WEEK(AL.FechaInicialAlquiler) = WEEK(CURDATE())
-ORDER BY Orden, PENDIENTE_POR_PAGAR;
+ORDER BY ORDEN, PENDIENTE_POR_PAGAR;
 
 `);
 
     // Realiza la cuarta consulta SQL para la hoja 'GASTOS'
+    await conexion.query('SET lc_time_names = "es_ES";');
     const [rowsGastos] = await conexion.query(`
     SELECT 
-    GE.createdAt,
-    GE.Descripcion,
-    GE.Monto,
-    E.Nombre,
-    E.Apellido
-  FROM gastosempleados AS GE
-  INNER JOIN empleados AS E ON GE.IdEmpleado = E.IdEmpleado
-  WHERE YEARWEEK(GE.createdAt) = YEARWEEK(CURDATE());
+  DATE_FORMAT(GE.createdAt, '%d %b %Y') AS FECHA_CREACION,
+  UPPER(GE.Descripcion) AS DESCRIPCION,
+  FORMAT(GE.Monto, 0) AS MONTO,
+  UPPER(E.Nombre) AS NOMBRE,
+  UPPER(E.Apellido) AS APELLIDO
+FROM gastosempleados AS GE
+INNER JOIN empleados AS E ON GE.IdEmpleado = E.IdEmpleado
+WHERE YEARWEEK(GE.createdAt) = YEARWEEK(CURDATE());
+
  
     `);
 
     // Realiza la cuarta consulta SQL para la hoja con tipos de 'CUENTAS SEMANA'
     const [rowsCuentasSemana] = await conexion.query(`
-  SELECT
-      pagos.IdTipoPago,
-      tipopagos.Descripcion,
-      SUM(CASE WHEN pagos.IdTipoPago = 1 THEN pagos.Valor ELSE 0 END) AS TotalPagosNequi,
-      SUM(CASE WHEN pagos.IdTipoPago = 2 THEN pagos.Valor ELSE 0 END) AS TotalSumaDaviplata,
-      SUM(CASE WHEN pagos.IdTipoPago = 3 THEN pagos.Valor ELSE 0 END) AS PagoTotalEfectivo,
-      SUM(CASE WHEN pagos.IdTipoPago = 4 THEN pagos.Valor ELSE 0 END) AS PagoTotalTarjeta
+    SELECT
+    UPPER(tipopagos.Descripcion) AS DESCRIPCION,
+    FORMAT(SUM(CASE WHEN pagos.IdTipoPago = 1 THEN pagos.Valor ELSE 0 END), 0) AS NEQUI,
+    FORMAT(SUM(CASE WHEN pagos.IdTipoPago = 2 THEN pagos.Valor ELSE 0 END), 0) AS DAVIPLATA,
+    FORMAT(SUM(CASE WHEN pagos.IdTipoPago = 3 THEN pagos.Valor ELSE 0 END), 0) AS EFECTIVO,
+    FORMAT(SUM(CASE WHEN pagos.IdTipoPago = 4 THEN pagos.Valor ELSE 0 END), 0) AS TARGETA
   FROM pagos
   JOIN tipopagos ON pagos.IdTipoPago = tipopagos.IdTipoPago
   WHERE pagos.IdTipoPago IN (1, 2, 3, 4) AND YEARWEEK(pagos.FechadPago) = YEARWEEK(CURDATE())
   GROUP BY pagos.IdTipoPago, tipopagos.Descripcion;
+  
 `);
 
     const response = {
@@ -290,7 +336,11 @@ ORDER BY Orden, PENDIENTE_POR_PAGAR;
       cuentasSemana: rowsCuentasSemana,
       saldoTotal: saldoTotal,
       abonoTotal: abonoTotal,
-    }
+      granTotal: granTotal,
+      gastoTotal: gastoTotal,
+      diferenciaTotal: diferenciaTotal
+    
+    };
 
     res.status(200).json(response)
   }

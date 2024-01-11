@@ -19,7 +19,7 @@ const NavbarCataComponente = () => {
       { to: '/clients', label: 'Clientes' },
 
     ],
-    configuration: [
+    configuracion: [
       { to: '/accesories', label: 'Accesorios' },
       { to: '/status/employe', label: 'Estados del Empleado' },
       { to: '/categorys', label: 'Categoría' },
@@ -51,7 +51,7 @@ const NavbarCataComponente = () => {
       { to: '/credit', label: 'pagos' },
 
     ],
-    devolution: [
+    devoluciones: [
       { to: '/rentalRefund', label: 'Nueva devolución' },
       { to: '/renting', label: 'validacion devoluciones del dia' },
       { to: '/rentalrefurnt', label: 'Devolucion de alquileres' },
@@ -60,9 +60,9 @@ const NavbarCataComponente = () => {
     reportes: [
       { to: '/reports', label: 'reportes' },
     ],
-    reportsNegative: [
-      { to: '/reportsNegative', label: 'Consultar negatividad' },
-    ]
+  //  reportsNegative: [
+     // { to: '/reportsNegative', label: 'Consultar negatividad' },
+   // ]
   };
 
   const renderDropdownItems = (items) =>

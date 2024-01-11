@@ -285,7 +285,7 @@ const Payments = () => {
   const indexOfLast = (currentPage + 1) * PerPage;
   const indexOfFirst = indexOfLast - PerPage;
   const current = forms
-    .filter((item) => item?.FechadPago?.toString().toLowerCase()
+    .filter((item) => item?.IdTipoPago?.toString().toLowerCase()
         .includes(filter.toString().toLowerCase())
     )
     .slice(indexOfFirst, indexOfLast);
@@ -303,7 +303,7 @@ console.log
               type={"search"}
               name={"filter"}
               id={"filter"}
-              placeholder={"Filtrar por Fecha"} //no es necesario
+              placeholder={"Filtrar idOrdenCompra"} //no es necesario
             />
           </div>
         </div>
