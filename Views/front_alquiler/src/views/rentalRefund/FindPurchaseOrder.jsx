@@ -13,13 +13,12 @@ const FindPurchaseOrder = ({
   const [tableDataRange, setTableDataRange] = useState(initTableDataRange)
   const [page, setPage] = useState(1)
 
-  const NEXTKEYS = ['1'],
-    PREVKEYS = ['0']
+  const NEXTKEYS = ['1']
 
   useEffect(() => {
-    if (tableData) setFilteredTableData(tableData)
+    if (tableData) setFilteredTableData(tableData
+      .filter(data => data.idPurchaseOrder))
   }, [tableData])
-
 
   useEffect(() => {
     if (filteredTableData) {
@@ -134,7 +133,8 @@ const FindPurchaseOrder = ({
                   <td>
                     <Button onClick={() => handleSelect(row.idPurchaseOrder)}>
                       Seleccionar
-                    </Button></td>
+                    </Button>
+                  </td>
                 </tr>
               ))
             }

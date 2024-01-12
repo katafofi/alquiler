@@ -139,6 +139,7 @@ const Rental = () => {
                 updateActiveKeys={updateActiveKeys}
                 updateRentalStatus={updateRentalStatus}
                 rentalStatus={rentalStatus}
+                addedArticles={addedArticles}
               />
               :
               <p>Cargando...</p>}

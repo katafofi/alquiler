@@ -9,18 +9,21 @@ const FORMARTICLESORDER = "PuchaseItemOrder"
 const FORMACCESORIESORDER = "PuchaseAccesoriesOrder"
 const FORMARTICLES = "item"
 const FORMACCESORIES = "accesories"
-const FORMNEGATIVERECORD = "StatusRegisterNegative"
+const FORMSTATUSNEGATIVERECORD = "StatusRegisterNegative"
+const FORMNEGATIVERECORD = "negativeRecord"
 
-const getTableData = (clientsData, purchaseOrderData, rentsData) => {
+const getTableData = (clientsData, purchaseOrderData, rentsData, negativeRecordsData) => {
   const newTableData = rentsData.map(rent => {
     const client = clientsData.find(client => client.IdCliente === rent.IdCliente)
     const purchaseOrder = purchaseOrderData.find(purchaseOrder => purchaseOrder.IdAlquiler === rent.IdAlquiler)
+    const negativeRecord = negativeRecordsData.find(negativeRecord => negativeRecord.IdCliente === rent.IdCliente)
     return {
       initialDate: rent.FechaInicialAlquiler,
       finalDate: rent.FechaFinlAlquiler,
       cedula: client.Cedula,
       name: client.Nombre,
       lastName: client.Apellido,
+      negativeRecord: negativeRecord ? true : false,
       idPurchaseOrder: purchaseOrder ? purchaseOrder.IdOrdenCompra : null,
     }
   })
@@ -36,7 +39,8 @@ export const useRentalRefundData = () => {
   const [accesoriesOrders, setAccesoriesOrders] = useState(null)
   const [articles, setArticles] = useState(null)
   const [accesories, setAccesories] = useState(null)
-  const [negativeRecord, setNegativeRecord] = useState(null)
+  const [statusNegativeRecords, setStatusNegativeRecords] = useState(null)
+  const [negativeRecords, setNegativeRecords] = useState(null)
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -49,7 +53,8 @@ export const useRentalRefundData = () => {
         const accesoriesOrdersReponse = await fetch(`${URL}${PORT}/${FORMACCESORIESORDER}`);
         const articlesResponse = await fetch(`${URL}${PORT}/${FORMARTICLES}`);
         const accesoriesReponse = await fetch(`${URL}${PORT}/${FORMACCESORIES}`);
-        const negativeRecordReponse = await fetch(`${URL}${PORT}/${FORMNEGATIVERECORD}`);
+        const statusNegativeRecordReponse = await fetch(`${URL}${PORT}/${FORMSTATUSNEGATIVERECORD}`);
+        const negativeRecordsReponse = await fetch(`${URL}${PORT}/${FORMNEGATIVERECORD}`);
         const articlesOrdersData = await articlesOrdersResponse.json()
         const accesoriesOrdersData = await accesoriesOrdersReponse.json()
         const articlesData = await articlesResponse.json()
@@ -57,8 +62,8 @@ export const useRentalRefundData = () => {
         const clientsData = await clientsResponse.json()
         const purchaseOrderData = await purchaseOrderResponse.json()
         const rentsData = await rentsResponse.json()
-        const negativeRecordData = await negativeRecordReponse.json()
-        console.log("HOLA: \n\n\n\n\n", negativeRecordData)
+        const statusNegativeRecordData = await statusNegativeRecordReponse.json()
+        const negativeRecordsData = await negativeRecordsReponse.json()
         setClients(clientsData);
         setPurchaseOrders(purchaseOrderData);
         setRents(rentsData)
@@ -66,8 +71,9 @@ export const useRentalRefundData = () => {
         setAccesoriesOrders(accesoriesOrdersData)
         setArticles(articlesData)
         setAccesories(accesorieData)
-        setNegativeRecord(negativeRecordData)
-        setTableData(getTableData(clientsData, purchaseOrderData, rentsData))
+        setStatusNegativeRecords(statusNegativeRecordData)
+        setNegativeRecords(negativeRecordsData)
+        setTableData(getTableData(clientsData, purchaseOrderData, rentsData, negativeRecordsData))
       } catch (error) {
         setError(error.message);
         console.error("Error:", error.message);
@@ -86,7 +92,8 @@ export const useRentalRefundData = () => {
     accesoriesOrders,
     articles,
     accesories,
-    negativeRecord,
+    statusNegativeRecords,
+    negativeRecords,
     tableData,
     error,
   ];

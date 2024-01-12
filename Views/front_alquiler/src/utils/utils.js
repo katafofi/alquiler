@@ -1,5 +1,8 @@
-export const getArticlesAccesoriesByIdPurchaseOrder = (
+export const getNegativeRecordInfo = (
   idPurchaseOrder,
+  rents,
+  purchaseOrders,
+  clients,
   articlesOrders,
   accesoriesOrders,
   articles,
@@ -26,8 +29,18 @@ export const getArticlesAccesoriesByIdPurchaseOrder = (
       }
     ))
 
+  const selectedClientId = clients
+    .find(client => client.IdCliente === rents
+      .find(rent => rent.IdAlquiler === purchaseOrders
+        .find(order =>
+          order.IdOrdenCompra === idPurchaseOrder)
+        .IdAlquiler)
+      .IdCliente)
+    .IdCliente
+
   return {
     filteredArticles,
     filteredAccesories,
+    selectedClientId,
   }
 }

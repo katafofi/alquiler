@@ -32,7 +32,8 @@ const RentalRefund = () => {
     accesoriesOrders,
     articles,
     accesories,
-    negativeRecord,
+    statusNegativeRecords,
+    negativeRecords,
     tableData,
     error,
   ] = useRentalRefundData()
@@ -47,6 +48,8 @@ const RentalRefund = () => {
   useEffect(() => {
     setActiveKeys(getActiveKeys(keyStatus))
   }, [keyStatus])
+
+  // console.log("Rents", rents, "PurchaseOrders:", purchaseOrders, "Clients", clients, "statusNegativeRecords", statusNegativeRecords, "negativeRecords", negativeRecords, "tableData:", tableData)
 
   return (
     <Container fluid className='mb-5'>
@@ -68,11 +71,15 @@ const RentalRefund = () => {
               <VerifyRentItems
                 updateActiveKeys={updateActiveKeys}
                 selectedIdPurchaseOrder={selectedIdPurchaseOrder}
+                setSelectedIdPurchaseOrder={setSelectedIdPurchaseOrder}
+                rents={rents}
+                purchaseOrders={purchaseOrders}
+                clients={clients}
                 articlesOrders={articlesOrders}
                 accesoriesOrders={accesoriesOrders}
                 articles={articles}
                 accesories={accesories}
-                negativeRecord={negativeRecord}
+                statusNegativeRecords={statusNegativeRecords}
               />
             }
           </Accordion.Body>

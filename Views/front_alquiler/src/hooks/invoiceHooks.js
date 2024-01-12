@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 
+const calcTotalPrice = (data) => data.reduce((counter, current) => counter + parseInt(current.Precio), 0)
+
 const calcCredit = (payments, Total) => {
   if (payments.length === 0) return { credit: 0, balance: 0, lastCredit: "" };
   let credit = 0;
@@ -24,7 +26,8 @@ const generateInvoice = async (id) => {
     data.FechaCompra = new Date(data.FechaCompra);
     data.FechaInicialAlquiler = new Date(data.FechaInicialAlquiler);
     data.FechaFinlAlquiler = new Date(data.FechaFinlAlquiler);
-    const { credit, balance, lastCredit } = calcCredit(data.payments, data.Total);
+    console.log("hola", calcTotalPrice(data.resultPurchareItemOrder))
+    const { credit, balance, lastCredit } = calcCredit(data.payments, calcTotalPrice(data.resultPurchareItemOrder));
     data = {
       ...data,
       credit,

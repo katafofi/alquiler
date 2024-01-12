@@ -13,11 +13,13 @@ const InvoicePreview = ({ id, invoiceModalActive, setInvoiceModalActive, }) => {
   const monthNames = ["Ene", "Feb", "Mar", "Abr", "May", "Jun",
     "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
 
-  // useEffect(() => {
-  //   console.log("ID:", id)
-  //   console.log("Invoice data:", invoiceData)
-  //   console.log("Date: ", invoiceData)
-  // }, [invoiceData])
+  const getTotalPrice = () => invoiceData.resultPurchareItemOrder.reduce((counter, current) => counter + parseInt(current.Precio), 0).toLocaleString()
+
+  useEffect(() => {
+    console.log("ID:", id)
+    console.log("Invoice data:", invoiceData)
+    console.log("Date: ", invoiceData.FechaInicialAlquiler.getUTCDay())
+  }, [invoiceData])
 
   return (
     <Modal show={invoiceModalActive} onHide={() => setInvoiceModalActive(false)} size="lg">
@@ -107,7 +109,7 @@ const InvoicePreview = ({ id, invoiceModalActive, setInvoiceModalActive, }) => {
                     <tr>
                       <td>Fecha Retirado:</td>
                       <td>Día</td>
-                      <td>{invoiceData.FechaInicialAlquiler.getUTCDay()}</td>
+                      <td>{invoiceData.FechaInicialAlquiler.getUTCDate()}</td>
                       <td>Mes</td>
                       <td>{monthNames[invoiceData.FechaInicialAlquiler.getUTCMonth()]}</td>
                       <td>Año</td>
@@ -116,7 +118,7 @@ const InvoicePreview = ({ id, invoiceModalActive, setInvoiceModalActive, }) => {
                     <tr>
                       <td>Fecha devolución:</td>
                       <td>Día</td>
-                      <td>{invoiceData.FechaFinlAlquiler.getUTCDay()}</td>
+                      <td>{invoiceData.FechaFinlAlquiler.getUTCDate()}</td>
                       <td>Mes</td>
                       <td>{monthNames[invoiceData.FechaFinlAlquiler.getUTCMonth()]}</td>
                       <td>Año</td>
@@ -191,13 +193,13 @@ const InvoicePreview = ({ id, invoiceModalActive, setInvoiceModalActive, }) => {
                       </small>
                     </p>
                     <p>
-                      <small><strong>TOTAL: </strong>{invoiceData.Total}$</small>
+                      <small><strong>TOTAL: </strong>{getTotalPrice()}$</small>
                     </p>
                     <p>
-                      <small><strong>ABONO: </strong>{invoiceData.credit}$</small>
+                      <small><strong>ABONO: </strong>{invoiceData.credit.toLocaleString()}$</small>
                     </p>
                     <p>
-                      <small><strong>SALDO: </strong>{invoiceData.balance}$</small>
+                      <small><strong>SALDO: </strong>{invoiceData.balance.toLocaleString()}$</small>
                     </p>
                   </Col>
                 </Row>

@@ -136,6 +136,7 @@ const NegativeRecord = () => {
       console.log(error);
     }
   };
+
   const handleGetEstadoRegistroNegativo = async () => {
     try {
       const response = await fetch(`${URL}${PORT}/StatusRegisterNegative`);

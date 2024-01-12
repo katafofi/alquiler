@@ -18,6 +18,7 @@ const NewArticlesOrder = (
   const [news, setNews] = useState({
     //IdArticuloOrdenCompra 
     Cantidad: "",
+    Precio: "",
     IdOrdenCompra: "",
     IdArticulo: ""
   });
@@ -35,6 +36,7 @@ const NewArticlesOrder = (
   useEffect(() => {
     handleGetArticulo();
   }, []);
+
 
   const handleDelete = async (id) => {
     try {
@@ -146,6 +148,16 @@ const NewArticlesOrder = (
                   onChange={handleSelect}
                 />
 
+                <InputCataComponente
+                  onChange={handleInput}
+                  placeholder={`Ingrese el precio total de los articulos`}
+                  id={`Precio`}
+                  type={"number"}
+                  name={`Precio`}
+                  label={`Precio`}
+                />
+
+
                 <ButtonCataComponente
                   type="submit"
                   className="btn btn-primary btn-block"
@@ -161,6 +173,7 @@ const NewArticlesOrder = (
                 <tr>
                   <th>Cantidad</th>
                   <th>Articulo</th>
+                  <th>Precio</th>
                 </tr>
               </thead>
               <tbody>
@@ -176,6 +189,7 @@ const NewArticlesOrder = (
                           ).Descripcion
                         }
                       </td>
+                      <td>{el.Precio}</td>
                       <td>
                         <Button
                           variant="danger"

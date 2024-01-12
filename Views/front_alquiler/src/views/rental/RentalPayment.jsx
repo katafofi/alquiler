@@ -9,7 +9,8 @@ const NewPayments = (
     idPurchaseOrder,
     updateActiveKeys,
     updateRentalStatus,
-    rentalStatus
+    rentalStatus,
+    addedArticles
   }
 ) => {
   const [forms, setForm] = useState([]);
@@ -35,6 +36,8 @@ const NewPayments = (
     handleGetEstadoPago();
     handleGetTipoPago();
   }, []);
+
+  const getTotalPrice = () => addedArticles.reduce((counter, current) => counter + parseInt(current.Precio), 0).toLocaleString()
 
   const handleGetEstadoPago = async () => {
     try {
@@ -159,7 +162,7 @@ const NewPayments = (
           </Col>
           <Col>
             <h3>Total a pagar:</h3>
-            <h4>{rentalStatus.purchaseOrder.Total} $</h4>
+            <h4>{addedArticles ? getTotalPrice() : 0} $</h4>
           </Col>
         </Row>
       </Container>

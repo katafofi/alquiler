@@ -18,7 +18,7 @@ const NewPurchaseOrder = (
     FechaCompra: "",
     IdAlquiler: "",
     IdEmpleado: "",
-    Total: "",
+    Total: 0,
   });
   const [options, setOptions] = useState([]);
 
@@ -127,7 +127,7 @@ const NewPurchaseOrder = (
                   onChange={handleSelect}
                 />
 
-                <InputCataComponente
+                {/* <InputCataComponente
                   value={news.Total}
                   onChange={handleInput}
                   placeholder={"Ingrese Total"}
@@ -135,7 +135,7 @@ const NewPurchaseOrder = (
                   type={"number"}
                   name={"Total"}
                   label={"Total"}
-                />
+                /> */}
 
                 <ButtonCataComponente
                   type="submit"
