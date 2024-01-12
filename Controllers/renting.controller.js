@@ -7,17 +7,15 @@ const CreateRenting = async (req, res) => {
     IdTienda,
     IdCliente,
     IdEstadoAlquiler,
-    
   } = req.body;
 
   try {
-    const RentingCreate = await  Renting.create({
+    const RentingCreate = await Renting.create({
       FechaInicialAlquiler,
       FechaFinlAlquiler,
       IdTienda,
       IdCliente,
       IdEstadoAlquiler,
-       
     });
     res.status(200).json(RentingCreate);
   } catch (error) {
@@ -26,7 +24,7 @@ const CreateRenting = async (req, res) => {
 };
 
 const UpdateRenting = async (req, res) => {
-  const { IdAlquiler} = req.params;
+  const { IdAlquiler } = req.params;
 
   const {
     FechaInicialAlquiler,
@@ -34,7 +32,7 @@ const UpdateRenting = async (req, res) => {
     IdTienda,
     IdCliente,
     IdEstadoAlquiler,
-   
+
   } = req.body;
 
   try {
@@ -44,16 +42,16 @@ const UpdateRenting = async (req, res) => {
         FechaFinlAlquiler,
         IdTienda,
         IdCliente,
-        IdEstadoAlquiler  
+        IdEstadoAlquiler
       },
       {
         where: { IdAlquiler },
       }
     );
-    if(result == 0){
-        res.status(404).json({ error: "Alquiler no actualizada o encontrada"});
-    }else{
-        res.status(201).json({ message: "Alquiler  actualizada"});
+    if (result == 0) {
+      res.status(404).json({ error: "Alquiler no actualizada o encontrada" });
+    } else {
+      res.status(201).json({ message: "Alquiler  actualizada" });
     }
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -62,26 +60,26 @@ const UpdateRenting = async (req, res) => {
 
 const DeleteRenting = async (req, res) => {
   const { IdAlquiler } = req.params;
-  const result = await Renting.destroy({where: { IdAlquiler} })
+  const result = await Renting.destroy({ where: { IdAlquiler } })
   try {
-    if(result == 0){
-        res.status(404).json({ error: "Alquiler  eliminado o encontrado"});
-    }else{
-        res.status(201).json({ message: "Alquiler  eliminada"});
+    if (result == 0) {
+      res.status(404).json({ error: "Alquiler  eliminado o encontrado" });
+    } else {
+      res.status(201).json({ message: "Alquiler  eliminada" });
     }
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
-const DeleteMultipleRenting = async(req, res) => {
+const DeleteMultipleRenting = async (req, res) => {
   const IdAlquileres = req.body
-  const result = await Renting.destroy({where: {IdAlquiler: IdAlquileres }})
+  const result = await Renting.destroy({ where: { IdAlquiler: IdAlquileres } })
   try {
-    if(result == 0){
-        res.status(404).json({ error: "Alquiler  no eliminados o encontrados"});
-    }else{
-        res.status(201).json({ message: "Alquiler  eliminados"});
+    if (result == 0) {
+      res.status(404).json({ error: "Alquiler  no eliminados o encontrados" });
+    } else {
+      res.status(201).json({ message: "Alquiler  eliminados" });
     }
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -91,12 +89,12 @@ const DeleteMultipleRenting = async(req, res) => {
 const FindOneRentingById = async (req, res) => {
   const { IdAlquiler } = req.params;
   try {
-    const result = await Renting.findOne({ where: {IdAlquiler} })
-    
-    if(result == 0){
-        res.status(404).json({ error: "Alquiler  no encontrado"});
-    }else{
-        res.status(200).json({ message: result});
+    const result = await Renting.findOne({ where: { IdAlquiler } })
+
+    if (result == 0) {
+      res.status(404).json({ error: "Alquiler  no encontrado" });
+    } else {
+      res.status(200).json({ message: result });
     }
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -117,8 +115,8 @@ const all = {
   UpdateRenting,
   DeleteRenting,
   DeleteMultipleRenting,
-  FindOneRentingById ,
-  FindAllRenting 
+  FindOneRentingById,
+  FindAllRenting
 };
 
 module.exports = all;

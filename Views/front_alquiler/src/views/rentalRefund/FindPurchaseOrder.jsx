@@ -1,15 +1,20 @@
 import { useEffect, useState } from 'react'
 import { Button, Col, Container, Form, Row, Table } from 'react-bootstrap'
-import { useRentalRefundData } from '../../hooks/rentalRefundHooks'
 
 const initTableDataRange = { init: 1, final: 10 }
 
-const FindPurchaseOrder = () => {
+const FindPurchaseOrder = ({
+  tableData,
+  updateActiveKeys,
+  setSelectedIdPurchaseOrder
+}) => {
   const [inputFilter, setInputFilter] = useState(null)
   const [filteredTableData, setFilteredTableData] = useState(null)
   const [tableDataRange, setTableDataRange] = useState(initTableDataRange)
   const [page, setPage] = useState(1)
-  const [clients, purchaseOrders, rents, tableData, error] = useRentalRefundData()
+
+  const NEXTKEYS = ['1'],
+    PREVKEYS = ['0']
 
   useEffect(() => {
     if (tableData) setFilteredTableData(tableData)
@@ -33,8 +38,6 @@ const FindPurchaseOrder = () => {
     }
   }, [page, filteredTableData])
 
-
-
   const handleChange = ({ target }) => setInputFilter(target.value)
 
   const handleSubmit = (e) => {
@@ -52,6 +55,11 @@ const FindPurchaseOrder = () => {
     } else {
       setPage(page - 1)
     }
+  }
+
+  const handleSelect = (idPurchaseOrder) => {
+    setSelectedIdPurchaseOrder(idPurchaseOrder)
+    updateActiveKeys(NEXTKEYS)
   }
   // console.log("Clients:", clients, "PurchaseOrder:", purchaseOrders, "Rents:", rents, "Table Data:", tableData)
 
@@ -122,8 +130,11 @@ const FindPurchaseOrder = () => {
                   <td>{row.finalDate}</td>
                   <td>{row.cedula}</td>
                   <td>{row.name} {row.lastName}</td>
-                  <td>{row.purchaseOrder}</td>
-                  <td><Button>Seleccionar</Button></td>
+                  <td>{row.idPurchaseOrder}</td>
+                  <td>
+                    <Button onClick={() => handleSelect(row.idPurchaseOrder)}>
+                      Seleccionar
+                    </Button></td>
                 </tr>
               ))
             }

@@ -1,6 +1,6 @@
-const StatusRenting = require("../Models/statusRenting");
+const StatusRenting = require("../Models/statusRenting.model");
 
-const CreateStatusRenting= async (req, res) => {
+const CreateStatusRenting = async (req, res) => {
   const {
     Descripcion
   } = req.body;
@@ -16,7 +16,7 @@ const CreateStatusRenting= async (req, res) => {
 };
 
 const UpdateStatusRenting = async (req, res) => {
-  const {IdEstadoAlquiler} = req.params;
+  const { IdEstadoAlquiler } = req.params;
 
   const {
     Descripcion
@@ -28,41 +28,41 @@ const UpdateStatusRenting = async (req, res) => {
         Descripcion
       },
       {
-        where: {IdEstadoAlquiler},
+        where: { IdEstadoAlquiler },
       }
     );
-    if(result == 0){
-        res.status(404).json({ error: "ESTADO NO ENCONTRADO"});
-    }else{
-        res.status(201).json({ message: "ESTADO ACTULÑIZADO"});
+    if (result == 0) {
+      res.status(404).json({ error: "ESTADO NO ENCONTRADO" });
+    } else {
+      res.status(201).json({ message: "ESTADO ACTULÑIZADO" });
     }
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
-const DeleteStatusRenting= async (req, res) => {
-  const {IdEstadoAlquiler} = req.params;
-  const result = await StatusRenting.destroy({where: { IdEstadoPago} })
+const DeleteStatusRenting = async (req, res) => {
+  const { IdEstadoAlquiler } = req.params;
+  const result = await StatusRenting.destroy({ where: { IdEstadoPago } })
   try {
-    if(result == 0){
-        res.status(404).json({ error: "ESTADO PAGO no encontrado por favor valide bien los datos ingresados"});
-    }else{
-        res.status(201).json({ message: "CESTADO PAGO eliminado con exito"});
+    if (result == 0) {
+      res.status(404).json({ error: "ESTADO PAGO no encontrado por favor valide bien los datos ingresados" });
+    } else {
+      res.status(201).json({ message: "CESTADO PAGO eliminado con exito" });
     }
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
-const DeleteMultipleStatusRenting = async(req, res) => {
+const DeleteMultipleStatusRenting = async (req, res) => {
   const IdEstadoPagos = req.body
-  const result = await StatusRenting.destroy({where: { IdEstadoPago: IdEstadoPagos }})
+  const result = await StatusRenting.destroy({ where: { IdEstadoPago: IdEstadoPagos } })
   try {
-    if(result == 0){
-        res.status(404).json({ error: "ESTADO PAGO no eliminados o encontrados"});
-    }else{
-        res.status(201).json({ message: "ESTADO PAGO eliminados"});
+    if (result == 0) {
+      res.status(404).json({ error: "ESTADO PAGO no eliminados o encontrados" });
+    } else {
+      res.status(201).json({ message: "ESTADO PAGO eliminados" });
     }
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -70,14 +70,14 @@ const DeleteMultipleStatusRenting = async(req, res) => {
 };
 
 const FindOneStatusRentingById = async (req, res) => {
-  const {IdEstadoAlquiler} = req.params;
+  const { IdEstadoAlquiler } = req.params;
   try {
-    const result = await StatusRenting.findOne({ where: { IdEstadoPago} })
-    
-    if(result == 0){
-        res.status(404).json({ error: "ESTADO PAGO no encontrado"});
-    }else{
-        res.status(200).json({ message: result});
+    const result = await StatusRenting.findOne({ where: { IdEstadoPago } })
+
+    if (result == 0) {
+      res.status(404).json({ error: "ESTADO PAGO no encontrado" });
+    } else {
+      res.status(200).json({ message: result });
     }
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -98,7 +98,7 @@ const all = {
   UpdateStatusRenting,
   DeleteStatusRenting,
   DeleteMultipleStatusRenting,
-  FindOneStatusRentingById ,
+  FindOneStatusRentingById,
   FindAllStatusRenting
 };
 

@@ -78,7 +78,6 @@ const NewPayments = (
   };
 
   const handleCreate = async () => {
-    console.log("Id orden compra:", idPurchaseOrder)
     try {
       const response = await fetch(`${URL}${PORT}/${FORM}`, {
         method: "POST",

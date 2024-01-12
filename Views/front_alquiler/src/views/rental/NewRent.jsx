@@ -14,10 +14,12 @@ const NewRent = ({ updateActiveKeys, updateRentalStatus }) => {
     FechaFinlAlquiler: "",
     IdTienda: "",
     IdCliente: "",
+    IdEstadoAlquiler: ""
   });
 
   const [ClienteOptions, setClienteOptions] = useState([]);
   const [TiendaOptions, setTiendaOptions] = useState([]);
+  const [statusRenting, setStatusRenting] = useState(null)
 
   const nextKeys = ['1']
 
@@ -28,6 +30,7 @@ const NewRent = ({ updateActiveKeys, updateRentalStatus }) => {
   };
 
   const handleSelect = (e) => {
+    handleCreate
     const { name, value } = e.target;
     setNews((prev) => ({
       ...prev,
@@ -42,7 +45,11 @@ const NewRent = ({ updateActiveKeys, updateRentalStatus }) => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ ...news, IdTienda: TiendaOptions[0].value }),
+        body: JSON.stringify({
+          ...news,
+          IdTienda: TiendaOptions[0].value,
+          IdEstadoAlquiler: statusRenting ? statusRenting[0].IdEstadoAlquiler : 1
+        }),
       });
       const data = await response.json();
       return data
@@ -61,6 +68,16 @@ const NewRent = ({ updateActiveKeys, updateRentalStatus }) => {
       }
     } catch (error) {
       console.error("Error al crear:", error);
+    }
+  };
+
+  const getStatusRenting = async () => {
+    try {
+      const response = await fetch(`${URL}${PORT}/statusRenting`);
+      const data = await response.json();
+      setStatusRenting(data)
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -95,6 +112,7 @@ const NewRent = ({ updateActiveKeys, updateRentalStatus }) => {
   useEffect(() => {
     getTienda();
     getCliente();
+    getStatusRenting()
   }, []);
 
   return (
