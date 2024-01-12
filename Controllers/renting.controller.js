@@ -5,7 +5,9 @@ const CreateRenting = async (req, res) => {
     FechaInicialAlquiler,
     FechaFinlAlquiler,
     IdTienda,
-    IdCliente   
+    IdCliente,
+    IdEstadoAlquiler,
+    
   } = req.body;
 
   try {
@@ -13,7 +15,9 @@ const CreateRenting = async (req, res) => {
       FechaInicialAlquiler,
       FechaFinlAlquiler,
       IdTienda,
-      IdCliente  
+      IdCliente,
+      IdEstadoAlquiler,
+       
     });
     res.status(200).json(RentingCreate);
   } catch (error) {
@@ -28,7 +32,9 @@ const UpdateRenting = async (req, res) => {
     FechaInicialAlquiler,
     FechaFinlAlquiler,
     IdTienda,
-    IdCliente  
+    IdCliente,
+    IdEstadoAlquiler,
+   
   } = req.body;
 
   try {
@@ -37,7 +43,8 @@ const UpdateRenting = async (req, res) => {
         FechaInicialAlquiler,
         FechaFinlAlquiler,
         IdTienda,
-        IdCliente  
+        IdCliente,
+        IdEstadoAlquiler  
       },
       {
         where: { IdAlquiler },

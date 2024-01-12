@@ -294,7 +294,7 @@ const PuchareItemOrder = () => {
 
 
                 <           SelectCataComponente
-                  //required
+                  required
                   label={"- Seleccionar orden de compra"}
                   name={"IdOrdenCompra"}
                   value={news.IdOrdenCompra}
@@ -304,7 +304,7 @@ const PuchareItemOrder = () => {
 
 
                 <SelectCataComponente
-                 // required
+                  required
                   label={" Seleccionar un Accesorio -"}
                   name={"IdArticulo"}
                   value={news.IdArticulo}

@@ -12,13 +12,18 @@ const PuchareItemOrder = database.define('ArticulosOrdenCompra', {
         type: Sequelize.INTEGER,
         allowNull: false,
     },
+    Precio: {
+        type: Sequelize.DECIMAL(10, 2),
+        
+    },
+
     IdOrdenCompra: {
         type: Sequelize.INTEGER,
-        allowNull: false,
+        allowNull: true,
     },
     IdArticulo: {
         type: Sequelize.INTEGER,
-        allowNull: false,
+        allowNull: true,
     }
 })
 

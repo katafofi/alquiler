@@ -81,8 +81,10 @@ CREATE TABLE Alquileres (
     FechaFinAlquiler DATE NOT NULL,
     IdTienda INT NOT NULL,
     IdCliente INT NOT NULL,
+    IdEstadoAlquiler INT NOT NULL,
     FOREIGN KEY (IdTienda) REFERENCES Tiendas(IdTienda),
-    FOREIGN KEY (IdCliente) REFERENCES Clientes(IdCliente)
+    FOREIGN KEY (IdCliente) REFERENCES Clientes(IdCliente),
+    FOREIGN KEY (IdEstadoAlquiler) REFERENCES (IdEstadoAlquiler)
 );
 
 -- TIMESTAMP AUTO FECHA 2*

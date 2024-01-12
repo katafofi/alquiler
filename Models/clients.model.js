@@ -31,6 +31,10 @@ const Clients = database.define('Clientes', {
         type: Sequelize.STRING(100),
         allowNull: false
     },
+    Barrio: {
+        type: Sequelize.STRING(100),
+        allowNull: false
+    },
     Telefono: {
         type: Sequelize.STRING(20),
         allowNull: false

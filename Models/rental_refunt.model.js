@@ -18,7 +18,7 @@ IdAlquiler: {
 IdEmpleado: {
   type: Sequelize.INTEGER,
   allowNull: false 
-}
+},
 
 })
 

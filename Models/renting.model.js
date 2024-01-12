@@ -23,5 +23,9 @@ const Renting = database.define("Alquiler", {
     type: Sequelize.INTEGER,
     allowNull: false,
   },
+  IdEstadoAlquiler: {
+    type: Sequelize.INTEGER,
+    allowNull: false 
+  }
 });
 module.exports = Renting;

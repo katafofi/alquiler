@@ -80,6 +80,7 @@ const Clients = () => {
             Cedula: "",
             Correo: "",
             Direccion: "",
+            Barrio: "",
             Telefono: "",
             ReferenciaPersonalNombre: "",
             ReferenciaPersonalTelefono: "",
@@ -122,6 +123,7 @@ const Clients = () => {
       Cedula: news.Cedula,
       Correo: news.Correo,
       Direccion: news.Direccion,
+      Barrio: news.Barrio,
       Telefono: news.Telefono,
       ReferenciaPersonalNombre: news.ReferenciaPersonalNombre,
       ReferenciaPersonalTelefono: news.ReferenciaPersonalTelefono,
@@ -141,6 +143,7 @@ const Clients = () => {
       formData.append("Cedula", news.Cedula)
       formData.append("Correo", news.Correo)
       formData.append("Direccion", news.Direccion)
+      formData.append("Barrio", news.Barrio)
       formData.append("Telefono", news.Telefono)
       formData.append("ReferenciaPersonalNombre", news.ReferenciaPersonalNombre)
       formData.append("ReferenciaPersonalTelefono", news.ReferenciaPersonalTelefono)
@@ -165,6 +168,7 @@ const Clients = () => {
         Cedula: "",
         Correo: "",
         Direccion: "",
+        Barrio: "",
         Telefono: "",
         ReferenciaPersonalNombre: "",
         ReferenciaPersonalTelefono: "",
@@ -228,6 +232,7 @@ const Clients = () => {
       formData.append("Cedula", news.Cedula);
       formData.append("Correo", news.Correo);
       formData.append("Direccion", news.Direccion);
+      formData.append("Barrio", news.Barrio);
       formData.append("Telefono", news.Telefono);
       formData.append("ReferenciaPersonalNombre", news.ReferenciaPersonalNombre);
       formData.append("ReferenciaPersonalTelefono", news.ReferenciaPersonalTelefono);
@@ -263,6 +268,7 @@ const Clients = () => {
         Cedula: "",
         Correo: "",
         Direccion: "",
+        Barrio: "",
         Telefono: "",
         ReferenciaPersonalNombre: "",
         ReferenciaPersonalTelefono: "",
@@ -381,6 +387,15 @@ const Clients = () => {
                   name={"Direccion"}
                   label={"Direccion"}
                 />
+                 <InputCataComponente
+                  value={news.Barrio}
+                  onChange={handleInput}
+                  placeholder={"Ingrese barrio"}
+                  id={"Barrio"}
+                  type={"text"}
+                  name={"Barrio"}
+                  label={"Barrio"}
+                />
 
                 <InputCataComponente
                   value={news.Telefono}
@@ -455,7 +470,7 @@ const Clients = () => {
               handleEdit={handleEdit}
               handleDeleteM={handleDeleteM}
               idField={"IdCliente"}
-              Fields={["Nombre", "Apellido", "Correo", "Cedula", "FotoDocumento", "FotoServicioPublico"]}
+              Fields={["Nombre", "Apellido", "Correo", "Cedula", "Direccion",  "Barrio", "FotoDocumento", "FotoServicioPublico"]}
             />
             <PaginateCataComponente
               data={forms}

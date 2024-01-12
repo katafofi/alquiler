@@ -3,6 +3,7 @@ const PuchareItemOrder= require("../Models/puchase_item_order.model");
 const CreatePuchareItemOrder = async (req, res) => {
   const {
     Cantidad,
+    Precio,
     IdOrdenCompra,
     IdArticulo
   } = req.body;
@@ -10,6 +11,7 @@ const CreatePuchareItemOrder = async (req, res) => {
   try {
     const PuchareItemOrderCreate = await  PuchareItemOrder.create({
         Cantidad,
+        Precio,
         IdOrdenCompra,
         IdArticulo
     });
@@ -24,6 +26,7 @@ const UpdatePuchareItemOrder = async (req, res) => {
 
   const {
     Cantidad,
+    Precio,
     IdOrdenCompra,
     IdArticulo
   } = req.body;
@@ -32,6 +35,7 @@ const UpdatePuchareItemOrder = async (req, res) => {
     const [result] = await PuchareItemOrder.update(
       {
         Cantidad,
+        Precio,
         IdOrdenCompra,
         IdArticulo
       },

@@ -52,7 +52,7 @@ const StatusEmploye = () => {
       };
 
       const handleDelete = async (id) => {
-        if (window.prompt("Ingrese la credencial de autorizacion", 0) == "202312") {
+        
           if (window.confirm("¿Estás seguro de que quieres eliminar?")) {
             try {
               const response = await fetch(`${URL}${PORT}/${form}/${id}`, {
@@ -72,13 +72,11 @@ const StatusEmploye = () => {
               console.log(error);
             }
           }
-        } else {
-          alert("No esta permitido para las credenciales por defecto.");
-        }
+        
       };
 
       const handleDeleteM = async (ids) => {
-        if (window.prompt("Ingrese la credencial de autorizacion", 0) == "202312") {
+       
           if (window.confirm("¿Estás seguro de que quieres eliminar?")) {
             try {
               const response = await fetch(`${URL}${PORT}/${form}/delete/all`, {
@@ -94,9 +92,7 @@ const StatusEmploye = () => {
               console.log(error);
             }
           }
-        } else {
-          alert("No esta permitido para las credenciales por defecto.");
-        }
+        
       };
 
       const handleEdit = async (news) => {
@@ -183,9 +179,7 @@ const StatusEmploye = () => {
         e.preventDefault();
     
         if (selected) {
-          if (
-            window.prompt("Ingrese la credencial de autorizacion", 0) == "202312"
-          ) {
+          
             if (window.confirm("¿Estás seguro de que quieres actualizar este?")) {
               try {
                 handleUpdate();
@@ -193,9 +187,7 @@ const StatusEmploye = () => {
                 console.error("Error al actualizar:", error);
               }
             }
-          } else {
-            alert("No esta permitido para las credenciales por defecto.");
-          }
+          
         } else {
           try {
             handleCreate();
