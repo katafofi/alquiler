@@ -9,7 +9,7 @@ const CreateStore = async (req, res) => {
     Direccion, 
     Telefono,         
     Correo,         
-    Logo 
+    
    
   } = req.body;
 
@@ -21,7 +21,7 @@ const CreateStore = async (req, res) => {
       Direccion, 
       Telefono,         
       Correo,         
-      Logo
+     
   
     });
     res.status(200).json(StoreCreate);
@@ -40,7 +40,7 @@ const UpdateStore = async (req, res) => {
     Direccion, 
     Telefono,         
     Correo,         
-    Logo
+   
 
   } = req.body;
 
@@ -52,7 +52,7 @@ const UpdateStore = async (req, res) => {
         Direccion, 
         Telefono,         
         Correo,         
-        Logo
+       
       },
       {
         where: { IdTienda },

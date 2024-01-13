@@ -16,7 +16,7 @@ const Store = () => {
     Direccion: "",
     Telefono: "",
     Correo: "",
-    Logo: "",
+   
   });
   const [selected, setSelected] = useState(null);
   const [deleted, setDeleted] = useState(false);
@@ -74,7 +74,7 @@ const Store = () => {
               Direccion: "",
               Telefono: "",
               Correo: "",
-              Logo: "",
+             
             });
           }
         } catch (error) {
@@ -117,7 +117,7 @@ const Store = () => {
       Direccion: news.Direccion,
       Telefono: news.Telefono,
       Correo: news.Correo,
-      Logo: news.Logo,
+      
     });
   };
 
@@ -139,7 +139,7 @@ const Store = () => {
         Direccion: "",
         Telefono: "",
         Correo: "",
-        Logo: "",
+       
       });
     } catch (error) {
       console.log(error);
@@ -180,7 +180,7 @@ const Store = () => {
         Direccion: news.Direccion,
         Telefono: news.Telefono,
         Correo: news.Correo,
-        Logo: news.Logo,
+        
       }),
     });
     const data = await response.json();
@@ -195,7 +195,7 @@ const Store = () => {
       Direccion: "",
       Telefono: "",
       Correo: "",
-      Logo: "",
+     
     });
   };
 
@@ -306,16 +306,7 @@ const Store = () => {
                   name={"Correo"}
                   label={"Correo Electrónico"}
                 />
-                <InputCataComponente
-                  value={news.Logo}
-                  onChange={handleInput}
-                  placeholder={"Ingrese ruta o nombre del logo"}
-                  id={"Logo"}
-                  type={"text"}
-                  name={"Logo"}
-                  label={"Logo de la Tienda"}
-                />
-
+             
                 <ButtonCataComponente
                   type="submit"
                   className="btn btn-primary btn-block"

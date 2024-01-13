@@ -27,12 +27,8 @@ const Store = database.define('Tiendas', {
         type: Sequelize.STRING(100),
         allowNull: false,
         unique: true
-    },
-    Logo: {
-        type: Sequelize.STRING(250),
-        allowNull: false,
-      
     }
+   
 
 })
 

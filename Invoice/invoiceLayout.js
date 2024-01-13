@@ -134,7 +134,7 @@ const createHtmlInvoice = ({
           </div>
         </div>
       </div>
-      <small>Transv. 78 L No. 68 - 03 Sur 2do. Piso . Bosa Piamonte . Cel: 320 805 6350 - 320 805 8884</small>
+      <small>Transv. 78 L No. 68 - 03 Sur 2do. Piso . Bosa Piamonte . Cel: 320 805 6350 - 320 805 8886</small>
       <div>
         <table>
           <tr>
@@ -150,6 +150,10 @@ const createHtmlInvoice = ({
           </tr>
         </table>
         <table>
+          <tr>
+            <td>Orden de trabajo</td>
+            <td>${IdOrdenCompra}</td>
+          </tr>
           <tr>
             <td>Orden de trabajo</td>
             <td>${IdOrdenCompra}</td>

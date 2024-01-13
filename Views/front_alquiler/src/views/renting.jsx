@@ -241,7 +241,7 @@ const Renting = () => {
   const indexOfFirst = indexOfLast - PerPage;
   const current = forms
     .filter((item) =>
-      item?.FechaInicialAlquiler?.toString()
+      item?.IdCliente?.toString()
         .toLowerCase()
         .includes(filter.toString().toLowerCase())
     )
@@ -259,7 +259,7 @@ const Renting = () => {
               type={"search"}
               name={"filter"}
               id={"filter"}
-              placeholder={"Filtrar por Descripcion"} //no es necesario
+              placeholder={"Filtrar por Id cliente"} //no es necesario
             />
           </div>
         </div>

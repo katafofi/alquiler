@@ -26,7 +26,7 @@ const Item = () => {
   const [colorOptions, setColorOptions] = useState([]);
   const [tallaOptions, setTallaOptions] = useState([]);
 
-  const PerPage = 10;
+  const PerPage = 20;
   const form = "item";
 
   const URL = "http://localhost:";
