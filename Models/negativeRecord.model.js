@@ -17,6 +17,17 @@ const NegativeRecord = database.define('RegistroNegativo', {
         type: Sequelize.INTEGER,
         allowNull: false
     },
+    IdOrdenCompra: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        unique: true
+    },
+    IdAlquiler: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        unique: true
+    },
+    
 },
 {
    timestamps: false
