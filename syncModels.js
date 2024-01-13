@@ -5,7 +5,7 @@ async function syncModels() {
   const ExpensesEmploye = require("./Models/expensesEmploye.model");
   const Clients = require("./Models/clients.model");
   const Store = require("./Models/store.model");
-  const statusRenting = require ("./Models/statusRenting.model.js");
+  const statusRenting = require("./Models/statusRenting.model.js");
   const RentingClientsStore = require("./Models/renting.model");
   const PuchaseOrderEmployeRenting = require("./Models/purchase_order.model");
   const Accesories = require("./Models/accesories.model");
@@ -27,7 +27,7 @@ async function syncModels() {
   const Renting = require("./Models/renting.model.js");
   const StatusEmployeEmploye = require("./Models/employe_status.model.js");
   const RentingRefunt = require("./Models/rental_refunt.model.js");
-  
+
 
   // TABLA relacional 1:M Eliminación en cascada
   Employe.hasMany(ExpensesEmploye, {
@@ -119,21 +119,21 @@ async function syncModels() {
     foreignKey: "IdCliente",
     onDelete: "RESTRICT",
   });
-  StatusRegisterNegative.hasMany(ClientsStatusRegisterNegativeNegativeRecord,{
-      foreignKey: "IdEstadoRegistroNegativo",
-      onDelete: "RESTRICT",
-    }
+  StatusRegisterNegative.hasMany(ClientsStatusRegisterNegativeNegativeRecord, {
+    foreignKey: "IdEstadoRegistroNegativo",
+    onDelete: "RESTRICT",
+  }
   );
-  PuchaseOrder.hasMany(ClientsStatusRegisterNegativeNegativeRecord,{
+  PuchaseOrder.hasMany(ClientsStatusRegisterNegativeNegativeRecord, {
     foreignKey: "IdOrdenCompra",
     onDelete: "RESTRICT",
   }
-);
-Renting.hasMany(ClientsStatusRegisterNegativeNegativeRecord,{
-  foreignKey: "IdAlquiler",
-  onDelete: "RESTRICT",
-}
-);
+  );
+  Renting.hasMany(ClientsStatusRegisterNegativeNegativeRecord, {
+    foreignKey: "IdAlquiler",
+    onDelete: "RESTRICT",
+  }
+  );
 
   //tabla relacion de 1:1
   StatusEmployeEmploye.hasOne(Employe, {
@@ -150,7 +150,7 @@ Renting.hasMany(ClientsStatusRegisterNegativeNegativeRecord,{
     foreignKey: "IdEmpleado",
     onDelete: "RESTRICT",
   });
-  
+
 
   await database.sync({ alter: false, force: false }); // false prod y true dev
 }

@@ -16,8 +16,9 @@ const FindPurchaseOrder = ({
   const NEXTKEYS = ['1']
 
   useEffect(() => {
+    console.log("Table Data:", tableData)
     if (tableData) setFilteredTableData(tableData
-      .filter(data => data.idPurchaseOrder))
+      .filter(data => data.idPurchaseOrder && !data.negativeRecord))
   }, [tableData])
 
   useEffect(() => {

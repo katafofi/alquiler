@@ -29,6 +29,11 @@ export const getNegativeRecordInfo = (
       }
     ))
 
+  const selectedRentId = rents
+    .find(rent => rent.IdAlquiler === purchaseOrders
+      .find(order => order.IdOrdenCompra === idPurchaseOrder).IdAlquiler
+    ).IdAlquiler
+
   const selectedClientId = clients
     .find(client => client.IdCliente === rents
       .find(rent => rent.IdAlquiler === purchaseOrders
@@ -42,5 +47,6 @@ export const getNegativeRecordInfo = (
     filteredArticles,
     filteredAccesories,
     selectedClientId,
+    selectedRentId
   }
 }

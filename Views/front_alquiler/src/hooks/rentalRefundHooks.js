@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 const URL = "http://localhost:";
 const PORT = "3003";
@@ -16,14 +16,14 @@ const getTableData = (clientsData, purchaseOrderData, rentsData, negativeRecords
   const newTableData = rentsData.map(rent => {
     const client = clientsData.find(client => client.IdCliente === rent.IdCliente)
     const purchaseOrder = purchaseOrderData.find(purchaseOrder => purchaseOrder.IdAlquiler === rent.IdAlquiler)
-    const negativeRecord = negativeRecordsData.find(negativeRecord => negativeRecord.IdCliente === rent.IdCliente)
+    const negativeRecord = negativeRecordsData.find(negativeRecord => negativeRecord.IdAlquiler === rent.IdAlquiler)
     return {
       initialDate: rent.FechaInicialAlquiler,
       finalDate: rent.FechaFinlAlquiler,
       cedula: client.Cedula,
       name: client.Nombre,
       lastName: client.Apellido,
-      negativeRecord: negativeRecord ? true : false,
+      negativeRecord: negativeRecord ? negativeRecord : false,
       idPurchaseOrder: purchaseOrder ? purchaseOrder.IdOrdenCompra : null,
     }
   })
@@ -42,6 +42,15 @@ export const useRentalRefundData = () => {
   const [statusNegativeRecords, setStatusNegativeRecords] = useState(null)
   const [negativeRecords, setNegativeRecords] = useState(null)
   const [error, setError] = useState(null);
+
+  const updateTableData = useCallback(
+    (data) => {
+      console.log("use callback:", data)
+      setTableData(data)
+    },
+    [],
+  )
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -96,5 +105,6 @@ export const useRentalRefundData = () => {
     negativeRecords,
     tableData,
     error,
+    updateTableData,
   ];
 };

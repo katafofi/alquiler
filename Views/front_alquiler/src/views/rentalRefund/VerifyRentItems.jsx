@@ -14,12 +14,17 @@ const VerifyRentItems = ({
   articles,
   accesories,
   statusNegativeRecords,
+  tableData,
+  updateTableData
 }) => {
   const [articlesTable, setArticlesTable] = useState(null)
   const [accesoriesTable, setAccesoriesTable] = useState(null)
   const [IdCliente, setIdCliente] = useState(null)
+  const [IdAlquiler, setIdAlquiler] = useState(null)
 
   const FORM = "negativeRecord"
+  const FORMRENTING = "renting"
+  const EMAILFORM = "send-email"
   const PORT = "3003";
   const URL = "http://localhost:";
 
@@ -33,7 +38,7 @@ const VerifyRentItems = ({
       articles &&
       accesories
     ) {
-      const { filteredArticles, filteredAccesories, selectedClientId } = getNegativeRecordInfo(
+      const { filteredArticles, filteredAccesories, selectedClientId, selectedRentId } = getNegativeRecordInfo(
         selectedIdPurchaseOrder,
         rents,
         purchaseOrders,
@@ -46,6 +51,7 @@ const VerifyRentItems = ({
       setArticlesTable(filteredArticles)
       setAccesoriesTable(filteredAccesories)
       setIdCliente(selectedClientId)
+      setIdAlquiler(selectedRentId)
     }
   }, [
     selectedIdPurchaseOrder,
@@ -60,6 +66,59 @@ const VerifyRentItems = ({
     setSelectedIdPurchaseOrder(null)
   }
 
+  const getEmailInfo = (idNegativeRecord, IdOrdenCompra) => {
+    const newClient = clients.find(client => client.IdCliente == rents.find(rent => rent.IdAlquiler == IdAlquiler).IdCliente)
+
+    const newNegativeRecord = statusNegativeRecords.find(el => el.IdEstadoRegistroNegativo == idNegativeRecord)
+
+    const newEmailInfo = {
+      IdCliente: newClient.IdCliente,
+      cedula: newClient.Cedula,
+      name: newClient.Nombre,
+      lastName: newClient.Apellido,
+      description: newNegativeRecord.Descripcion,
+      createdAt: (new Date()).toLocaleDateString('es-CO', { timeZone: 'UTC' }),
+    }
+
+    return newEmailInfo
+  }
+
+  const sendNegativeRecord = async (emailData) => {
+    try {
+      const response = await fetch(`${URL}${PORT}/${EMAILFORM}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(emailData),
+      });
+      const data = await response.json();
+      return data
+    } catch (error) {
+      console.log("Ha ocurrido un error al enviar el email.", error);
+    }
+  }
+
+  const updateRent = async (IdAlquiler) => {
+    const updatedRent = rents.find(rent => rent.IdAlquiler === IdAlquiler)
+    try {
+      const response = await fetch(`${URL}${PORT}/${FORMRENTING}/${IdAlquiler}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          ...updatedRent,
+          IdEstadoAlquiler: 2
+        }),
+      });
+      const data = await response.json();
+      return data
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   const handleCreate = async (IdEstadoRegistroNegativo) => {
     try {
       const response = await fetch(`${URL}${PORT}/${FORM}`, {
@@ -67,7 +126,12 @@ const VerifyRentItems = ({
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ IdCliente, IdEstadoRegistroNegativo }),
+        body: JSON.stringify({
+          IdCliente,
+          IdEstadoRegistroNegativo,
+          IdOrdenCompra: selectedIdPurchaseOrder,
+          IdAlquiler
+        }),
       });
       const data = await response.json();
       return data
@@ -78,16 +142,20 @@ const VerifyRentItems = ({
 
   const handleSubmit = async (idNegativeRecord) => {
     try {
-      const data = await handleCreate(idNegativeRecord);
-      if (data) updateActiveKeys(PREVKEYS)
+      const negativeRecordData = await handleCreate(idNegativeRecord);
+      const rentData = await updateRent(IdAlquiler)
+      updateTableData(tableData
+        .map(el => el.idPurchaseOrder === negativeRecordData.IdOrdenCompra
+          ? { ...el, negativeRecord: negativeRecordData }
+          : el
+        ))
+      if (idNegativeRecord !== 1) sendNegativeRecord(getEmailInfo(idNegativeRecord, negativeRecordData.IdOrdenCompra))
+      if (negativeRecordData) updateActiveKeys(PREVKEYS)
     } catch (error) {
       console.error("Error al crear:", error);
     }
-
   };
 
-
-  // console.log("Hello:", statusNegativeRecords)
   return (
     <Container>
       <Row>

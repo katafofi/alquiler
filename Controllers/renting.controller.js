@@ -51,7 +51,7 @@ const UpdateRenting = async (req, res) => {
     if (result == 0) {
       res.status(404).json({ error: "Alquiler no actualizada o encontrada" });
     } else {
-      res.status(201).json({ message: "Alquiler  actualizada" });
+      res.status(201).json({ message: "Alquiler  actualizada", result: result });
     }
   } catch (error) {
     res.status(500).json({ message: error.message });

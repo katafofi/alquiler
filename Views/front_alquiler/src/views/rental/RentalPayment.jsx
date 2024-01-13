@@ -27,6 +27,7 @@ const NewPayments = (
   const [TipoPagoOptions, setTipoPagoOptions] = useState([]);
 
   const FORM = "payments";
+  const FORMPURCHASEORDER = "PuchaseOrder"
   const URL = "http://localhost:";
   const PORT = "3003";
 
@@ -37,7 +38,7 @@ const NewPayments = (
     handleGetTipoPago();
   }, []);
 
-  const getTotalPrice = () => addedArticles.reduce((counter, current) => counter + parseInt(current.Precio), 0).toLocaleString()
+  const getTotalPrice = () => addedArticles.reduce((counter, current) => counter + parseInt(current.Precio), 0)
 
   const handleGetEstadoPago = async () => {
     try {
@@ -99,11 +100,28 @@ const NewPayments = (
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const data = await handleCreate();
-      updateRentalStatus({ payment: data })
+      const paymentData = await handleCreate();
+      handleUpdateTotal()
+      updateRentalStatus({ payment: paymentData })
       updateActiveKeys(nextKeys)
     } catch (error) {
       console.error("Error al crear:", error);
+    }
+  };
+
+  const handleUpdateTotal = async () => {
+    try {
+      const response = await fetch(`${URL}${PORT}/${FORMPURCHASEORDER}/${idPurchaseOrder}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ ...rentalStatus.purchaseOrder, Total: getTotalPrice() }),
+      });
+      const data = await response.json();
+      return data
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -162,7 +180,7 @@ const NewPayments = (
           </Col>
           <Col>
             <h3>Total a pagar:</h3>
-            <h4>{addedArticles ? getTotalPrice() : 0} $</h4>
+            <h4>{addedArticles ? getTotalPrice().toLocaleString() : 0} $</h4>
           </Col>
         </Row>
       </Container>

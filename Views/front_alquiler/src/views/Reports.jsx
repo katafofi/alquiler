@@ -97,12 +97,13 @@ const createReport = async (data, reportType) => {
   if (reportType === 'semanal') {
     // Crear una nueva hoja 'CUENTAS SEMANA' con el resultado de SALDO_TOTAL y ABONO_TOTAL
     const hojaCuentasSemanaNueva = XLSX.utils.json_to_sheet([
-      { ABONO: data.abonoTotal[0].ABONO_TOTAL,
-        SALDO: data.saldoTotal[0].SALDO_TOTAL, 
-        SUMA: data.granTotal[0].SUMA_GENERAL, 
+      {
+        ABONO: data.abonoTotal[0].ABONO_TOTAL,
+        SALDO: data.saldoTotal[0].SALDO_TOTAL,
+        SUMA: data.granTotal[0].SUMA_GENERAL,
         GASTOS: data.gastoTotal[0].TOTAL_GASTOS_SEMANA,
         TOTAL: data.diferenciaTotal[0].TOTAL
-        }, // Agrega SALDO_TOTAL y ABONO_TOTAL como nuevas columnas
+      }, // Agrega SALDO_TOTAL y ABONO_TOTAL como nuevas columnas
       // Puedes agregar más transformaciones si es necesario
       ...data.cuentasSemana.map(row => ({
         ...row,
@@ -112,8 +113,6 @@ const createReport = async (data, reportType) => {
     ]);
     XLSX.utils.book_append_sheet(libro, hojaCuentasSemanaNueva, 'CUENTAS SEMANA');
   }
-
-
 
   XLSX.writeFile(libro, `reporte_${reportType}.xlsx`);
 }

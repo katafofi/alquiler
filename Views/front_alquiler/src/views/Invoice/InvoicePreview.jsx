@@ -15,11 +15,11 @@ const InvoicePreview = ({ id, invoiceModalActive, setInvoiceModalActive, }) => {
 
   const getTotalPrice = () => invoiceData.resultPurchareItemOrder.reduce((counter, current) => counter + parseInt(current.Precio), 0).toLocaleString()
 
-  useEffect(() => {
-    console.log("ID:", id)
-    console.log("Invoice data:", invoiceData)
-    console.log("Date: ", invoiceData.FechaInicialAlquiler.getUTCDay())
-  }, [invoiceData])
+  // useEffect(() => {
+  //   console.log("ID:", id)
+  //   console.log("Invoice data:", invoiceData)
+  //   console.log("Date: ", invoiceData.FechaInicialAlquiler.getUTCDay())
+  // }, [invoiceData])
 
   return (
     <Modal show={invoiceModalActive} onHide={() => setInvoiceModalActive(false)} size="lg">

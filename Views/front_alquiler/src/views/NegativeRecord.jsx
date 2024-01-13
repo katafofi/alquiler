@@ -78,7 +78,7 @@ const NegativeRecord = () => {
       description: newNegativeRecord.Descripcion,
       createdAt: newNegativeRecord.createdAt,
     }
-    // console.log(newTableData)
+
     return newTableData
   }
 
@@ -113,7 +113,6 @@ const NegativeRecord = () => {
     try {
       const response = await fetch(`${URL}${PORT}/${form}`);
       const data = await response.json();
-      // console.log("el get:", data)
       setForm(data);
       return data
     } catch (error) {
@@ -125,7 +124,6 @@ const NegativeRecord = () => {
     try {
       const response = await fetch(`${URL}${PORT}/Clients`);
       const data = await response.json();
-      // console.log("Datos cliente:", data)
       const newOptions = data.map((element) => ({
         value: element.IdCliente, //lo que selecciona en el back
         label: element.Cedula + " " + element.IdCliente, //lo que se ve en el selector
@@ -141,7 +139,6 @@ const NegativeRecord = () => {
     try {
       const response = await fetch(`${URL}${PORT}/StatusRegisterNegative`);
       const data = await response.json();
-      // console.log("Registro negativo:", data)
       const newOptions = data.map((element) => ({
         value: element.IdEstadoRegistroNegativo, //lo que selecciona en el back
         label: element.Descripcion + " " + element.IdEstadoRegistroNegativo, //lo que se ve en el selector
@@ -159,7 +156,6 @@ const NegativeRecord = () => {
       const response = await fetch(`${URL}${PORT}/${form}/${id}`, {
         method: "DELETE",
       });
-      console.log(response);
       setTableData((prev) =>
         prev.filter((info) => info.IdRegistroNegativo != id)
       );

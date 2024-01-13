@@ -26,7 +26,6 @@ const generateInvoice = async (id) => {
     data.FechaCompra = new Date(data.FechaCompra);
     data.FechaInicialAlquiler = new Date(data.FechaInicialAlquiler);
     data.FechaFinlAlquiler = new Date(data.FechaFinlAlquiler);
-    console.log("hola", calcTotalPrice(data.resultPurchareItemOrder))
     const { credit, balance, lastCredit } = calcCredit(data.payments, calcTotalPrice(data.resultPurchareItemOrder));
     data = {
       ...data,

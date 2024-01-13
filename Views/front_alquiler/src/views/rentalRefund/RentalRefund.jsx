@@ -36,6 +36,7 @@ const RentalRefund = () => {
     negativeRecords,
     tableData,
     error,
+    updateTableData
   ] = useRentalRefundData()
 
   const updateActiveKeys = (newActiveKeys) => setKeyStatus(keyStatus.map(el => {
@@ -80,6 +81,8 @@ const RentalRefund = () => {
                 articles={articles}
                 accesories={accesories}
                 statusNegativeRecords={statusNegativeRecords}
+                tableData={tableData}
+                updateTableData={updateTableData}
               />
             }
           </Accordion.Body>
