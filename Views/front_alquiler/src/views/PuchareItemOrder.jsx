@@ -6,6 +6,7 @@ import TabletCataComponente from "../components/provider/Table/Table";
 import PaginateCataComponente from "../components/provider/Paginate/Paginate";
 import { SelectCataComponente } from "../components/provider/Select/Select";
 import SearchCataComponente from "../components/provider/Search/Search";
+import InvoicePreview from "./Invoice/InvoicePreview";
 
 const PuchareItemOrder = () => {
   const [forms, setForm] = useState([]);
@@ -17,12 +18,14 @@ const PuchareItemOrder = () => {
     IdArticulo: ""
   });
   const [selected, setSelected] = useState(null);
+  const [lastSelectedPurchaseId, setLastSelectedPurchaseId] = useState(null);
   const [deleted, setDeleted] = useState(false);
   const [deletedM, setDeletedM] = useState(false);
   const [options, setOptions] = useState([]);
   const [options2, setOptions2] = useState([]);
   const [currentPage, setCurrentPage] = useState([]);
   const [filter, setFilter] = useState("")
+  const [invoiceModalActive, setInvoiceModalActive] = useState(false)
 
   const PerPage = 10;
   const form = "PuchaseItemOrder";
@@ -92,7 +95,6 @@ const PuchareItemOrder = () => {
       const response = await fetch(`${URL}${PORT}/${form}/${id}`, {
         method: "DELETE",
       });
-      console.log(response);
       setForm((prev) => prev.filter((info) => info.IdArticuloOrdenCompra != id));
       setDeleted(true);
       if (selected && selected.IdArticuloOrdenCompra == id) {
@@ -122,7 +124,6 @@ const PuchareItemOrder = () => {
           },
           body: JSON.stringify(ids),
         });
-        console.log(response);
         setDeletedM(true);
       } catch (error) {
         console.log(error);
@@ -133,6 +134,7 @@ const PuchareItemOrder = () => {
 
   const handleEdit = async (news) => {
     setSelected(news);
+    setLastSelectedPurchaseId(news.IdOrdenCompra)
     setNews({
       IdArticuloOrdenCompra: news.IdArticuloOrdenCompra,
       Cantidad: news.Cantidad,
@@ -216,7 +218,6 @@ const PuchareItemOrder = () => {
       Precio: "",
       IdOrdenCompra: "",
       IdArticulo: ""
-
     });
   };
 
@@ -227,7 +228,8 @@ const PuchareItemOrder = () => {
 
       if (window.confirm("¿Estás seguro de que quieres actualizar este?")) {
         try {
-          handleUpdate();
+          await handleUpdate();
+          setInvoiceModalActive(true)
         } catch (error) {
           console.error("Error al actualizar:", error);
         }
@@ -255,6 +257,13 @@ const PuchareItemOrder = () => {
   return (
     <>
       <div className="container mt-4">
+        {invoiceModalActive && lastSelectedPurchaseId &&
+          <InvoicePreview
+            id={lastSelectedPurchaseId}
+            invoiceModalActive={invoiceModalActive}
+            setInvoiceModalActive={setInvoiceModalActive}
+          />
+        }
         <div className="row">
           <div className="col">
             <TitleCataComponente title="articulo Orden Compra" size="h6" />
@@ -282,7 +291,7 @@ const PuchareItemOrder = () => {
                   name={"Cantidad"}
                   label={"Cantidad"}
                 />
-                 <InputCataComponente
+                <InputCataComponente
                   value={news.Precio}
                   onChange={handleInput}
                   placeholder={"Ingrese Precio"}
@@ -304,7 +313,7 @@ const PuchareItemOrder = () => {
 
 
                 <SelectCataComponente
-                 // required
+                  // required
                   label={" Seleccionar un Accesorio -"}
                   name={"IdArticulo"}
                   value={news.IdArticulo}

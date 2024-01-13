@@ -154,6 +154,7 @@ const Rental = () => {
                 idPurchaseOrder={idPurchaseOrder}
                 updateActiveKeys={updateActiveKeys}
                 rentalStatus={rentalStatus}
+                updateRentalStatus={updateRentalStatus}
               />
               :
               <p>Cargando...</p>}

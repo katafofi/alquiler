@@ -1,15 +1,20 @@
 import { useState } from 'react'
-import { Button, Container } from 'react-bootstrap'
+import { Button, Col, Container, Row } from 'react-bootstrap'
 import InvoicePreview from '../Invoice/InvoicePreview'
+import { useNavigate } from 'react-router'
+
+
 
 const NewInvoice = (
   {
     idPurchaseOrder,
     updateActiveKeys,
-    rentalStatus
+    rentalStatus,
   }
 ) => {
   const [invoiceModalActive, setInvoiceModalActive] = useState(false)
+  const navigate = useNavigate()
+
   const prevKeys = ['2', '3', '4']
 
   const FORM = "payments";
@@ -27,18 +32,30 @@ const NewInvoice = (
   };
 
 
+
   return (
     <Container fluid>
-      <Button variant='primary' onClick={() => setInvoiceModalActive(!invoiceModalActive)} >
-        Generar factura
-      </Button>
-      <Button variant='danger' onClick={() => {
-        console.log(rentalStatus.payment)
-        handleCancelPayment(rentalStatus.payment.IdPago)
-        updateActiveKeys(prevKeys)
-      }} >
-        Cancelar Pago
-      </Button>
+      <Row>
+        <Col>
+          <Button variant='primary' onClick={() => setInvoiceModalActive(!invoiceModalActive)} >
+            Generar factura
+          </Button>
+        </Col>
+        <Col>
+          <Button variant='primary' onClick={() => navigate(0)} >
+            Nuevo Alquiler
+          </Button>
+        </Col>
+        <Col>
+          <Button variant='danger' onClick={() => {
+            handleCancelPayment(rentalStatus.payment.IdPago)
+            updateActiveKeys(prevKeys)
+          }} >
+            Cancelar Pago
+          </Button>
+        </Col>
+
+      </Row>
       {invoiceModalActive &&
         <InvoicePreview
           id={idPurchaseOrder}
