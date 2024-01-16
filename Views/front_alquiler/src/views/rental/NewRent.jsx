@@ -2,6 +2,8 @@ import ButtonCataComponente from "../../components/provider/Button/Button";
 import InputCataComponente from "../../components/provider/Input/Input";
 import { SelectCataComponente } from "../../components/provider/Select/Select";
 import { useEffect, useState } from 'react'
+import FindClient from "./FindClient";
+import { Col, Container, Row } from "react-bootstrap";
 
 const URL = "http://localhost:";
 const PORT = "3003";
@@ -87,7 +89,7 @@ const NewRent = ({ updateActiveKeys, updateRentalStatus }) => {
       const data = await response.json();
       const newOptions = data.map((element) => ({
         value: element.IdCliente, //lo que selecciona en el back
-        label: element.Nombre + " - " + element.Apellido + element.IdCliente, //lo que se ve en el selector
+        label: element.Nombre + " " + element.Apellido, //lo que se ve en el selector
       }));
       setClienteOptions(newOptions);
     } catch (error) {
@@ -116,61 +118,55 @@ const NewRent = ({ updateActiveKeys, updateRentalStatus }) => {
   }, []);
 
   return (
-    <>
-      <div className="container mt-4">
-        <div className="row">
-          <div className="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
-            <form onSubmit={handleSubmit} className="mb-4">
-              <div className="form-row">
 
-                <InputCataComponente
-                  value={news.FechaInicialAlquiler}
-                  onChange={handleInput}
-                  placeholder={"Ingrese descripcion"}
-                  id={"FechaInicialAlquiler"}
-                  type={"date"}
-                  name={"FechaInicialAlquiler"}
-                  label={"FechaInicialAlquiler"}
-                />
-                <InputCataComponente
-                  value={news.FechaFinlAlquiler}
-                  onChange={handleInput}
-                  placeholder={"Ingrese descripcion"}
-                  id={"FechaFinlAlquiler"}
-                  type={"date"}
-                  name={"FechaFinlAlquiler"}
-                  label={"FechaFinlAlquiler"}
-                />
+    <Container className={"mt-4"}>
+      <Row>
+        <Col xs={4}>
+          <form onSubmit={handleSubmit} className="mb-4">
+            <div className="form-row">
+              <InputCataComponente
+                value={news.FechaInicialAlquiler}
+                onChange={handleInput}
+                placeholder={"Ingrese descripcion"}
+                id={"FechaInicialAlquiler"}
+                type={"date"}
+                name={"FechaInicialAlquiler"}
+                label={"FechaInicialAlquiler"}
+              />
+              <InputCataComponente
+                value={news.FechaFinlAlquiler}
+                onChange={handleInput}
+                placeholder={"Ingrese descripcion"}
+                id={"FechaFinlAlquiler"}
+                type={"date"}
+                name={"FechaFinlAlquiler"}
+                label={"FechaFinlAlquiler"}
+              />
 
-                {/* <SelectCataComponente
-                  required
-                  label={"- Seleccionar tienda -"}
-                  name={"IdTienda"}
-                  value={news.IdTienda}
-                  options={TiendaOptions}
-                  onChange={handleSelect}
-                /> */}
+              <SelectCataComponente
+                required
+                label={"- Seleccionar Cliente "}
+                name={"IdCliente"}
+                value={news.IdCliente}
+                options={ClienteOptions}
+                onChange={handleSelect}
+              />
 
-                <SelectCataComponente
-                  required
-                  label={"- Seleccionar Cliente "}
-                  name={"IdCliente"}
-                  value={news.IdCliente}
-                  options={ClienteOptions}
-                  onChange={handleSelect}
-                />
 
-                <ButtonCataComponente
-                  type="submit"
-                  className="btn btn-primary btn-block"
-                  title="Guardar"
-                />
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-    </>
+
+              <ButtonCataComponente
+                type="submit"
+                className="btn btn-primary btn-block"
+                title="Guardar"
+              />
+            </div>
+          </form>
+        </Col>
+        <Col xs={8}>
+          <FindClient setNews={setNews} tableData={ClienteOptions} />
+        </Col>
+      </Row>
+    </Container>
   )
 }
 

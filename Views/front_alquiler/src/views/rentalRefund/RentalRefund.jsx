@@ -50,8 +50,6 @@ const RentalRefund = () => {
     setActiveKeys(getActiveKeys(keyStatus))
   }, [keyStatus])
 
-  // console.log("Rents", rents, "PurchaseOrders:", purchaseOrders, "Clients", clients, "statusNegativeRecords", statusNegativeRecords, "negativeRecords", negativeRecords, "tableData:", tableData)
-
   return (
     <Container fluid className='mb-5'>
       <Accordion activeKey={activeKeys}>

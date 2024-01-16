@@ -256,19 +256,6 @@ const generateInvoice = async (req, res) => {
     } else {
       const responseInvoice = await handleGetInvoiceById(result.IdOrdenCompra);
       exportPdf2(responseInvoice)
-      // console.log("Hola:", responseInvoice)
-      // const responseEmploye = await handleGetByIdEmploye(result.IdEmpleado);
-      // const responseRenting = await handleGetByIdAlquiler(result.IdAlquiler);
-      // const responseClient = await handleGetByIdClient(responseRenting?.message?.IdCliente);
-      // const responseStore = await handleGetByIdStore(responseRenting?.message?.IdTienda);
-      // const responsePuchaseOrder = await handleGetByIdPuchaseOrder(result.IdOrdenCompra);
-      // const responsePuchaseItemOrder = await handleGetByIdPuchaseItemOrder(responsePuchaseOrder?.message?.IdOrdenCompra);
-      //const responseItem = await handleGetByIdItems(responseRenting?.message?.IdArticulo);
-      //const responsePuchaseAccesoriesOrder = await handleGetByIdPuchasePuchaseAccesoriesOrder(responsePuchaseOrder?.message?.IdOrdenCompra);
-
-
-      // exportPdf(result, responseEmploye, responseRenting, responseClient, responseStore, responsePuchaseOrder, responsePuchaseItemOrder);
-      // res.status(200).json({ message: result });
     }
   } catch (error) {
     res.status(500).json({ message: error.message });

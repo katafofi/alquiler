@@ -7,6 +7,18 @@ import PaginateCataComponente from "../components/provider/Paginate/Paginate";
 import { SelectCataComponente } from "../components/provider/Select/Select";
 import SearchCataComponente from "../components/provider/Search/Search";
 
+
+function formatearFecha(fechaString) {
+  let fecha = new Date(fechaString);
+
+  let año = fecha.getUTCFullYear();
+  // Agregar 1 al mes porque getMonth() devuelve un índice basado en cero
+  let mes = (fecha.getUTCMonth() + 1).toString().padStart(2, '0');
+  let dia = fecha.getUTCDate().toString().padStart(2, '0');
+
+  return `${año}-${mes}-${dia}`;
+}
+
 const PuchaseOrder = () => {
   const [forms, setForm] = useState([]);
   const [news, setNews] = useState({
@@ -14,6 +26,7 @@ const PuchaseOrder = () => {
     FechaCompra: "",
     IdAlquiler: "",
     IdEmpleado: "",
+    Total: 0,
   });
   const [selected, setSelected] = useState(null);
   const [deleted, setDeleted] = useState(false);
@@ -171,7 +184,7 @@ const PuchaseOrder = () => {
     setSelected(news);
     setNews({
       IdOrdenCompra: news.IdOrdenCompra,
-      FechaCompra: news.FechaCompra,
+      FechaCompra: formatearFecha(news.FechaCompra),
       IdAlquiler: news.IdAlquiler,
       IdEmpleado: news.IdEmpleado,
       Total: news.Total

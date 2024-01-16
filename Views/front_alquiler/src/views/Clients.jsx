@@ -7,23 +7,38 @@ import PaginateCataComponente from "../components/provider/Paginate/Paginate";
 import { SelectCataComponente } from "../components/provider/Select/Select";
 import SearchCataComponente from "../components/provider/Search/Search";
 
+const newsDefault = {
+  Nombre: "",
+  Apellido: "",
+  Cedula: "",
+  Correo: "",
+  Direccion: "",
+  Barrio: "",
+  Telefono: "",
+  ReferenciaPersonalNombre: "",
+  ReferenciaPersonalTelefono: "",
+  FotoDocumento: "",
+  FotoServicioPublico: "",
+  Fecha: "",
+}
+
+function verificarDatos(objeto) {
+  for (let clave in objeto) {
+    if (clave === "FotoDocumento" || clave === "FotoServicioPublico") {
+      continue;
+    }
+    if (objeto[clave] === "") {
+      return false;
+    }
+  }
+  return true;
+}
+
 const Clients = () => {
   const [forms, setForm] = useState([]);
   const [fotoDocumento, setFotoDocumento] = useState(null);
   const [fotoServicioPublico, setFotoServicioPublico] = useState(null);
-  const [news, setNews] = useState({
-    //IdCategoria
-    Nombre: "",
-    Apellido: "",
-    Correo: "",
-    Direccion: "",
-    Telefono: "",
-    ReferenciaPersonalNombre: "",
-    ReferenciaPersonalTelefono: "",
-    FotoDocumento: "",
-    FotoServicioPublico: "",
-    Fecha: "",
-  });
+  const [news, setNews] = useState(newsDefault);
   const [selected, setSelected] = useState(null);
   const [deleted, setDeleted] = useState(false);
   const [deletedM, setDeletedM] = useState(false);
@@ -33,7 +48,6 @@ const Clients = () => {
 
   const PerPage = 10;
   const form = "Clients";
-
   const URL = "http://localhost:";
   const PORT = "3003";
 
@@ -223,6 +237,9 @@ const Clients = () => {
     }
   };
 
+
+
+
   const handleUpdate = async () => {
     try {
       const formData = new FormData();
@@ -296,10 +313,14 @@ const Clients = () => {
 
 
     } else {
-      try {
-        handleCreate();
-      } catch (error) {
-        console.error("Error al crear:", error);
+      if (verificarDatos(news)) {
+        try {
+          handleCreate();
+        } catch (error) {
+          console.error("Error al crear:", error);
+        }
+      } else {
+        alert("Porfavor ingrese todos los datos obligatorios antes de guardar.")
       }
     }
   };
@@ -316,6 +337,10 @@ const Clients = () => {
       .includes(filter.toString().toLowerCase())
     )
     .slice(indexOfFirst, indexOfLast);
+
+  useEffect(() => {
+    console.log(current)
+  }, [current])
 
   return (
     <>
@@ -387,7 +412,7 @@ const Clients = () => {
                   name={"Direccion"}
                   label={"Direccion"}
                 />
-                 <InputCataComponente
+                <InputCataComponente
                   value={news.Barrio}
                   onChange={handleInput}
                   placeholder={"Ingrese barrio"}
@@ -470,7 +495,10 @@ const Clients = () => {
               handleEdit={handleEdit}
               handleDeleteM={handleDeleteM}
               idField={"IdCliente"}
-              Fields={["Nombre", "Apellido", "Correo", "Cedula", "Direccion",  "Barrio", "FotoDocumento", "FotoServicioPublico"]}
+              Fields={["Nombre", "Apellido", "Correo", "Cedula", "Direccion", "Barrio",
+                // "FotoDocumento",
+                // "FotoServicioPublico"
+              ]}
             />
             <PaginateCataComponente
               data={forms}

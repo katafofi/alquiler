@@ -16,7 +16,6 @@ const Store = () => {
     Direccion: "",
     Telefono: "",
     Correo: "",
-    Logo: "",
   });
   const [selected, setSelected] = useState(null);
   const [deleted, setDeleted] = useState(false);
@@ -74,7 +73,6 @@ const Store = () => {
               Direccion: "",
               Telefono: "",
               Correo: "",
-              Logo: "",
             });
           }
         } catch (error) {
@@ -117,7 +115,6 @@ const Store = () => {
       Direccion: news.Direccion,
       Telefono: news.Telefono,
       Correo: news.Correo,
-      Logo: news.Logo,
     });
   };
 
@@ -139,7 +136,6 @@ const Store = () => {
         Direccion: "",
         Telefono: "",
         Correo: "",
-        Logo: "",
       });
     } catch (error) {
       console.log(error);
@@ -180,7 +176,6 @@ const Store = () => {
         Direccion: news.Direccion,
         Telefono: news.Telefono,
         Correo: news.Correo,
-        Logo: news.Logo,
       }),
     });
     const data = await response.json();
@@ -195,7 +190,6 @@ const Store = () => {
       Direccion: "",
       Telefono: "",
       Correo: "",
-      Logo: "",
     });
   };
 
@@ -252,12 +246,12 @@ const Store = () => {
               type={"search"}
               name={"filter"}
               id={"filter"}
-              placeholder={"Filtrar portienda Estado"} //no es necesario
+              placeholder={"Filtrar por tienda Estado"} //no es necesario
             />
           </div>
         </div>
         <div className="row">
-        <div className="form-row" style={{ overflowY: 'scroll', height: '23em' }}>
+          <div className="form-row" style={{ overflowY: 'scroll', height: '23em' }}>
             <form onSubmit={handleSubmit} className="mb-4">
               <div className="form-row">
                 <InputCataComponente
@@ -305,15 +299,6 @@ const Store = () => {
                   type={"email"}
                   name={"Correo"}
                   label={"Correo Electrónico"}
-                />
-                <InputCataComponente
-                  value={news.Logo}
-                  onChange={handleInput}
-                  placeholder={"Ingrese ruta o nombre del logo"}
-                  id={"Logo"}
-                  type={"text"}
-                  name={"Logo"}
-                  label={"Logo de la Tienda"}
                 />
 
                 <ButtonCataComponente
