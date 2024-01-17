@@ -2,27 +2,25 @@
 const Store = require("../Models/store.model");
 
 const CreateStore = async (req, res) => {
-  const {
-        
+  const {        
     Nit, 
     Nombre, 
     Direccion, 
     Telefono,         
-    Correo,         
+    Correo,       
     
    
   } = req.body;
 
   try {
-    const StoreCreate = await  Store.create({
-         
-      Nit, 
-      Nombre, 
-      Direccion, 
-      Telefono,         
-      Correo,         
-     
-  
+    const StoreCreate = await Store.create({
+
+      Nit,
+      Nombre,
+      Direccion,
+      Telefono,
+      Correo,
+
     });
     res.status(200).json(StoreCreate);
   } catch (error) {
@@ -58,10 +56,10 @@ const UpdateStore = async (req, res) => {
         where: { IdTienda },
       }
     );
-    if(result == 0){
-        res.status(404).json({ error: "Tienda no actualizada o encontrada"});
-    }else{
-        res.status(201).json({ message: "Tienda actualizada"});
+    if (result == 0) {
+      res.status(404).json({ error: "Tienda no actualizada o encontrada" });
+    } else {
+      res.status(201).json({ message: "Tienda actualizada" });
     }
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -70,26 +68,26 @@ const UpdateStore = async (req, res) => {
 
 const DeleteStore = async (req, res) => {
   const { IdTienda } = req.params;
-  const result = await Store.destroy({where: { IdTienda} })
+  const result = await Store.destroy({ where: { IdTienda } })
   try {
-    if(result == 0){
-        res.status(404).json({ error: "Tienda eliminado o encontrado"});
-    }else{
-        res.status(201).json({ message: "cTienda eliminada"});
+    if (result == 0) {
+      res.status(404).json({ error: "Tienda eliminado o encontrado" });
+    } else {
+      res.status(201).json({ message: "cTienda eliminada" });
     }
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
-const DeleteMultipleStore = async(req, res) => {
+const DeleteMultipleStore = async (req, res) => {
   const IdTiendas = req.body
-  const result = await Store.destroy({where: { IdTienda: IdTiendas }})
+  const result = await Store.destroy({ where: { IdTienda: IdTiendas } })
   try {
-    if(result == 0){
-        res.status(404).json({ error: "Tiendasno eliminados o encontrados"});
-    }else{
-        res.status(201).json({ message: "Tiendas eliminados"});
+    if (result == 0) {
+      res.status(404).json({ error: "Tiendasno eliminados o encontrados" });
+    } else {
+      res.status(201).json({ message: "Tiendas eliminados" });
     }
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -99,19 +97,19 @@ const DeleteMultipleStore = async(req, res) => {
 const FindOneStoreById = async (req, res) => {
   const { IdTienda } = req.params;
   try {
-    const result = await Store.findOne({ where: { IdTienda} })
-    
-    if(result == 0){
-        res.status(404).json({ error: "Tienda no encontrado"});
-    }else{
-        res.status(200).json({ message: result});
+    const result = await Store.findOne({ where: { IdTienda } })
+
+    if (result == 0) {
+      res.status(404).json({ error: "Tienda no encontrado" });
+    } else {
+      res.status(200).json({ message: result });
     }
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
-const FindAllStore= async (req, res) => {
+const FindAllStore = async (req, res) => {
   try {
     const result = await Store.findAll();
     res.status(200).json(result);

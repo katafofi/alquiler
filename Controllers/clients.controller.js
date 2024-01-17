@@ -19,8 +19,8 @@ const CreateClients = async (req, res) => {
   const FotoDocumento = req.files && req.files['FotoDocumento'] ? req.files['FotoDocumento'][0].path : null;
   const FotoServicioPublico = req.files && req.files['FotoServicioPublico'] ? req.files['FotoServicioPublico'][0].path : null;
 
-  console.log(FotoDocumento)
-  console.log(FotoServicioPublico)
+  // console.log(FotoDocumento)
+  // console.log(FotoServicioPublico)
   //organizar que se guarden son los dos que vienen desde el cb multer
   try {
     const ClientsCreate = await Clients.create({

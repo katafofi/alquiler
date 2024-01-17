@@ -252,12 +252,12 @@ const Store = () => {
               type={"search"}
               name={"filter"}
               id={"filter"}
-              placeholder={"Filtrar portienda Estado"} //no es necesario
+              placeholder={"Filtrar por tienda Estado"} //no es necesario
             />
           </div>
         </div>
         <div className="row">
-        <div className="form-row" style={{ overflowY: 'scroll', height: '23em' }}>
+          <div className="form-row" style={{ overflowY: 'scroll', height: '23em' }}>
             <form onSubmit={handleSubmit} className="mb-4">
               <div className="form-row">
                 <InputCataComponente

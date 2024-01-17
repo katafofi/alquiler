@@ -6,6 +6,18 @@ import TabletCataComponente from "../components/provider/Table/Table";
 import PaginateCataComponente from "../components/provider/Paginate/Paginate";
 import { SelectCataComponente } from "../components/provider/Select/Select";
 import SearchCataComponente from "../components/provider/Search/Search";
+import InvoicePreview from "./Invoice/InvoicePreview";
+
+function formatearFecha(fechaString) {
+  let fecha = new Date(fechaString);
+
+  let año = fecha.getUTCFullYear();
+  // Agregar 1 al mes porque getMonth() devuelve un índice basado en cero
+  let mes = (fecha.getUTCMonth() + 1).toString().padStart(2, '0');
+  let dia = fecha.getUTCDate().toString().padStart(2, '0');
+
+  return `${año}-${mes}-${dia}`;
+}
 
 const Renting = () => {
   const [forms, setForm] = useState([]);
@@ -17,6 +29,7 @@ const Renting = () => {
     IdCliente: "",
   });
   const [selected, setSelected] = useState(null);
+  const [lastSelectedPurchaseId, setLastSelectedPurchaseId] = useState(null);
   const [deleted, setDeleted] = useState(false);
   const [deletedM, setDeletedM] = useState(false);
   const [options, setOptions] = useState([]);
@@ -24,6 +37,8 @@ const Renting = () => {
   const [filter, setFilter] = useState("");
   const [ClienteOptions, setClienteOptions] = useState([]);
   const [TiendaOptions, setTiendaOptions] = useState([]);
+  const [invoiceModalActive, setInvoiceModalActive] = useState(false)
+  const [purchaseOrders, setPurchaseOrders] = useState(null)
 
   const PerPage = 10;
   const form = "renting";
@@ -33,12 +48,14 @@ const Renting = () => {
 
   useEffect(() => {
     handleGet();
+    handleGetPurchaseOrders()
     handleGetTienda();
     handleGetCliente();
   }, [selected]);
 
   useEffect(() => {
     handleGet();
+    handleGetPurchaseOrders()
     handleGetTienda();
     handleGetCliente();
     setDeleted(false);
@@ -46,6 +63,7 @@ const Renting = () => {
 
   useEffect(() => {
     handleGet();
+    handleGetPurchaseOrders()
     handleGetTienda();
     handleGetCliente();
     setDeletedM(false);
@@ -56,6 +74,16 @@ const Renting = () => {
       const response = await fetch(`${URL}${PORT}/${form}`);
       const data = await response.json();
       setForm(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleGetPurchaseOrders = async () => {
+    try {
+      const response = await fetch(`${URL}${PORT}/PuchaseOrder`);
+      const data = await response.json();
+      setPurchaseOrders(data);
     } catch (error) {
       console.log(error);
     }
@@ -125,13 +153,13 @@ const Renting = () => {
       console.log(error);
     }
   };
-
   const handleEdit = async (news) => {
     setSelected(news);
+    setLastSelectedPurchaseId(purchaseOrders.find(order => order.IdAlquiler === news.IdAlquiler).IdOrdenCompra)
     setNews({
       IdAlquiler: news.IdAlquiler,
-      FechaInicialAlquiler: news.FechaInicialAlquiler,
-      FechaFinlAlquiler: news.FechaFinlAlquiler,
+      FechaInicialAlquiler: formatearFecha(news.FechaInicialAlquiler),
+      FechaFinlAlquiler: formatearFecha(news.FechaFinlAlquiler),
       IdTienda: news.IdTienda,
       IdCliente: news.IdCliente,
     });
@@ -219,7 +247,8 @@ const Renting = () => {
 
     if (selected) {
       try {
-        handleUpdate();
+        await handleUpdate();
+        setInvoiceModalActive(true)
       } catch (error) {
         console.error("Error al actualizar:", error);
       }
@@ -249,6 +278,13 @@ const Renting = () => {
   return (
     <>
       <div className="container mt-4">
+        {invoiceModalActive && lastSelectedPurchaseId &&
+          <InvoicePreview
+            id={lastSelectedPurchaseId}
+            invoiceModalActive={invoiceModalActive}
+            setInvoiceModalActive={setInvoiceModalActive}
+          />
+        }
         <div className="row">
           <div className="col">
             <TitleCataComponente title="Alquiler" size="h6" />

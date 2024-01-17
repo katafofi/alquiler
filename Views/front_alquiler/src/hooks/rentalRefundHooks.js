@@ -45,7 +45,6 @@ export const useRentalRefundData = () => {
 
   const updateTableData = useCallback(
     (data) => {
-      console.log("use callback:", data)
       setTableData(data)
     },
     [],

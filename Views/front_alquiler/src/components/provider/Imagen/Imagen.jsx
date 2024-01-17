@@ -5,7 +5,7 @@ const ImagenCataComponente = (props) => {
   const { imageName } = useParams();
 
   const imageNames = imageName ? imageName : props.name
-  const imageUrl = `http://localhost:3003/assets/${imageNames}.jpg`;
+  const imageUrl = `http://localhost:3003/assets/${imageNames}`;
 
   const open = () => {
     window.open(`/images/${imageNames}`, '_blank');

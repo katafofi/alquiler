@@ -1,23 +1,16 @@
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Button, Col, Container, Form, Row, Table } from 'react-bootstrap'
 
 const initTableDataRange = { init: 1, final: 10 }
 
-const FindPurchaseOrder = ({
-  tableData,
-  updateActiveKeys,
-  setSelectedIdPurchaseOrder
-}) => {
+const FindClient = ({ tableData, setNews }) => {
   const [inputFilter, setInputFilter] = useState(null)
   const [filteredTableData, setFilteredTableData] = useState(null)
   const [tableDataRange, setTableDataRange] = useState(initTableDataRange)
   const [page, setPage] = useState(1)
 
-  const NEXTKEYS = ['1']
-
   useEffect(() => {
-    if (tableData) setFilteredTableData(tableData
-      .filter(data => data.idPurchaseOrder && !data.negativeRecord).reverse())
+    if (tableData) setFilteredTableData(tableData.reverse())
   }, [tableData])
 
   useEffect(() => {
@@ -32,6 +25,7 @@ const FindPurchaseOrder = ({
           ?
           filteredTableData.length
           :
+
           page === Math.floor(filteredTableData.length / 10) + 1
             ?
             (page - 1) * 10 + filteredTableData.length % 10
@@ -46,7 +40,7 @@ const FindPurchaseOrder = ({
   const handleSubmit = (e) => {
     e.preventDefault()
     setFilteredTableData(tableData.filter(data => (
-      data.name + data.lastName).toLowerCase().replaceAll(" ", "").includes(inputFilter.toLowerCase().replaceAll(" ", ""))))
+      data.label).toLowerCase().replaceAll(" ", "").includes(inputFilter.toLowerCase().replaceAll(" ", ""))))
     setTableDataRange(initTableDataRange)
     setPage(1)
   }
@@ -60,9 +54,8 @@ const FindPurchaseOrder = ({
     }
   }
 
-  const handleSelect = (idPurchaseOrder) => {
-    setSelectedIdPurchaseOrder(idPurchaseOrder)
-    updateActiveKeys(NEXTKEYS)
+  const handleSelect = (idCliente) => {
+    setNews((prev) => ({ ...prev, IdCliente: idCliente }))
   }
 
   return (
@@ -71,7 +64,7 @@ const FindPurchaseOrder = ({
         <Form onSubmit={handleSubmit}>
           <Row>
             <Col xs={3}>
-              <Form.Control onChange={handleChange} />
+              <Form.Control onChange={handleChange} placeholder='Buscar por nombre' />
             </Col>
             <Col xs={1}>
               <Button variant="primary" type="submit">Buscar</Button>
@@ -113,28 +106,22 @@ const FindPurchaseOrder = ({
         </Form>
       </Row>
       <Row>
-        <Table>
+        <Table >
           <thead>
             <tr>
-              <th>Fecha Inicial</th>
-              <th>Fecha Final</th>
-              <th>Cedula</th>
+              <th>ID</th>
               <th>Nombre</th>
-              <th>Orden compra</th>
-              <th>Accion</th>
+              <th>Acción</th>
             </tr>
           </thead>
           <tbody>
             {filteredTableData &&
-              filteredTableData.reverse().slice(tableDataRange.init, tableDataRange.final).map((row, index) => (
+              filteredTableData.slice(tableDataRange.init, tableDataRange.final).map((row, index) => (
                 <tr key={index}>
-                  <td>{row.initialDate}</td>
-                  <td>{row.finalDate}</td>
-                  <td>{row.cedula}</td>
-                  <td>{row.name} {row.lastName}</td>
-                  <td>{row.idPurchaseOrder}</td>
+                  <td>{row.value}</td>
+                  <td>{row.label}</td>
                   <td>
-                    <Button onClick={() => handleSelect(row.idPurchaseOrder)}>
+                    <Button onClick={() => handleSelect(row.value)}>
                       Seleccionar
                     </Button>
                   </td>
@@ -149,4 +136,4 @@ const FindPurchaseOrder = ({
   )
 }
 
-export default FindPurchaseOrder
+export default FindClient

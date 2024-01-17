@@ -15,11 +15,10 @@ const InvoicePreview = ({ id, invoiceModalActive, setInvoiceModalActive, }) => {
 
   const getTotalPrice = () => invoiceData.resultPurchareItemOrder.reduce((counter, current) => counter + parseInt(current.Precio), 0).toLocaleString()
 
-  // useEffect(() => {
-  //   console.log("ID:", id)
-  //   console.log("Invoice data:", invoiceData)
-  //   console.log("Date: ", invoiceData.FechaInicialAlquiler.getUTCDay())
-  // }, [invoiceData])
+  useEffect(() => {
+    console.log("ID:", id)
+    console.log("Invoice data:", invoiceData)
+  }, [invoiceData])
 
   return (
     <Modal show={invoiceModalActive} onHide={() => setInvoiceModalActive(false)} size="lg">
@@ -53,7 +52,7 @@ const InvoicePreview = ({ id, invoiceModalActive, setInvoiceModalActive, }) => {
                   <p>Transv. 78 L No. 68 - 03 Sur 2do. Piso . Bosa Piamonte . Cel: 320 805 6350 - 320 805 8884</p>
                 </div>
                 <Row>
-                  <Col>
+                  <Col xs={3}>
                     <Table striped bordered hover size="sm">
                       <thead>
                         <tr>
@@ -72,10 +71,46 @@ const InvoicePreview = ({ id, invoiceModalActive, setInvoiceModalActive, }) => {
                     </Table>
                   </Col>
                   <Col xs="3">
-                    <Table bordered size='sm'>
+                    <Table striped bordered hover size='sm'>
+                      <thead>
+                        <tr>
+                          <th>Vendedor</th>
+                        </tr>
+                      </thead>
                       <tbody>
                         <tr>
-                          <td>Orden de trabajo</td>
+                          <td>
+                            {invoiceData.NombreEmpleado}
+                          </td>
+                        </tr>
+                      </tbody>
+                    </Table>
+                  </Col>
+                  <Col xs="3">
+                    <Table striped bordered hover size='sm'>
+                      <thead>
+                        <tr>
+                          <th>ID Alquiler</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>
+                            {invoiceData.IdAlquiler}
+                          </td>
+                        </tr>
+                      </tbody>
+                    </Table>
+                  </Col>
+                  <Col xs="3">
+                    <Table striped bordered hover size='sm'>
+                      <thead>
+                        <tr>
+                          <th>Orden de trabajo</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
                           <td>{invoiceData.IdOrdenCompra}</td>
                         </tr>
                       </tbody>

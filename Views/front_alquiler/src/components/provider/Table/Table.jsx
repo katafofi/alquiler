@@ -88,13 +88,17 @@ const TabletCataComponente = ({
                     ) : (
                       provider[e]
                     )
-                  ) : e === "FotoDocumento" || e === "FotoServicioPublico" ? (
-                    provider[e] ? (
-                      <ImagenCataComponente name={provider[e].replace('.jpg', '')}></ImagenCataComponente>
-                    ) : null
-                  ) : (
-                    provider[e]
-                  )}
+                  )
+                    // :
+                    //   e === "FotoDocumento" || e === "FotoServicioPublico" ? (
+                    //     provider[e] ? (
+                    //       <ImagenCataComponente name={provider[e]}></ImagenCataComponente>
+                    //     ) : null
+                    //   )
+                    :
+                    (
+                      provider[e]
+                    )}
                 </td>
               ))}
 
