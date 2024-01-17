@@ -6,14 +6,17 @@ const CreateExpenseEmploye = async (req, res) => {
   const {
     Descripcion,
     Monto,	
-    IdEmpleado
+    IdEmpleado,
+    Fecha
   } = req.body;
 
   try {
     const expenseEmployeCreate = await ExpenseEmploye.create({
         Descripcion,
         Monto,	
-        IdEmpleado
+        IdEmpleado,
+        Fecha
+
     });
     res.status(200).json(expenseEmployeCreate);
   } catch (error) {
@@ -27,7 +30,8 @@ const UpdateExpenseEmploye = async (req, res) => {
   const {
     Descripcion,
     Monto,	
-    IdEmpleado
+    IdEmpleado,
+    Fecha
   } = req.body;
 
   try {
@@ -35,7 +39,8 @@ const UpdateExpenseEmploye = async (req, res) => {
       {
         Descripcion,
         Monto,	
-        IdEmpleado
+        IdEmpleado,
+        Fecha
       },
       {
         where: { IdGastoEmpleado },

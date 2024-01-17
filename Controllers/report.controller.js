@@ -110,15 +110,17 @@ WHERE
     `);
 
     // Realiza la cuarta consulta SQL para la hoja 'GASTOS'
+    await conexion.query('SET lc_time_names = "es_ES";');
     const [rowsGastos] = await conexion.query(`
-      SELECT 
-        GE.createdAt,
-        GE.Descripcion,
-        GE.Monto,
-        E.Nombre,
-        E.Apellido
-      FROM gastosempleados AS GE
-      INNER JOIN empleados AS E ON GE.IdEmpleado = E.IdEmpleado;
+    SELECT 
+    DATE_FORMAT(GE.Fecha, '%d %b %Y') AS FECHA,
+    GE.Descripcion,
+    GE.Monto,
+    E.Nombre,
+    E.Apellido
+FROM gastosempleados AS GE
+INNER JOIN empleados AS E ON GE.IdEmpleado = E.IdEmpleado
+WHERE WEEK(GE.Fecha) = WEEK(CURDATE());
     `);
 
     const response = {
@@ -297,22 +299,34 @@ ORDER BY ORDEN, PENDIENTE_POR_PAGAR;
 
 `);
 
-    // Realiza la cuarta consulta SQL para la hoja 'GASTOS'
+    // Realiza la cuarta consulta SQL para la hoja 'GASTOS_ SEMANA'
     await conexion.query('SET lc_time_names = "es_ES";');
     const [rowsGastos] = await conexion.query(`
     SELECT 
-  DATE_FORMAT(GE.createdAt, '%d %b %Y') AS FECHA_CREACION,
+  DATE_FORMAT(GE.Fecha, '%d %b %Y') AS FECHA,
   UPPER(GE.Descripcion) AS DESCRIPCION,
   FORMAT(GE.Monto, 0) AS MONTO,
   UPPER(E.Nombre) AS NOMBRE,
   UPPER(E.Apellido) AS APELLIDO
 FROM gastosempleados AS GE
 INNER JOIN empleados AS E ON GE.IdEmpleado = E.IdEmpleado
-WHERE YEARWEEK(GE.createdAt) = YEARWEEK(CURDATE());
-
+WHERE WEEK(GE.Fecha) = WEEK(CURDATE());
  
     `);
 
+        // Realiza la cuarta consulta SQL para la hoja 'GASTOS'
+        await conexion.query('SET lc_time_names = "es_ES";');
+        const [rowsGastostotal] = await conexion.query(`
+        SELECT 
+      DATE_FORMAT(GE.Fecha, '%d %b %Y') AS FECHA,
+      UPPER(GE.Descripcion) AS DESCRIPCION,
+      FORMAT(GE.Monto, 0) AS MONTO,
+      UPPER(E.Nombre) AS NOMBRE,
+      UPPER(E.Apellido) AS APELLIDO
+    FROM gastosempleados AS GE
+    INNER JOIN empleados AS E ON GE.IdEmpleado = E.IdEmpleado;
+     
+        `);
     // Realiza la cuarta consulta SQL para la hoja con tipos de 'CUENTAS SEMANA'
     const [rowsCuentasSemana] = await conexion.query(`
     SELECT
@@ -333,6 +347,7 @@ WHERE YEARWEEK(GE.createdAt) = YEARWEEK(CURDATE());
       abonos: rowsAbonos,
       saldos: rowsSaldos,
       gastos: rowsGastos,
+      rowsGastostotal: rowsGastostotal,
       cuentasSemana: rowsCuentasSemana,
       saldoTotal: saldoTotal,
       abonoTotal: abonoTotal,

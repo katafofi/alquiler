@@ -65,29 +65,28 @@ const createReport = async (data, reportType) => {
   const libro = XLSX.utils.book_new();
   const hojaDia = XLSX.utils.json_to_sheet(data.dia.map(row => ({
     ...row,
-    FechadPago: formatearFecha(row.FechadPago),
-    createdAt: formatearFecha(row.createdAt),
-  })));
+     })));
 
   // Agregar el resultado de SALDO_TOTAL a la hoja de ABONOS
   const hojaAbonos = XLSX.utils.json_to_sheet([
     ...data.abonos.map(row => ({
       ...row,
-      FechadPago: formatearFecha(row.FechadPago),
+    
     })),
   ]);
 
   // Crea una hoja de Excel con los resultados de 'SALDOS'
   const hojaSaldos = XLSX.utils.json_to_sheet(data.saldos.map(row => ({
     ...row,
-    FechadPago: formatearFecha(row.FechadPago),
+   
   })));
 
   // Crea una hoja de Excel con los resultados de 'GASTOS'
   const hojaGastos = XLSX.utils.json_to_sheet(data.gastos.map(row => ({
-    ...row,
-    createdAt: formatearFecha(row.createdAt),
+    // Omitir la propiedad createdAt en el objeto resultante
+    ...((({ createdAt, ...rest }) => rest)(row)),
   })));
+  
 
   XLSX.utils.book_append_sheet(libro, hojaDia, 'DIA');
   XLSX.utils.book_append_sheet(libro, hojaAbonos, 'ABONOS');

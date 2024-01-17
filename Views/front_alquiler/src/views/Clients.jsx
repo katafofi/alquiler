@@ -39,24 +39,6 @@ const Clients = () => {
   const [fotoDocumento, setFotoDocumento] = useState(null);
   const [fotoServicioPublico, setFotoServicioPublico] = useState(null);
   const [news, setNews] = useState(newsDefault);
-const Clients = () => {
-  const [forms, setForm] = useState([]);
-  const [clientExists, setClientExists] = useState(false); 
-  const [fotoDocumento, setFotoDocumento] = useState(null);
-  const [fotoServicioPublico, setFotoServicioPublico] = useState(null);
-  const [news, setNews] = useState({
-    //IdCategoria
-    Nombre: "",
-    Apellido: "",
-    Correo: "",
-    Direccion: "",
-    Telefono: "",
-    ReferenciaPersonalNombre: "",
-    ReferenciaPersonalTelefono: "",
-    FotoDocumento: "",
-    FotoServicioPublico: "",
-    Fecha: "",
-  });
   const [selected, setSelected] = useState(null);
   const [deleted, setDeleted] = useState(false);
   const [deletedM, setDeletedM] = useState(false);
@@ -94,6 +76,7 @@ const Clients = () => {
   };
 
   const handleDelete = async (id) => {
+
     if (window.confirm("¿Estás seguro de que quieres eliminar?")) {
       try {
         const response = await fetch(`${URL}${PORT}/${form}/${id}`, {
@@ -124,6 +107,7 @@ const Clients = () => {
         console.log(error);
       }
     }
+
   };
 
   const handleDeleteM = async (ids) => {
@@ -165,50 +149,30 @@ const Clients = () => {
 
   const handleCreate = async () => {
     try {
-      // Verificar si el cliente ya existe
-      const existingClient = forms.find(
-        (client) => client.Cedula === news.Cedula
-      );
 
-      if (existingClient) {
-        // Cliente ya existe, mostrar mensaje y salir
-        setClientExists(true);
-        return;
+      const formData = new FormData()
+
+      formData.append("Nombre", news.Nombre)
+      formData.append("Apellido", news.Apellido)
+      formData.append("Cedula", news.Cedula)
+      formData.append("Correo", news.Correo)
+      formData.append("Direccion", news.Direccion)
+      formData.append("Barrio", news.Barrio)
+      formData.append("Telefono", news.Telefono)
+      formData.append("ReferenciaPersonalNombre", news.ReferenciaPersonalNombre)
+      formData.append("ReferenciaPersonalTelefono", news.ReferenciaPersonalTelefono)
+      if (fotoDocumento) formData.append("FotoDocumento", fotoDocumento, fotoDocumento.name)
+      if (fotoServicioPublico) formData.append("FotoServicioPublico", fotoServicioPublico, fotoServicioPublico.name)
+      formData.append("Fecha", news.Fecha)
+
+      for (const entry of formData.entries()) {
+        //console.log(entry);
       }
-
-      // Resto del código de creación
-      const formData = new FormData();
-
-      formData.append("Nombre", news.Nombre);
-      formData.append("Apellido", news.Apellido);
-      formData.append("Cedula", news.Cedula);
-      formData.append("Correo", news.Correo);
-      formData.append("Direccion", news.Direccion);
-      formData.append("Barrio", news.Barrio);
-      formData.append("Telefono", news.Telefono);
-      formData.append(
-        "ReferenciaPersonalNombre",
-        news.ReferenciaPersonalNombre
-      );
-      formData.append(
-        "ReferenciaPersonalTelefono",
-        news.ReferenciaPersonalTelefono
-      );
-      if (fotoDocumento)
-        formData.append("FotoDocumento", fotoDocumento, fotoDocumento.name);
-      if (fotoServicioPublico)
-        formData.append(
-          "FotoServicioPublico",
-          fotoServicioPublico,
-          fotoServicioPublico.name
-        );
-      formData.append("Fecha", news.Fecha);
 
       const response = await fetch(`${URL}${PORT}/${form}`, {
         method: "POST",
         body: formData,
       });
-
       const data = await response.json();
       setForm((prev) => [...prev, data]);
       setNews({
@@ -226,8 +190,6 @@ const Clients = () => {
         FotoServicioPublico: null,
         Fecha: "",
       });
-
-      setClientExists(false); // Reiniciar el estado después de la creación exitosa
     } catch (error) {
       console.log(error);
     }
@@ -256,10 +218,10 @@ const Clients = () => {
 
   const handleInputFileDocumentoChange = (event) => {
     const file = event.target.files[0];
-    if ((file && file.type === "image/jpg") || file.type === "image/jpeg") {
+    if (file && file.type === 'image/jpg' || file.type === 'image/jpeg') {
       setFotoDocumento(file);
     } else {
-      alert("Please select a valid JPG file." + file.type);
+      alert('Please select a valid JPG file.' + file.type);
       event.target.value = null;
     }
   };
@@ -267,13 +229,10 @@ const Clients = () => {
   const handleInputFileServicioPublicoChange = (event) => {
     const file = event.target.files[0];
 
-    if ((file && file.type === "image/jpg") || file.type === "image/jpeg") {
+    if (file && file.type === 'image/jpg' || file.type === 'image/jpeg') {
       setFotoServicioPublico(file);
     } else {
-      alert(
-        file.type +
-          "Por favor seleccionar un arhico en formato JPG ya que tienen calidad y es imagen segura otro tipo no sera permitido a no ser que sea evaluado por seguridad"
-      );
+      alert(file.type + 'Por favor seleccionar un arhico en formato JPG ya que tienen calidad y es imagen segura otro tipo no sera permitido a no ser que sea evaluado por seguridad');
       event.target.value = null;
     }
   };
@@ -292,25 +251,15 @@ const Clients = () => {
       formData.append("Direccion", news.Direccion);
       formData.append("Barrio", news.Barrio);
       formData.append("Telefono", news.Telefono);
-      formData.append(
-        "ReferenciaPersonalNombre",
-        news.ReferenciaPersonalNombre
-      );
-      formData.append(
-        "ReferenciaPersonalTelefono",
-        news.ReferenciaPersonalTelefono
-      );
+      formData.append("ReferenciaPersonalNombre", news.ReferenciaPersonalNombre);
+      formData.append("ReferenciaPersonalTelefono", news.ReferenciaPersonalTelefono);
       formData.append("Fecha", news.Fecha);
 
       if (fotoDocumento) {
         formData.append("FotoDocumento", fotoDocumento, fotoDocumento.name);
       }
       if (fotoServicioPublico) {
-        formData.append(
-          "FotoServicioPublico",
-          fotoServicioPublico,
-          fotoServicioPublico.name
-        );
+        formData.append("FotoServicioPublico", fotoServicioPublico, fotoServicioPublico.name);
       }
 
       const response = await fetch(
@@ -324,9 +273,7 @@ const Clients = () => {
       const data = await response.json();
 
       setForm((prev) =>
-        prev.map((estado) =>
-          estado.IdCliente === data.IdCliente ? data : estado
-        )
+        prev.map((estado) => (estado.IdCliente === data.IdCliente ? data : estado))
       );
 
       setSelected(null);
@@ -355,6 +302,7 @@ const Clients = () => {
     e.preventDefault();
 
     if (selected) {
+
       if (window.confirm("¿Estás seguro de que quieres actualizar este?")) {
         try {
           handleUpdate();
@@ -362,6 +310,8 @@ const Clients = () => {
           console.error("Error al actualizar:", error);
         }
       }
+
+
     } else {
       if (verificarDatos(news)) {
         try {
@@ -383,10 +333,8 @@ const Clients = () => {
   const indexOfLast = (currentPage + 1) * PerPage;
   const indexOfFirst = indexOfLast - PerPage;
   const current = forms
-    .filter((item) =>
-      item?.Cedula?.toString()
-        .toLowerCase()
-        .includes(filter.toString().toLowerCase())
+    .filter((item) => item?.Cedula?.toString().toLowerCase()
+      .includes(filter.toString().toLowerCase())
     )
     .slice(indexOfFirst, indexOfLast);
 
@@ -414,14 +362,7 @@ const Clients = () => {
           <div className="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
             <form onSubmit={handleSubmit} className="mb-4">
               {/* AGREGAR SCROLL STYLE EN FORM-ROW */}
-              <div
-                className="form-row"
-                style={{
-                  overflowY: "scroll",
-                  height: "23em",
-                  lineHeight: "1em",
-                }}
-              >
+              <div className="form-row" style={{ overflowY: 'scroll', height: '23em', lineHeight: '1em' }} >
                 <InputCataComponente
                   value={news.Nombre}
                   onChange={handleInput}
@@ -504,7 +445,7 @@ const Clients = () => {
                 <InputCataComponente
                   value={news.ReferenciaPersonalTelefono}
                   onChange={handleInput}
-                  placeholder={"Ingrese teléfono de referencia personal"}
+                  placeholder={"Ingrese teléfono de referencia"}
                   id={"ReferenciaPersonalTelefono"}
                   type={"text"}
                   name={"ReferenciaPersonalTelefono"}
@@ -544,11 +485,6 @@ const Clients = () => {
                   className="btn btn-primary btn-block"
                   title="Guardar"
                 />
-                {clientExists && (
-                  <div className="alert alert-warning mt-3" role="alert">
-                    ¡El cliente ya está registrado con la misma cédula!
-                  </div>
-                )}
               </div>
             </form>
           </div>
@@ -559,16 +495,6 @@ const Clients = () => {
               handleEdit={handleEdit}
               handleDeleteM={handleDeleteM}
               idField={"IdCliente"}
-              Fields={[
-                "Nombre",
-                "Apellido",
-                "Correo",
-                "Cedula",
-                "Direccion",
-                "Barrio",
-                "FotoDocumento",
-                "FotoServicioPublico",
-              ]}
               Fields={["Nombre", "Apellido", "Correo", "Cedula", "Direccion", "Barrio",
                 // "FotoDocumento",
                 // "FotoServicioPublico"
@@ -585,5 +511,4 @@ const Clients = () => {
     </>
   );
 };
-
 export default Clients;

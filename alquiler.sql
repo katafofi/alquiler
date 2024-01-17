@@ -20,7 +20,7 @@ CREATE TABLE Tiendas (
     Direccion VARCHAR(100) NOT NULL,
     Telefono VARCHAR(20) NOT NULL,
     Correo VARCHAR(100) NOT NULL,
-    Logo VARCHAR(255) NOT NULL
+
 );
 -- 1*
 CREATE TABLE EstadosPago (

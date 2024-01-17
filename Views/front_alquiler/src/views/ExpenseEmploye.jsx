@@ -14,7 +14,8 @@ const ExpenseEmploye = () => {
         //IdGastoEmpleado
         Descripcion: "",
         Monto: "",
-        IdEmpleado: ""
+        IdEmpleado: "",
+        Fecha:""
     });
     const [selected, setSelected] = useState(null);
     const [deleted, setDeleted] = useState(false);
@@ -86,7 +87,8 @@ const ExpenseEmploye = () => {
                     IdGastoEmpleado: "",
                     Descripcion: "",
                     Monto: "",
-                    IdEmpleado: ""
+                    IdEmpleado: "",
+                    Fecha:""
                 });
               }
             } catch (error) {
@@ -126,7 +128,8 @@ const ExpenseEmploye = () => {
             IdGastoEmpleado: news.IdGastoEmpleado,
             Descripcion: news.Descripcion,
             Monto: news.Monto,
-            IdEmpleado: news.IdEmpleado
+            IdEmpleado: news.IdEmpleado,
+            Fecha: news.Fecha
         });
       };
 
@@ -145,7 +148,8 @@ const ExpenseEmploye = () => {
             IdGastoEmpleado: "",
             Descripcion: "",
             Monto: "",
-            IdEmpleado: ""
+            IdEmpleado: "",
+            Fecha:""
           });
         } catch (error) {
           console.log(error);
@@ -185,7 +189,8 @@ const ExpenseEmploye = () => {
                 IdGastoEmpleado: news.IdGastoEmpleado,
                 Descripcion: news.Descripcion,
                 Monto: news.Monto,
-                IdEmpleado: news.IdEmpleado
+                IdEmpleado: news.IdEmpleado,
+                Fecha: news.Fecha
             }),
           }
         );
@@ -200,7 +205,8 @@ const ExpenseEmploye = () => {
             IdGastoEmpleado: "",
             Descripcion: "",
             Monto: "",
-            IdEmpleado: ""
+            IdEmpleado: "",
+            Fecha:""
         });
       };
 
@@ -259,6 +265,16 @@ const ExpenseEmploye = () => {
           <div className="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
             <form onSubmit={handleSubmit} className="mb-4">
               <div className="form-row">
+
+              <InputCataComponente
+                  value={news.Fecha}
+                  onChange={handleInput}
+                  placeholder={"Ingrese fecha"}
+                  id={"Fecha"}
+                  type={"date"}
+                  name={"Fecha"}
+                  label={"Fecha"}
+                />
             
                 <InputCataComponente
                   value={news.Descripcion}
@@ -306,11 +322,11 @@ const ExpenseEmploye = () => {
               handleDeleteM={handleDeleteM}
               idField={"IdGastoEmpleado"}
               Fields={[
+                "Fecha",
                 "Descripcion",
                 "Monto",
                 "IdEmpleado",
-                "updatedAt",
-                "createdAt"
+                                            
               ]}
             />
             <PaginateCataComponente

@@ -18,9 +18,12 @@ const ExpensesEmploye = database.define('GastosEmpleados', {
     IdEmpleado: {
         type: Sequelize.INTEGER,
         allowNull: false
-    }
-}, {
-    timestamps: true
-});
+
+    },
+    Fecha: {
+        type: Sequelize.DATE,
+        allowNull: false,
+      },
+    });
   
 module.exports = ExpensesEmploye;
