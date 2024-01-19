@@ -49,7 +49,7 @@ const InvoicePreview = ({ id, invoiceModalActive, setInvoiceModalActive, }) => {
                   </Row>
                 </div>
                 <div className='flex-center'>
-                  <p>Transv. 78 L No. 68 - 03 Sur 2do. Piso . Bosa Piamonte . Cel: 320 805 6350 - 320 805 8884</p>
+                  <p>Transv. 78 L No. 68 - 03 Sur 2do. Piso . Bosa Piamonte . Cel: 320 805 6350 - 320 805 8886</p>
                 </div>
                 <Row>
                   <Col xs={3}>
