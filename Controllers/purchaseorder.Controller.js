@@ -262,9 +262,10 @@ const generateInvoice = async (req, res) => {
   }
 };
 const createPurchaseOrder = async (req, res) => {
-  const { FechaCompra, IdAlquiler, IdEmpleado, Total } = req.body;
+  const {IdOrdenCompra,FechaCompra, IdAlquiler, IdEmpleado, Total } = req.body;
   try {
     const purchaseOrderCreate = await PuchaseOrder.create({
+      IdOrdenCompra,
       FechaCompra,
       IdAlquiler,
       IdEmpleado,
