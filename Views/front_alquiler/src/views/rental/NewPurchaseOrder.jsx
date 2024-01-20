@@ -14,7 +14,7 @@ const NewPurchaseOrder = (
   }
 ) => {
   const [news, setNews] = useState({
-    //IdOrdenCompra
+    IdOrdenCompra:"",
     FechaCompra: "",
     IdAlquiler: "",
     IdEmpleado: "",
@@ -108,6 +108,16 @@ const NewPurchaseOrder = (
           <div className="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
             <form onSubmit={handleSubmit} className="mb-4">
               <div className="form-row">
+              <InputCataComponente
+                  value={news.IdOrdenCompra}
+                  onChange={handleInput}
+                  placeholder={"Ingrese IdOrdenCompra"}
+                  id={"IdOrdenCompra"}
+                  type={"numbre"}
+                  name={"IdOrdenCompra"}
+                  label={"IdOrdenCompra"}
+                />
+                
                 <InputCataComponente
                   value={news.FechaCompra}
                   onChange={handleInput}
