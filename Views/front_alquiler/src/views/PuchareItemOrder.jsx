@@ -27,7 +27,7 @@ const PuchareItemOrder = () => {
   const [filter, setFilter] = useState("")
   const [invoiceModalActive, setInvoiceModalActive] = useState(false)
 
-  const PerPage = 10;
+  const PerPage = 200;
   const form = "PuchaseItemOrder";
 
   const URL = "http://localhost:";

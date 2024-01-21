@@ -151,7 +151,7 @@ const generarReporteSemanal = async (req, res) => {
     // Realiza la primera consulta SQL para la hoja 'dia'
     await conexion.query('SET lc_time_names = "es_ES";');
     const [rowsDia] = await conexion.query(`
-    SELECT 
+ SELECT 
     LPAD(DATE_FORMAT(P.FechadPago, '%d %b %Y'), 15, ' ') AS FECHA,
     LPAD(OC.IdOrdenCompra, 10, ' ') AS ORDEN,
     LPAD(DATE_FORMAT(AL.FechaInicialAlquiler, '%d %b %Y'), 15, ' ') AS FECHA_SALIDA,
@@ -167,8 +167,11 @@ FROM
     INNER JOIN ordencompras AS OC ON (P.IdOrdenCompra = OC.IdOrdenCompra) 
     INNER JOIN alquilers AS AL ON (OC.IdAlquiler = AL.IdAlquiler)
 WHERE 
-    YEARWEEK(P.FechadPago) = YEARWEEK(CURDATE())
+    P.FechadPago >= CURDATE() - INTERVAL (WEEKDAY(CURDATE()) + 1) DAY
+    AND P.FechadPago < CURDATE() + INTERVAL (6 - WEEKDAY(CURDATE())) DAY
 ORDER BY ORDEN ASC;
+
+
 
     `);
 
@@ -188,11 +191,9 @@ FROM
   INNER JOIN estadopagos AS EP ON (P.IdEstadoPago = EP.IdEstadoPago) 
   INNER JOIN ordencompras AS OC ON (P.IdOrdenCompra = OC.IdOrdenCompra) 
 WHERE 
-  EP.IdEstadoPago IN (1, 2)
-  AND YEARWEEK(P.FechadPago) = YEARWEEK(CURDATE())
+P.FechadPago >= CURDATE() - INTERVAL (WEEKDAY(CURDATE()) + 1) DAY
+AND P.FechadPago < CURDATE() + INTERVAL (6 - WEEKDAY(CURDATE())) DAY
 ORDER BY ORDEN ASC;
-
-
 
 `);
 
@@ -203,26 +204,32 @@ ORDER BY ORDEN ASC;
       ',',
       '.'
     ) AS ABONO_TOTAL
-FROM (
-SELECT 
- P.FechadPago, 
- OC.IdOrdenCompra, 
- CASE WHEN EP.IdEstadoPago = 1 THEN P.Valor ELSE 0 END AS ABONO
-FROM pagos AS P 
- INNER JOIN tipopagos AS TP ON (P.IdTipoPago = TP.IdTipoPago) 
- INNER JOIN estadopagos AS EP ON (P.IdEstadoPago = EP.IdEstadoPago) 
- INNER JOIN ordencompras AS OC ON (P.IdOrdenCompra = OC.IdOrdenCompra) 
-WHERE EP.IdEstadoPago = 1
- AND YEARWEEK(P.FechadPago) = YEARWEEK(CURDATE())
-) AS M;
-
+    FROM (
+      SELECT 
+        P.FechadPago, 
+        OC.IdOrdenCompra, 
+        CASE WHEN EP.IdEstadoPago = 1 THEN P.Valor ELSE 0 END AS ABONO
+      FROM 
+        pagos AS P 
+        INNER JOIN tipopagos AS TP ON (P.IdTipoPago = TP.IdTipoPago) 
+        INNER JOIN estadopagos AS EP ON (P.IdEstadoPago = EP.IdEstadoPago) 
+        INNER JOIN ordencompras AS OC ON (P.IdOrdenCompra = OC.IdOrdenCompra) 
+      WHERE 
+        EP.IdEstadoPago = 1
+        AND P.FechadPago >= CURDATE() - INTERVAL (WEEKDAY(CURDATE()) + 1) DAY
+        AND P.FechadPago < CURDATE() + INTERVAL (6 - WEEKDAY(CURDATE())) DAY
+    ) AS M;
+    
     
     `);
  // REALIZA LA SUMA ENTRE  SALDO TOTAL + ABONO TOTAL DE LA SEMANA 
  const [granTotal] = await conexion.query(`
  SELECT FORMAT(ROUND(SUM(Valor)), 0) AS SUMA_GENERAL
 FROM pagos
-WHERE WEEK(FechadPago) = WEEK(CURDATE());
+WHERE 
+  FechadPago >= CURDATE() - INTERVAL (WEEKDAY(CURDATE()) + 1) DAY
+  AND FechadPago < CURDATE() + INTERVAL (6 - WEEKDAY(CURDATE())) DAY;
+
   `);
     // Realiza la tercera consulta SQL para obtener SALDO_TOTAL
     const [saldoTotal] = await conexion.query(`
@@ -231,27 +238,39 @@ WHERE WEEK(FechadPago) = WEEK(CURDATE());
       ',',
       '.'
     ) AS SALDO_TOTAL
-FROM (
-SELECT 
- P.FechadPago, 
- OC.IdOrdenCompra, 
- CASE WHEN EP.IdEstadoPago = 2 THEN P.Valor ELSE 0 END AS ABONO
-FROM pagos AS P 
- INNER JOIN tipopagos AS TP ON (P.IdTipoPago = TP.IdTipoPago) 
- INNER JOIN estadopagos AS EP ON (P.IdEstadoPago = EP.IdEstadoPago) 
- INNER JOIN ordencompras AS OC ON (P.IdOrdenCompra = OC.IdOrdenCompra) 
-WHERE EP.IdEstadoPago = 2
-AND YEARWEEK(P.FechadPago) = YEARWEEK(CURDATE())
-) AS M;
+    FROM (
+      SELECT 
+        P.FechadPago, 
+        OC.IdOrdenCompra, 
+        CASE WHEN EP.IdEstadoPago = 2 THEN P.Valor ELSE 0 END AS ABONO
+      FROM 
+        pagos AS P 
+        INNER JOIN tipopagos AS TP ON (P.IdTipoPago = TP.IdTipoPago) 
+        INNER JOIN estadopagos AS EP ON (P.IdEstadoPago = EP.IdEstadoPago) 
+        INNER JOIN ordencompras AS OC ON (P.IdOrdenCompra = OC.IdOrdenCompra) 
+      WHERE 
+        EP.IdEstadoPago = 2
+        AND P.FechadPago >= CURDATE() - INTERVAL (WEEKDAY(CURDATE()) + 1) DAY
+        AND P.FechadPago < CURDATE() + INTERVAL (6 - WEEKDAY(CURDATE())) DAY
+    ) AS M;
+    
 `);
 
 // REALIZAR LA RESTA ENTRE SUMA GENERAL y GASTOS TOTAL
 const [diferenciaTotal] = await conexion.query(`
 SELECT
-  (SELECT FORMAT(SUM(Valor), 2) FROM pagos WHERE WEEK(FechadPago) = WEEK(CURDATE())) AS TotalPagos,
-  (SELECT FORMAT(SUM(Monto), 2) FROM gastosempleados WHERE WEEK(createdAt) = WEEK(CURDATE())) AS TotalGastos,
-  FORMAT((SELECT SUM(Valor) FROM pagos WHERE WEEK(FechadPago) = WEEK(CURDATE())) - (SELECT SUM(Monto) FROM gastosempleados WHERE WEEK(createdAt) = WEEK(CURDATE())), 0) AS TOTAL;
-
+  (SELECT FORMAT(SUM(Valor), 2) FROM 
+  pagos WHERE FechadPago >= CURDATE() - INTERVAL (WEEKDAY(CURDATE()) + 1) DAY 
+  AND FechadPago < CURDATE() + INTERVAL (6 - WEEKDAY(CURDATE())) DAY) AS TotalPagos,
+  (SELECT FORMAT(SUM(Monto), 2) FROM 
+  gastosempleados WHERE createdAt >= CURDATE() - INTERVAL (WEEKDAY(CURDATE()) + 1) DAY 
+  AND createdAt < CURDATE() + INTERVAL (6 - WEEKDAY(CURDATE())) DAY) AS TotalGastos,
+  FORMAT((SELECT SUM(Valor) FROM 
+  pagos WHERE FechadPago >= CURDATE() - INTERVAL (WEEKDAY(CURDATE()) + 1) DAY 
+  AND FechadPago < CURDATE() + INTERVAL (6 - WEEKDAY(CURDATE())) DAY) - (SELECT SUM(Monto) FROM gastosempleados 
+  WHERE 
+  createdAt >= CURDATE() - INTERVAL (WEEKDAY(CURDATE()) + 1) DAY 
+  AND createdAt < CURDATE() + INTERVAL (6 - WEEKDAY(CURDATE())) DAY), 0) AS TOTAL;
 
 
 `);
@@ -267,7 +286,9 @@ SELECT REPLACE(
 ) AS TOTAL_GASTOS_SEMANA
 FROM gastosempleados AS GE
 INNER JOIN empleados AS E ON GE.IdEmpleado = E.IdEmpleado
-WHERE YEARWEEK(GE.createdAt) = YEARWEEK(CURDATE());
+WHERE 
+  GE.createdAt >= CURDATE() - INTERVAL (WEEKDAY(CURDATE()) + 1) DAY
+  AND GE.createdAt < CURDATE() + INTERVAL (6 - WEEKDAY(CURDATE())) DAY;
 
 
 `);
@@ -293,9 +314,10 @@ FROM
     INNER JOIN ORDENCOMPRAS AS OC ON P.IdOrdenCompra = OC.IdOrdenCompra
     INNER JOIN ALQUILERS AS AL ON OC.IdAlquiler = AL.IdAlquiler
 WHERE 
-    YEAR(AL.FechaInicialAlquiler) = YEAR(CURDATE()) 
-    AND WEEK(AL.FechaInicialAlquiler) = WEEK(CURDATE())
+    P.FechadPago >= CURDATE() - INTERVAL (WEEKDAY(CURDATE()) + 1) DAY
+    AND P.FechadPago < CURDATE() + INTERVAL (6 - WEEKDAY(CURDATE())) DAY
 ORDER BY ORDEN, PENDIENTE_POR_PAGAR;
+
 
 `);
 
@@ -303,14 +325,18 @@ ORDER BY ORDEN, PENDIENTE_POR_PAGAR;
     await conexion.query('SET lc_time_names = "es_ES";');
     const [rowsGastos] = await conexion.query(`
     SELECT 
-  DATE_FORMAT(GE.Fecha, '%d %b %Y') AS FECHA,
-  UPPER(GE.Descripcion) AS DESCRIPCION,
-  FORMAT(GE.Monto, 0) AS MONTO,
-  UPPER(E.Nombre) AS NOMBRE,
-  UPPER(E.Apellido) AS APELLIDO
-FROM gastosempleados AS GE
-INNER JOIN empleados AS E ON GE.IdEmpleado = E.IdEmpleado
-WHERE WEEK(GE.Fecha) = WEEK(CURDATE());
+    DATE_FORMAT(GE.Fecha, '%d %b %Y') AS FECHA,
+    UPPER(GE.Descripcion) AS DESCRIPCION,
+    FORMAT(GE.Monto, 0) AS MONTO,
+    UPPER(E.Nombre) AS NOMBRE,
+    UPPER(E.Apellido) AS APELLIDO
+  FROM 
+    gastosempleados AS GE
+    INNER JOIN empleados AS E ON GE.IdEmpleado = E.IdEmpleado
+  WHERE 
+    GE.Fecha >= CURDATE() - INTERVAL (WEEKDAY(CURDATE()) + 1) DAY
+    AND GE.Fecha < CURDATE() + INTERVAL (6 - WEEKDAY(CURDATE())) DAY;
+  
  
     `);
 
@@ -335,10 +361,16 @@ WHERE WEEK(GE.Fecha) = WEEK(CURDATE());
     FORMAT(SUM(CASE WHEN pagos.IdTipoPago = 2 THEN pagos.Valor ELSE 0 END), 0) AS DAVIPLATA,
     FORMAT(SUM(CASE WHEN pagos.IdTipoPago = 3 THEN pagos.Valor ELSE 0 END), 0) AS EFECTIVO,
     FORMAT(SUM(CASE WHEN pagos.IdTipoPago = 4 THEN pagos.Valor ELSE 0 END), 0) AS TARGETA
-  FROM pagos
-  JOIN tipopagos ON pagos.IdTipoPago = tipopagos.IdTipoPago
-  WHERE pagos.IdTipoPago IN (1, 2, 3, 4) AND YEARWEEK(pagos.FechadPago) = YEARWEEK(CURDATE())
-  GROUP BY pagos.IdTipoPago, tipopagos.Descripcion;
+FROM 
+    pagos
+    JOIN tipopagos ON pagos.IdTipoPago = tipopagos.IdTipoPago
+WHERE 
+    pagos.IdTipoPago IN (1, 2, 3, 4) 
+    AND pagos.FechadPago >= CURDATE() - INTERVAL (WEEKDAY(CURDATE()) + 1) DAY
+    AND pagos.FechadPago < CURDATE() + INTERVAL (6 - WEEKDAY(CURDATE())) DAY
+GROUP BY 
+    pagos.IdTipoPago, tipopagos.Descripcion;
+
   
 `);
 

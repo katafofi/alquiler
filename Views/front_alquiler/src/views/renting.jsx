@@ -356,7 +356,7 @@ const Renting = () => {
               handleEdit={handleEdit}
               handleDeleteM={handleDeleteM}
               idField={"IdAlquiler"}
-              Fields={["FechaInicialAlquiler", "FechaFinlAlquiler", "IdTienda", "IdCliente"]}
+              Fields={["IdAlquiler", "FechaInicialAlquiler", "FechaFinlAlquiler", "IdTienda", "IdCliente"]}
             />
             <PaginateCataComponente
               data={forms}

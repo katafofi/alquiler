@@ -27,7 +27,7 @@ const Payments = () => {
   const [TipoPagoOptions, setTipoPagoOptions] = useState([]);
   const [OrdenCompraOptions, setOrdenCompraOptions] = useState([]);
 
-  const PerPage = 10;
+  const PerPage = 300;
   const form = "payments";
 
   const URL = "http://localhost:";
@@ -285,7 +285,7 @@ const Payments = () => {
   const indexOfLast = (currentPage + 1) * PerPage;
   const indexOfFirst = indexOfLast - PerPage;
   const current = forms
-    .filter((item) => item?.IdTipoPago?.toString().toLowerCase()
+    .filter((item) => IdOrdenCompra.toString().toLowerCase()
         .includes(filter.toString().toLowerCase())
     )
     .slice(indexOfFirst, indexOfLast);
@@ -303,7 +303,7 @@ console.log
               type={"search"}
               name={"filter"}
               id={"filter"}
-              placeholder={"Filtrar idOrdenCompra"} //no es necesario
+              placeholder={"orden compra"} //no es necesario
             />
           </div>
         </div>
