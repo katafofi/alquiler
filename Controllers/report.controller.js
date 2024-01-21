@@ -355,22 +355,7 @@ ORDER BY ORDEN, PENDIENTE_POR_PAGAR;
         `);
     // Realiza la cuarta consulta SQL para la hoja con tipos de 'CUENTAS SEMANA'
     const [rowsCuentasSemana] = await conexion.query(`
-    SELECT
-    UPPER(tipopagos.Descripcion) AS DESCRIPCION,
-    FORMAT(SUM(CASE WHEN pagos.IdTipoPago = 1 THEN pagos.Valor ELSE 0 END), 0) AS NEQUI,
-    FORMAT(SUM(CASE WHEN pagos.IdTipoPago = 2 THEN pagos.Valor ELSE 0 END), 0) AS DAVIPLATA,
-    FORMAT(SUM(CASE WHEN pagos.IdTipoPago = 3 THEN pagos.Valor ELSE 0 END), 0) AS EFECTIVO,
-    FORMAT(SUM(CASE WHEN pagos.IdTipoPago = 4 THEN pagos.Valor ELSE 0 END), 0) AS TARGETA
-FROM 
-    pagos
-    JOIN tipopagos ON pagos.IdTipoPago = tipopagos.IdTipoPago
-WHERE 
-    pagos.IdTipoPago IN (1, 2, 3, 4) 
-    AND pagos.FechadPago >= CURDATE() - INTERVAL (WEEKDAY(CURDATE()) + 1) DAY
-    AND pagos.FechadPago < CURDATE() + INTERVAL (6 - WEEKDAY(CURDATE())) DAY
-GROUP BY 
-    pagos.IdTipoPago, tipopagos.Descripcion;
-
+    
   
 `);
 
