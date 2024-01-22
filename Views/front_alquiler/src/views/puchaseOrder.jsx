@@ -336,6 +336,16 @@ const PuchaseOrder = () => {
           <div className="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
             <form onSubmit={handleSubmit} className="mb-4">
               <div className="form-row">
+
+              <InputCataComponente
+                  value={news.IdOrdenCompra}
+                  onChange={handleInput}
+                  placeholder={"Ingrese orden compra"}
+                  id={"IdOrdenCompra"}
+                  type={"date"}
+                  name={"IdOrdenCompra"}
+                  label={"IdOrdenCompra"}
+                />
                 <InputCataComponente
                   value={news.FechaCompra}
                   onChange={handleInput}
