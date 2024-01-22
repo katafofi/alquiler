@@ -46,7 +46,7 @@ const Clients = () => {
   const [currentPage, setCurrentPage] = useState([]);
   const [filter, setFilter] = useState("");
 
-  const PerPage = 10;
+  const PerPage = 300;
   const form = "Clients";
   const URL = "http://localhost:";
   const PORT = "3003";
