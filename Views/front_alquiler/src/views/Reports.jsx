@@ -157,7 +157,7 @@ const Reports = () => {
     e.preventDefault()
     const data = await getReportDataWeek(formData)
     console.log("Datos devueltos:", data)
-    // createReport(data, "general")
+    /createReport(data, "generalSemanal")
   }
 
   const handleChange = ({ target }) => {
