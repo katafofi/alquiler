@@ -21,7 +21,7 @@ async function generarReporte(req, res) {
 
   try {
     // Realiza la primera consulta SQL para la hoja 'dia'
-     await conexion.query('SET lc_time_names = "es_ES";');
+    await conexion.query('SET lc_time_names = "es_ES";');
 
     const [rowsDia] = await conexion.query(`
       SELECT 
@@ -92,7 +92,7 @@ WHERE
         WHERE EP.IdEstadoPago = 2
       ) as M;
       `);
-     
+
 
     // Realiza la tercera consulta SQL para la hoja 'SALDOS'
     const [rowsSaldos] = await conexion.query(`
@@ -140,6 +140,8 @@ WHERE WEEK(GE.Fecha) = WEEK(CURDATE());
 }
 
 const generarReporteSemanal = async (req, res) => {
+  const { initialDate, finalDate } = req.body
+  // initialDate:2024-01-01, finalDate:2024-01-22
   const conexion = await mysql.createConnection({
     host: 'localhost',
     user: 'cata',
@@ -150,228 +152,219 @@ const generarReporteSemanal = async (req, res) => {
   try {
     // Realiza la primera consulta SQL para la hoja 'dia'
     await conexion.query('SET lc_time_names = "es_ES";');
-    const [rowsDia] = await conexion.query(`
- SELECT 
-    LPAD(DATE_FORMAT(P.FechadPago, '%d %b %Y'), 15, ' ') AS FECHA,
-    LPAD(OC.IdOrdenCompra, 10, ' ') AS ORDEN,
-    LPAD(DATE_FORMAT(AL.FechaInicialAlquiler, '%d %b %Y'), 15, ' ') AS FECHA_SALIDA,
-    LPAD(FORMAT(OC.Total, 0), 15, ' ') AS VALOR_FACTURA,
-    LPAD(FORMAT(CASE WHEN EP.IdEstadoPago = 1 THEN P.Valor ELSE 0 END, 0), 15, ' ') AS ABONO, 
-    LPAD(FORMAT(CASE WHEN EP.IdEstadoPago = 2 THEN P.Valor ELSE 0 END, 0), 15, ' ') AS SALDO, 
-    LPAD(TP.Descripcion, 20, ' ') AS TIPOPAGO, 
-    LPAD(DATE_FORMAT(P.createdAt, '%d %b %Y'), 20, ' ') AS FECHA_CREACION 
-FROM 
-    pagos AS P 
-    INNER JOIN tipopagos AS TP ON (P.IdTipoPago = TP.IdTipoPago) 
-    INNER JOIN estadopagos AS EP ON (P.IdEstadoPago = EP.IdEstadoPago) 
-    INNER JOIN ordencompras AS OC ON (P.IdOrdenCompra = OC.IdOrdenCompra) 
-    INNER JOIN alquilers AS AL ON (OC.IdAlquiler = AL.IdAlquiler)
-WHERE 
-    P.FechadPago >= CURDATE() - INTERVAL (WEEKDAY(CURDATE()) + 1) DAY
-    AND P.FechadPago < CURDATE() + INTERVAL (6 - WEEKDAY(CURDATE())) DAY
-ORDER BY ORDEN ASC;
+    //     const [rowsDia] = await conexion.query(`
+    //  SELECT 
+    //     LPAD(DATE_FORMAT(P.FechadPago, '%d %b %Y'), 15, ' ') AS FECHA,
+    //     LPAD(OC.IdOrdenCompra, 10, ' ') AS ORDEN,
+    //     LPAD(DATE_FORMAT(AL.FechaInicialAlquiler, '%d %b %Y'), 15, ' ') AS FECHA_SALIDA,
+    //     LPAD(FORMAT(OC.Total, 0), 15, ' ') AS VALOR_FACTURA,
+    //     LPAD(FORMAT(CASE WHEN EP.IdEstadoPago = 1 THEN P.Valor ELSE 0 END, 0), 15, ' ') AS ABONO, 
+    //     LPAD(FORMAT(CASE WHEN EP.IdEstadoPago = 2 THEN P.Valor ELSE 0 END, 0), 15, ' ') AS SALDO, 
+    //     LPAD(TP.Descripcion, 20, ' ') AS TIPOPAGO, 
+    //     LPAD(DATE_FORMAT(P.createdAt, '%d %b %Y'), 20, ' ') AS FECHA_CREACION 
+    // FROM 
+    //     pagos AS P 
+    //     INNER JOIN tipopagos AS TP ON (P.IdTipoPago = TP.IdTipoPago) 
+    //     INNER JOIN estadopagos AS EP ON (P.IdEstadoPago = EP.IdEstadoPago) 
+    //     INNER JOIN ordencompras AS OC ON (P.IdOrdenCompra = OC.IdOrdenCompra) 
+    //     INNER JOIN alquilers AS AL ON (OC.IdAlquiler = AL.IdAlquiler)
+    // WHERE 
+    //     P.FechadPago >= CURDATE() - INTERVAL (WEEKDAY(CURDATE()) + 1) DAY
+    //     AND P.FechadPago < CURDATE() + INTERVAL (6 - WEEKDAY(CURDATE())) DAY
+    // ORDER BY ORDEN ASC;
 
 
 
-    `);
+    //     `);
 
-    // Realiza la segunda consulta SQL para la hoja 'ABONOS'
-    
-    const [rowsAbonos] = await conexion.query(`
+    //     // Realiza la segunda consulta SQL para la hoja 'ABONOS'
 
-    SELECT 
-  DATE_FORMAT(P.FechadPago, '%d %b %Y') AS FECHA,
-  OC.IdOrdenCompra AS ORDEN,
-  FORMAT(OC.Total, 0) AS VALOR_FACTURA,
-  FORMAT(CASE WHEN EP.IdEstadoPago = 1 THEN P.Valor ELSE 0 END, 0) AS ABONO, 
-  FORMAT(CASE WHEN EP.IdEstadoPago = 2 THEN P.Valor ELSE 0 END, 0) AS SALDO
-FROM 
-  pagos AS P 
-  INNER JOIN tipopagos AS TP ON (P.IdTipoPago = TP.IdTipoPago) 
-  INNER JOIN estadopagos AS EP ON (P.IdEstadoPago = EP.IdEstadoPago) 
-  INNER JOIN ordencompras AS OC ON (P.IdOrdenCompra = OC.IdOrdenCompra) 
-WHERE 
-P.FechadPago >= CURDATE() - INTERVAL (WEEKDAY(CURDATE()) + 1) DAY
-AND P.FechadPago < CURDATE() + INTERVAL (6 - WEEKDAY(CURDATE())) DAY
-ORDER BY ORDEN ASC;
+    //     const [rowsAbonos] = await conexion.query(`
 
-`);
+    //     SELECT 
+    //   DATE_FORMAT(P.FechadPago, '%d %b %Y') AS FECHA,
+    //   OC.IdOrdenCompra AS ORDEN,
+    //   FORMAT(OC.Total, 0) AS VALOR_FACTURA,
+    //   FORMAT(CASE WHEN EP.IdEstadoPago = 1 THEN P.Valor ELSE 0 END, 0) AS ABONO, 
+    //   FORMAT(CASE WHEN EP.IdEstadoPago = 2 THEN P.Valor ELSE 0 END, 0) AS SALDO
+    // FROM 
+    //   pagos AS P 
+    //   INNER JOIN tipopagos AS TP ON (P.IdTipoPago = TP.IdTipoPago) 
+    //   INNER JOIN estadopagos AS EP ON (P.IdEstadoPago = EP.IdEstadoPago) 
+    //   INNER JOIN ordencompras AS OC ON (P.IdOrdenCompra = OC.IdOrdenCompra) 
+    // WHERE 
+    // P.FechadPago >= CURDATE() - INTERVAL (WEEKDAY(CURDATE()) + 1) DAY
+    // AND P.FechadPago < CURDATE() + INTERVAL (6 - WEEKDAY(CURDATE())) DAY
+    // ORDER BY ORDEN ASC;
 
-    // Realiza la tercera consulta SQL para obtener ABONO_TOTAL
-    const [abonoTotal] = await conexion.query(`
-    SELECT REPLACE(
-      COALESCE(FORMAT(SUM(M.ABONO), 0), 0),
-      ',',
-      '.'
-    ) AS ABONO_TOTAL
-    FROM (
-      SELECT 
-        P.FechadPago, 
-        OC.IdOrdenCompra, 
-        CASE WHEN EP.IdEstadoPago = 1 THEN P.Valor ELSE 0 END AS ABONO
-      FROM 
-        pagos AS P 
-        INNER JOIN tipopagos AS TP ON (P.IdTipoPago = TP.IdTipoPago) 
-        INNER JOIN estadopagos AS EP ON (P.IdEstadoPago = EP.IdEstadoPago) 
-        INNER JOIN ordencompras AS OC ON (P.IdOrdenCompra = OC.IdOrdenCompra) 
-      WHERE 
-        EP.IdEstadoPago = 1
-        AND P.FechadPago >= CURDATE() - INTERVAL (WEEKDAY(CURDATE()) + 1) DAY
-        AND P.FechadPago < CURDATE() + INTERVAL (6 - WEEKDAY(CURDATE())) DAY
-    ) AS M;
-    
-    
-    `);
- // REALIZA LA SUMA ENTRE  SALDO TOTAL + ABONO TOTAL DE LA SEMANA 
- const [granTotal] = await conexion.query(`
- SELECT FORMAT(ROUND(SUM(Valor)), 0) AS SUMA_GENERAL
-FROM pagos
-WHERE 
-  FechadPago >= CURDATE() - INTERVAL (WEEKDAY(CURDATE()) + 1) DAY
-  AND FechadPago < CURDATE() + INTERVAL (6 - WEEKDAY(CURDATE())) DAY;
+    // `);
 
-  `);
-    // Realiza la tercera consulta SQL para obtener SALDO_TOTAL
-    const [saldoTotal] = await conexion.query(`
-    SELECT REPLACE(
-      COALESCE(FORMAT(SUM(M.ABONO), 0), 0),
-      ',',
-      '.'
-    ) AS SALDO_TOTAL
-    FROM (
-      SELECT 
-        P.FechadPago, 
-        OC.IdOrdenCompra, 
-        CASE WHEN EP.IdEstadoPago = 2 THEN P.Valor ELSE 0 END AS ABONO
-      FROM 
-        pagos AS P 
-        INNER JOIN tipopagos AS TP ON (P.IdTipoPago = TP.IdTipoPago) 
-        INNER JOIN estadopagos AS EP ON (P.IdEstadoPago = EP.IdEstadoPago) 
-        INNER JOIN ordencompras AS OC ON (P.IdOrdenCompra = OC.IdOrdenCompra) 
-      WHERE 
-        EP.IdEstadoPago = 2
-        AND P.FechadPago >= CURDATE() - INTERVAL (WEEKDAY(CURDATE()) + 1) DAY
-        AND P.FechadPago < CURDATE() + INTERVAL (6 - WEEKDAY(CURDATE())) DAY
-    ) AS M;
-    
-`);
+    //     // Realiza la tercera consulta SQL para obtener ABONO_TOTAL
+    //     const [abonoTotal] = await conexion.query(`
+    //     SELECT REPLACE(
+    //       COALESCE(FORMAT(SUM(M.ABONO), 0), 0),
+    //       ',',
+    //       '.'
+    //     ) AS ABONO_TOTAL
+    //     FROM (
+    //       SELECT 
+    //         P.FechadPago, 
+    //         OC.IdOrdenCompra, 
+    //         CASE WHEN EP.IdEstadoPago = 1 THEN P.Valor ELSE 0 END AS ABONO
+    //       FROM 
+    //         pagos AS P 
+    //         INNER JOIN tipopagos AS TP ON (P.IdTipoPago = TP.IdTipoPago) 
+    //         INNER JOIN estadopagos AS EP ON (P.IdEstadoPago = EP.IdEstadoPago) 
+    //         INNER JOIN ordencompras AS OC ON (P.IdOrdenCompra = OC.IdOrdenCompra) 
+    //       WHERE 
+    //         EP.IdEstadoPago = 1
+    //         AND P.FechadPago >= CURDATE() - INTERVAL (WEEKDAY(CURDATE()) + 1) DAY
+    //         AND P.FechadPago < CURDATE() + INTERVAL (6 - WEEKDAY(CURDATE())) DAY
+    //     ) AS M;
 
-// REALIZAR LA RESTA ENTRE SUMA GENERAL y GASTOS TOTAL
-const [diferenciaTotal] = await conexion.query(`
-SELECT
-  (SELECT FORMAT(SUM(Valor), 2) FROM 
-  pagos WHERE FechadPago >= CURDATE() - INTERVAL (WEEKDAY(CURDATE()) + 1) DAY 
-  AND FechadPago < CURDATE() + INTERVAL (6 - WEEKDAY(CURDATE())) DAY) AS TotalPagos,
-  (SELECT FORMAT(SUM(Monto), 2) FROM 
-  gastosempleados WHERE createdAt >= CURDATE() - INTERVAL (WEEKDAY(CURDATE()) + 1) DAY 
-  AND createdAt < CURDATE() + INTERVAL (6 - WEEKDAY(CURDATE())) DAY) AS TotalGastos,
-  FORMAT((SELECT SUM(Valor) FROM 
-  pagos WHERE FechadPago >= CURDATE() - INTERVAL (WEEKDAY(CURDATE()) + 1) DAY 
-  AND FechadPago < CURDATE() + INTERVAL (6 - WEEKDAY(CURDATE())) DAY) - (SELECT SUM(Monto) FROM gastosempleados 
-  WHERE 
-  createdAt >= CURDATE() - INTERVAL (WEEKDAY(CURDATE()) + 1) DAY 
-  AND createdAt < CURDATE() + INTERVAL (6 - WEEKDAY(CURDATE())) DAY), 0) AS TOTAL;
 
+    //     `);
+    //     // REALIZA LA SUMA ENTRE  SALDO TOTAL + ABONO TOTAL DE LA SEMANA 
+    //     const [granTotal] = await conexion.query(`
+    //  SELECT FORMAT(ROUND(SUM(Valor)), 0) AS SUMA_GENERAL
+    // FROM pagos
+    // WHERE 
+    //   FechadPago >= CURDATE() - INTERVAL (WEEKDAY(CURDATE()) + 1) DAY
+    //   AND FechadPago < CURDATE() + INTERVAL (6 - WEEKDAY(CURDATE())) DAY;
+
+    //   `);
+    //     // Realiza la tercera consulta SQL para obtener SALDO_TOTAL
+    //     const [saldoTotal] = await conexion.query(`
+    //     SELECT REPLACE(
+    //       COALESCE(FORMAT(SUM(M.ABONO), 0), 0),
+    //       ',',
+    //       '.'
+    //     ) AS SALDO_TOTAL
+    //     FROM (
+    //       SELECT 
+    //         P.FechadPago, 
+    //         OC.IdOrdenCompra, 
+    //         CASE WHEN EP.IdEstadoPago = 2 THEN P.Valor ELSE 0 END AS ABONO
+    //       FROM 
+    //         pagos AS P 
+    //         INNER JOIN tipopagos AS TP ON (P.IdTipoPago = TP.IdTipoPago) 
+    //         INNER JOIN estadopagos AS EP ON (P.IdEstadoPago = EP.IdEstadoPago) 
+    //         INNER JOIN ordencompras AS OC ON (P.IdOrdenCompra = OC.IdOrdenCompra) 
+    //       WHERE 
+    //         EP.IdEstadoPago = 2
+    //         AND P.FechadPago >= CURDATE() - INTERVAL (WEEKDAY(CURDATE()) + 1) DAY
+    //         AND P.FechadPago < CURDATE() + INTERVAL (6 - WEEKDAY(CURDATE())) DAY
+    //     ) AS M;
+
+    // `);
+
+    // REALIZAR LA RESTA ENTRE SUMA GENERAL y GASTOS TOTAL
+    const [diferenciaTotal] = await conexion.query(`
+    SELECT FORMAT(
+      (SELECT SUM(Valor) FROM pagos 
+       WHERE FechadPago >= '${initialDate}' AND FechadPago <= '${finalDate}') - 
+      (SELECT SUM(Monto) FROM gastosempleados 
+       WHERE Fecha >= '${initialDate}' AND Fecha <= '${finalDate}'), 2
+  ) AS TOTAL;
 
 `);
 
 
-//REALIZA SUMA DE GASTOS TOTAL DE LA SEMANA 
-const [gastoTotal] = await conexion.query(`
+    //     //REALIZA SUMA DE GASTOS TOTAL DE LA SEMANA 
+    //     const [gastoTotal] = await conexion.query(`
 
-SELECT REPLACE(
-  COALESCE(FORMAT(SUM(GE.Monto), 0), 0),
-  ',',
-  '.'
-) AS TOTAL_GASTOS_SEMANA
-FROM gastosempleados AS GE
-INNER JOIN empleados AS E ON GE.IdEmpleado = E.IdEmpleado
-WHERE 
-  GE.createdAt >= CURDATE() - INTERVAL (WEEKDAY(CURDATE()) + 1) DAY
-  AND GE.createdAt < CURDATE() + INTERVAL (6 - WEEKDAY(CURDATE())) DAY;
-
-
-`);
+    // SELECT REPLACE(
+    //   COALESCE(FORMAT(SUM(GE.Monto), 0), 0),
+    //   ',',
+    //   '.'
+    // ) AS TOTAL_GASTOS_SEMANA
+    // FROM gastosempleados AS GE
+    // INNER JOIN empleados AS E ON GE.IdEmpleado = E.IdEmpleado
+    // WHERE 
+    //   GE.createdAt >= CURDATE() - INTERVAL (WEEKDAY(CURDATE()) + 1) DAY
+    //   AND GE.createdAt < CURDATE() + INTERVAL (6 - WEEKDAY(CURDATE())) DAY;
 
 
-   // Realiza la tercera consulta SQL para la hoja 'SALDOS'
-// Establecer configuración de formato de fecha en español
-await conexion.query('SET lc_time_names = "es_ES";');
-
-// Realizar la tercera consulta SQL para la hoja 'SALDOS'
-const [rowsSaldos] = await conexion.query(`
-SELECT 
-    LPAD(DATE_FORMAT(AL.FechaInicialAlquiler, '%d %b %y'), 15, ' ') AS FECHA_SALIDA,
-    LPAD(OC.IdOrdenCompra, 10, ' ') AS ORDEN,
-    LPAD(FORMAT(OC.Total, 0), 15, ' ') AS VALOR_FACTURA,
-    LPAD(FORMAT(CASE WHEN EP.IdEstadoPago = 1 THEN P.Valor ELSE 0 END, 0), 10, ' ') AS ABONO,
-    LPAD(FORMAT(CASE WHEN EP.IdEstadoPago = 2 THEN P.Valor ELSE 0 END, 0), 10, ' ') AS SALDO,
-    LPAD(FORMAT(OC.Total - (CASE WHEN EP.IdEstadoPago = 1 THEN P.Valor ELSE 0 END + CASE WHEN EP.IdEstadoPago = 2 THEN P.Valor ELSE 0 END), 0), 20, ' ') AS PENDIENTE_POR_PAGAR
-FROM 
-    PAGOS AS P 
-    INNER JOIN TIPOPAGOS AS TP ON P.IdTipoPago = TP.IdTipoPago
-    INNER JOIN ESTADOPAGOS AS EP ON P.IdEstadoPago = EP.IdEstadoPago
-    INNER JOIN ORDENCOMPRAS AS OC ON P.IdOrdenCompra = OC.IdOrdenCompra
-    INNER JOIN ALQUILERS AS AL ON OC.IdAlquiler = AL.IdAlquiler
-WHERE 
-    P.FechadPago >= CURDATE() - INTERVAL (WEEKDAY(CURDATE()) + 1) DAY
-    AND P.FechadPago < CURDATE() + INTERVAL (6 - WEEKDAY(CURDATE())) DAY
-ORDER BY ORDEN, PENDIENTE_POR_PAGAR;
+    // `);
 
 
-`);
+    //     // Realiza la tercera consulta SQL para la hoja 'SALDOS'
+    //     // Establecer configuración de formato de fecha en español
+    //     await conexion.query('SET lc_time_names = "es_ES";');
 
-    // Realiza la cuarta consulta SQL para la hoja 'GASTOS_ SEMANA'
-    await conexion.query('SET lc_time_names = "es_ES";');
-    const [rowsGastos] = await conexion.query(`
-    SELECT 
-    DATE_FORMAT(GE.Fecha, '%d %b %Y') AS FECHA,
-    UPPER(GE.Descripcion) AS DESCRIPCION,
-    FORMAT(GE.Monto, 0) AS MONTO,
-    UPPER(E.Nombre) AS NOMBRE,
-    UPPER(E.Apellido) AS APELLIDO
-  FROM 
-    gastosempleados AS GE
-    INNER JOIN empleados AS E ON GE.IdEmpleado = E.IdEmpleado
-  WHERE 
-    GE.Fecha >= CURDATE() - INTERVAL (WEEKDAY(CURDATE()) + 1) DAY
-    AND GE.Fecha < CURDATE() + INTERVAL (6 - WEEKDAY(CURDATE())) DAY;
-  
- 
-    `);
+    //     // Realizar la tercera consulta SQL para la hoja 'SALDOS'
+    //     const [rowsSaldos] = await conexion.query(`
+    // SELECT 
+    //     LPAD(DATE_FORMAT(AL.FechaInicialAlquiler, '%d %b %y'), 15, ' ') AS FECHA_SALIDA,
+    //     LPAD(OC.IdOrdenCompra, 10, ' ') AS ORDEN,
+    //     LPAD(FORMAT(OC.Total, 0), 15, ' ') AS VALOR_FACTURA,
+    //     LPAD(FORMAT(CASE WHEN EP.IdEstadoPago = 1 THEN P.Valor ELSE 0 END, 0), 10, ' ') AS ABONO,
+    //     LPAD(FORMAT(CASE WHEN EP.IdEstadoPago = 2 THEN P.Valor ELSE 0 END, 0), 10, ' ') AS SALDO,
+    //     LPAD(FORMAT(OC.Total - (CASE WHEN EP.IdEstadoPago = 1 THEN P.Valor ELSE 0 END + CASE WHEN EP.IdEstadoPago = 2 THEN P.Valor ELSE 0 END), 0), 20, ' ') AS PENDIENTE_POR_PAGAR
+    // FROM 
+    //     PAGOS AS P 
+    //     INNER JOIN TIPOPAGOS AS TP ON P.IdTipoPago = TP.IdTipoPago
+    //     INNER JOIN ESTADOPAGOS AS EP ON P.IdEstadoPago = EP.IdEstadoPago
+    //     INNER JOIN ORDENCOMPRAS AS OC ON P.IdOrdenCompra = OC.IdOrdenCompra
+    //     INNER JOIN ALQUILERS AS AL ON OC.IdAlquiler = AL.IdAlquiler
+    // WHERE 
+    //     P.FechadPago >= CURDATE() - INTERVAL (WEEKDAY(CURDATE()) + 1) DAY
+    //     AND P.FechadPago < CURDATE() + INTERVAL (6 - WEEKDAY(CURDATE())) DAY
+    // ORDER BY ORDEN, PENDIENTE_POR_PAGAR;
 
-        // Realiza la cuarta consulta SQL para la hoja 'GASTOS'
-        await conexion.query('SET lc_time_names = "es_ES";');
-        const [rowsGastostotal] = await conexion.query(`
-        SELECT 
-      DATE_FORMAT(GE.Fecha, '%d %b %Y') AS FECHA,
-      UPPER(GE.Descripcion) AS DESCRIPCION,
-      FORMAT(GE.Monto, 0) AS MONTO,
-      UPPER(E.Nombre) AS NOMBRE,
-      UPPER(E.Apellido) AS APELLIDO
-    FROM gastosempleados AS GE
-    INNER JOIN empleados AS E ON GE.IdEmpleado = E.IdEmpleado;
-     
-        `);
-    // Realiza la cuarta consulta SQL para la hoja con tipos de 'CUENTAS SEMANA'
-    const [rowsCuentasSemana] = await conexion.query(`
-    
-  
-`);
+
+    // `);
+
+    //     // Realiza la cuarta consulta SQL para la hoja 'GASTOS_ SEMANA'
+    //     await conexion.query('SET lc_time_names = "es_ES";');
+    //     const [rowsGastos] = await conexion.query(`
+    //     SELECT 
+    //     DATE_FORMAT(GE.Fecha, '%d %b %Y') AS FECHA,
+    //     UPPER(GE.Descripcion) AS DESCRIPCION,
+    //     FORMAT(GE.Monto, 0) AS MONTO,
+    //     UPPER(E.Nombre) AS NOMBRE,
+    //     UPPER(E.Apellido) AS APELLIDO
+    //   FROM 
+    //     gastosempleados AS GE
+    //     INNER JOIN empleados AS E ON GE.IdEmpleado = E.IdEmpleado
+    //   WHERE 
+    //     GE.Fecha >= CURDATE() - INTERVAL (WEEKDAY(CURDATE()) + 1) DAY
+    //     AND GE.Fecha < CURDATE() + INTERVAL (6 - WEEKDAY(CURDATE())) DAY;
+
+
+    //     `);
+
+    //     // Realiza la cuarta consulta SQL para la hoja 'GASTOS'
+    //     await conexion.query('SET lc_time_names = "es_ES";');
+    //     const [rowsGastostotal] = await conexion.query(`
+    //         SELECT 
+    //       DATE_FORMAT(GE.Fecha, '%d %b %Y') AS FECHA,
+    //       UPPER(GE.Descripcion) AS DESCRIPCION,
+    //       FORMAT(GE.Monto, 0) AS MONTO,
+    //       UPPER(E.Nombre) AS NOMBRE,
+    //       UPPER(E.Apellido) AS APELLIDO
+    //     FROM gastosempleados AS GE
+    //     INNER JOIN empleados AS E ON GE.IdEmpleado = E.IdEmpleado;
+
+    //         `);
+    //     // Realiza la cuarta consulta SQL para la hoja con tipos de 'CUENTAS SEMANA'
+    //     const [rowsCuentasSemana] = await conexion.query(`
+
+
+    // `);
 
     const response = {
-      dia: rowsDia,
-      abonos: rowsAbonos,
-      saldos: rowsSaldos,
-      gastos: rowsGastos,
-      rowsGastostotal: rowsGastostotal,
-      cuentasSemana: rowsCuentasSemana,
-      saldoTotal: saldoTotal,
-      abonoTotal: abonoTotal,
-      granTotal: granTotal,
-      gastoTotal: gastoTotal,
+      // dia: rowsDia,
+      // abonos: rowsAbonos,
+      // saldos: rowsSaldos,
+      // gastos: rowsGastos,
+      // rowsGastostotal: rowsGastostotal,
+      // cuentasSemana: rowsCuentasSemana,
+      // saldoTotal: saldoTotal,
+      // abonoTotal: abonoTotal,
+      // granTotal: granTotal,
+      // gastoTotal: gastoTotal,
       diferenciaTotal: diferenciaTotal
-    
     };
 
     res.status(200).json(response)

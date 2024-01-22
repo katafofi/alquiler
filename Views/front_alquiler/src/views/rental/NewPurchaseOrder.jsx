@@ -21,6 +21,7 @@ const NewPurchaseOrder = (
     Total: 0,
   });
   const [options, setOptions] = useState([]);
+  const [purchaseOrders, setPurchaseOrders] = useState(null)
 
   const nextKeys = ['2', '3', '4']
   const prevKeys = ['0']
@@ -31,6 +32,7 @@ const NewPurchaseOrder = (
 
   useEffect(() => {
     handleGetEmpleado();
+    handleGetPurchaseOrders();
   }, []);
 
 
@@ -44,6 +46,16 @@ const NewPurchaseOrder = (
           element.Nombre + " " + element.Apellido + " - " + element.IdEmpleado, //lo que se ve en el selector
       }));
       setOptions(newOptions);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleGetPurchaseOrders = async () => {
+    try {
+      const response = await fetch(`${URL}${PORT}/${FORM}`);
+      const data = await response.json();
+      setPurchaseOrders(data);
     } catch (error) {
       console.log(error);
     }
@@ -82,6 +94,12 @@ const NewPurchaseOrder = (
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (news.IdOrdenCompra !== "" && purchaseOrders) {
+      if (purchaseOrders.find(order => order.IdOrdenCompra === parseInt(news.IdOrdenCompra))) {
+        alert("La orden de compra seleccionada ya esta asignada a un alquiler.")
+        return null
+      }
+    }
     try {
       const data = await handleCreate();
       if (data) {
@@ -93,13 +111,13 @@ const NewPurchaseOrder = (
       console.error("Error al crear:", error);
     }
 
+
   };
 
   const handleReturnToRent = async () => {
     await handleDeleteById(rentalStatus.rent.IdAlquiler, "renting")
     updateActiveKeys(prevKeys)
   }
-
 
   return (
     <>
@@ -108,6 +126,8 @@ const NewPurchaseOrder = (
           <div className="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
             <form onSubmit={handleSubmit} className="mb-4">
               <div className="form-row">
+
+
                 <InputCataComponente
                   value={news.FechaCompra}
                   onChange={handleInput}
@@ -127,15 +147,15 @@ const NewPurchaseOrder = (
                   onChange={handleSelect}
                 />
 
-                {/* <InputCataComponente
-                  value={news.Total}
+                <InputCataComponente
+                  value={news.IdOrdenCompra}
                   onChange={handleInput}
-                  placeholder={"Ingrese Total"}
-                  id={"Total"}
+                  placeholder={"Ingrese Orden Compra"}
+                  id={"IdOrdenCompra"}
                   type={"number"}
-                  name={"Total"}
-                  label={"Total"}
-                /> */}
+                  name={"IdOrdenCompra"}
+                  label={"IdOrdenCompra"}
+                />
 
                 <ButtonCataComponente
                   type="submit"

@@ -1,5 +1,6 @@
+import { useEffect, useState } from "react";
 import ButtonCataComponente from "../components/provider/Button/Button"
-import { Button, Col, Container, Row } from "react-bootstrap";
+import { Button, Col, Container, Form, Row } from "react-bootstrap";
 import * as XLSX from 'xlsx'
 // import ReportPreview from "./report/ReportPreview";
 // import XLSXPopulate from "xlsx-populate";
@@ -43,12 +44,21 @@ const getReportData = async () => {
   }
 }
 
-const getReportDataWeek = async () => {
+const getReportDataWeek = async (formData) => {
+  console.log(JSON.stringify(formData))
   const FORM = "report/week";
   const URL = "http://localhost:";
   const PORT = "3003";
   try {
-    const response = await fetch(`${URL}${PORT}/${FORM}`);
+    const response = await fetch(`${URL}${PORT}/${FORM}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      }
+    );
     const data = await response.json();
     return data
   } catch (error) {
@@ -65,20 +75,20 @@ const createReport = async (data, reportType) => {
   const libro = XLSX.utils.book_new();
   const hojaDia = XLSX.utils.json_to_sheet(data.dia.map(row => ({
     ...row,
-     })));
+  })));
 
   // Agregar el resultado de SALDO_TOTAL a la hoja de ABONOS
   const hojaAbonos = XLSX.utils.json_to_sheet([
     ...data.abonos.map(row => ({
       ...row,
-    
+
     })),
   ]);
 
   // Crea una hoja de Excel con los resultados de 'SALDOS'
   const hojaSaldos = XLSX.utils.json_to_sheet(data.saldos.map(row => ({
     ...row,
-   
+
   })));
 
   // Crea una hoja de Excel con los resultados de 'GASTOS'
@@ -86,7 +96,7 @@ const createReport = async (data, reportType) => {
     // Omitir la propiedad createdAt en el objeto resultante
     ...((({ createdAt, ...rest }) => rest)(row)),
   })));
-  
+
 
   XLSX.utils.book_append_sheet(libro, hojaDia, 'DIA');
   XLSX.utils.book_append_sheet(libro, hojaAbonos, 'ABONOS');
@@ -117,23 +127,77 @@ const createReport = async (data, reportType) => {
 }
 
 
-const handleReport = async () => {
-  const data = await getReportData()
-  createReport(data, "general")
-}
+
 
 const handleReportWeek = async () => {
   const data = await getReportDataWeek()
   createReport(data, "semanal")
 }
 
+const initFormData = () => {
+  let initialDate = new Date()
+  let finalDate = new Date()
+  initialDate.setDate(initialDate.getDate() - 7)
+  return {
+    initialDate: initialDate.toISOString().split('T')[0],
+    finalDate: finalDate.toISOString().split('T')[0]
+  }
+}
+
+const handleOldReport = async () => {
+  const data = await getReportData()
+  createReport(data, "general")
+}
+
+
 const Reports = () => {
+  const [formData, setFormData] = useState(initFormData())
+
+  const handleReport = async (e) => {
+    e.preventDefault()
+    const data = await getReportDataWeek(formData)
+    console.log("Datos devueltos:", data)
+    // createReport(data, "general")
+  }
+
+  const handleChange = ({ target }) => {
+    setFormData((prev) => ({ ...prev, [target.name]: target.value }))
+  }
+
+  // useEffect(() => {
+  //   console.log(formData)
+  // }, [formData])
+
   return (<Container>
     <Row><h3>Reportes</h3></Row>
-    <Row>
-      <Col><Button onClick={handleReport}>Generar Reporte</Button></Col>
-      <Col><Button onClick={handleReportWeek}>Generar Reporte Semamal</Button></Col>
-    </Row>
+    <Form onSubmit={handleReport}>
+      <Row>
+        <Col>
+          <Form.Group>
+            <Form.Label>Fecha Inicial</Form.Label>
+            <Form.Control
+              type="date"
+              value={formData.initialDate}
+              name="initialDate"
+              onChange={handleChange} />
+          </Form.Group>
+        </Col>
+        <Col>
+          <Form.Group>
+            <Form.Label>Fecha Final</Form.Label>
+            <Form.Control
+              type="date"
+              value={formData.finalDate}
+              name="finalDate"
+              onChange={handleChange} />
+          </Form.Group>
+        </Col>
+        <Col>
+          <Button type="submit">Generar Reporte</Button>
+        </Col>
+      </Row>
+    </Form>
+    <Col><Button onClick={handleOldReport}>Generar Reporte</Button></Col>
   </Container>)
 }
 
