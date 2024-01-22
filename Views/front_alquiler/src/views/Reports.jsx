@@ -197,7 +197,7 @@ const Reports = () => {
         </Col>
       </Row>
     </Form>
-    <Col><Button onClick={handleOldReport}>Generar Reporte</Button></Col>
+    <Col><Button onClick={handleOldReport}></Button></Col>
   </Container>)
 }
 

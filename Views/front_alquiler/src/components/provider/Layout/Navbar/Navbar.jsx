@@ -30,7 +30,7 @@ const NavbarCataComponente = () => {
       { to: '/item', label: 'Artículos' },
       { to: '/status/register/negative', label: 'Estado registro negativo' },
       { to: '/payment/type', label: 'Tipos de pago' },
-      { to: '/renting', label: 'validacion devoluciones del dia' },
+      { to: '/renting', label: 'alquiler' },
       { to: '/puchase/order', label: 'Orden compra' },
       { to: '/puchase/accesories/order', label: 'Orden compra accesorios' },
       { to: '/puchase/item/order', label: 'Orden compra articulo ' },
@@ -47,6 +47,7 @@ const NavbarCataComponente = () => {
       { to: '/credit', label: 'Abonos' },
       { to: '/puchase/accesories/order', label: 'redimir factuta accesorios' },
       { to: '/puchase/item/order', label: 'redimir factura articulo ' },
+      { to: '/renting', label: 'redimir factura fecha' },
 
     ],
     pagos: [
