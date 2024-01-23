@@ -23,7 +23,7 @@ const getTableData = (clientsData, purchaseOrderData, rentsData, negativeRecords
       cedula: client.Cedula,
       name: client.Nombre,
       lastName: client.Apellido,
-      negativeRecord: negativeRecord ? negativeRecord : false,
+      negativeRecord: negativeRecord ? negativeRecord : null,
       idPurchaseOrder: purchaseOrder ? purchaseOrder.IdOrdenCompra : null,
     }
   })
