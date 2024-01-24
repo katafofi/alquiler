@@ -111,7 +111,9 @@ const createReport = async (data, reportType) => {
         SALDO: data.saldoTotal[0].SALDO_TOTAL,
         SUMA: data.granTotal[0].SUMA_GENERAL,
         GASTOS: data.gastoTotal[0].TOTAL_GASTOS_SEMANA,
-        TOTAL: data.diferenciaTotal[0].TOTAL
+        TOTAL: data.diferenciaTotal[0].TOTAL,       
+       //xx: data.cuentasSemana[0].NEQUI
+
       }, // Agrega SALDO_TOTAL y ABONO_TOTAL como nuevas columnas
       // Puedes agregar más transformaciones si es necesario
       ...data.cuentasSemana.map(row => ({

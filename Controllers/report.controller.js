@@ -194,7 +194,7 @@ FROM
     INNER JOIN ordencompras AS OC ON (P.IdOrdenCompra = OC.IdOrdenCompra) 
 WHERE 
     P.FechadPago >= '${initialDate}'
-    AND P.FechadPago < '${finalDate}'
+    AND P.FechadPago <= '${finalDate}'
 ORDER BY ORDEN ASC;
 
 
@@ -251,26 +251,16 @@ WHERE
     //     //REALIZA SUMA DE GASTOS TOTAL DE LA SEMANA 
       const [gastoTotal] = await conexion.query(`
 
-    SELECT REPLACE(
-      COALESCE(FORMAT(SUM(M.ABONO), 0), 0),
-      ',',
-      '.'
-  ) AS SALDO_TOTAL
-  FROM (
-      SELECT 
-          P.FechadPago, 
-          OC.IdOrdenCompra, 
-          CASE WHEN EP.IdEstadoPago = 2 THEN P.Valor ELSE 0 END AS ABONO
-      FROM 
-          pagos AS P 
-          INNER JOIN tipopagos AS TP ON (P.IdTipoPago = TP.IdTipoPago) 
-          INNER JOIN estadopagos AS EP ON (P.IdEstadoPago = EP.IdEstadoPago) 
-          INNER JOIN ordencompras AS OC ON (P.IdOrdenCompra = OC.IdOrdenCompra) 
+      SELECT REPLACE(
+        COALESCE(FORMAT(SUM(GE.Monto), 0), 0),
+        ',',
+        '.'
+      ) AS TOTAL_GASTOS_SEMANA
+      FROM gastosempleados AS GE
+      INNER JOIN empleados AS E ON GE.IdEmpleado = E.IdEmpleado
       WHERE 
-          EP.IdEstadoPago = 2
-          AND P.FechadPago >= '${initialDate}'
-          AND P.FechadPago <= '${finalDate}'
-  ) AS M;
+        GE.Fecha >= '${initialDate}'  
+        AND GE.Fecha <= '${finalDate}';  
   
 
      `);
@@ -333,7 +323,7 @@ FROM
     INNER JOIN empleados AS E ON GE.IdEmpleado = E.IdEmpleado
 WHERE 
     GE.Fecha >= '${initialDate}'
-    AND GE.Fecha < '${finalDate}';
+    AND GE.Fecha <= '${finalDate}';
          `);
     //     // Realiza la cuarta consulta SQL para la hoja con tipos de 'CUENTAS SEMANA'
         const [rowsCuentasSemana] = await conexion.query(`
@@ -349,7 +339,7 @@ FROM
 WHERE 
     pagos.IdTipoPago IN (1, 2, 3, 4) 
     AND pagos.FechadPago >= '${initialDate}'
-    AND pagos.FechadPago < '${finalDate}'
+    AND pagos.FechadPago <= '${finalDate}'
 GROUP BY 
     pagos.IdTipoPago, tipopagos.Descripcion;
 
