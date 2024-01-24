@@ -86,7 +86,7 @@ const InvoicePreview = ({ id, invoiceModalActive, setInvoiceModalActive, }) => {
                       </tbody>
                     </Table>
                   </Col>
-                  <Col xs="3">
+                  <Col xs="1">
                     <Table striped bordered hover size='sm'>
                       <thead>
                         <tr>
@@ -107,14 +107,17 @@ const InvoicePreview = ({ id, invoiceModalActive, setInvoiceModalActive, }) => {
                       <thead>
                         <tr>
                           <th>Orden de trabajo</th>
+                          <th>cliente</th>
                         </tr>
                       </thead>
                       <tbody>
                         <tr>
                           <td>{invoiceData.IdOrdenCompra}</td>
+                          <td>{invoiceData.Cliente.IdCliente}</td>
                         </tr>
                       </tbody>
                     </Table>
+                    
                   </Col>
                 </Row>
               </header>
@@ -133,7 +136,7 @@ const InvoicePreview = ({ id, invoiceModalActive, setInvoiceModalActive, }) => {
                     </tr>
                     <tr>
                       <td>Barrio:</td>
-                      <td colSpan="6"></td>
+                      <td colSpan="6">{invoiceData.Cliente.Barrio}</td>
                     </tr>
                     <tr>
                       <td>Ref:</td>
