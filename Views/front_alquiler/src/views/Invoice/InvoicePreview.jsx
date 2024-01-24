@@ -205,7 +205,10 @@ const InvoicePreview = ({ id, invoiceModalActive, setInvoiceModalActive, }) => {
               <footer>
                 <Row>
                   <Col xs="9">
-                    <small className='fs-6'>El cliente esta en la obligación de responder por las prendas ya descritas. El retardo en la devolución de las prendas ocasionara. <strong>MULTA DE $10.000 DIARIOS. </strong>El cliente esta obligado a llevar las prendas estipuladas en esta factura. <strong>Por Ningún Motivo se Hará Devolución de Dinero Ni Transferencia de Saldos a Otra Factura. </strong>La entrega de las prendas será en la fecha esTablecida en esta factura. Después de las 3 pm para la entrega de las prendas favor traer fotocopia de cédula de la persona quien venga a mirarlas y un recibo público de agua o luz.</small>
+                    <small className='fs-7 text-xxs' style={{ fontSize: '0.5rem' }}>El cliente esta en la obligación de
+                     responder por las prendas ya descritas. El retardo en la devolución 
+                     de las prendas ocasionara. <strong>MULTA DE $10.000 DIARIOS.</strong>El cliente esta obligado a llevar las prendas estipuladas en esta factura. <strong>Por Nin
+                        gún Motivo se Hará Devolución de Dinero Ni Transferencia de Saldos a Otra Factura. </strong>La entrega de las prendas será en la fecha esTablecida en esta factura. Después de las 3 pm para la entrega de las prendas favor traer fotocopia de cédula de la persona quien venga a mirarlas y un recibo público de agua o luz.</small>
                     <div className='mt-3'>
                       <Table size='sm'>
                         <tbody>
