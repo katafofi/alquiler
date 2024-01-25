@@ -251,7 +251,7 @@ const PuchareItemOrder = () => {
 
   const indexOfLast = (currentPage + 1) * PerPage;
   const indexOfFirst = indexOfLast - PerPage;
-  const current = forms.filter((item) => item.IdOrdenCompra.toString().toLowerCase().includes(filter.toString().toLowerCase())).slice(indexOfFirst, indexOfLast);
+  const current = forms.filter((item) => item.IdOrdenCompra?.toString().toLowerCase().includes(filter?.toString().toLowerCase())).slice(indexOfFirst, indexOfLast);
 
 
   return (

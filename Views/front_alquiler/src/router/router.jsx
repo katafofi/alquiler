@@ -22,7 +22,7 @@ import ItemInventory from '../views/ItemInventory';
 import Item from '../views/Item';
 import NegativeRecord from '../views/NegativeRecord';
 import Payments from '../views/Payments';
-import Reports from '../views/Reports';
+import Reports from '../views/reports/Reports';
 import RentingRefunt from '../views/RentingRefunt';
 import PuchareItemOrder from '../views/PuchareItemOrder';
 import Renting from '../views/renting';

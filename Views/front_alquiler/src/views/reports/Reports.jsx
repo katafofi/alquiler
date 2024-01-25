@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import ButtonCataComponente from "../components/provider/Button/Button"
+import ButtonCataComponente from "../../components/provider/Button/Button"
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
 import * as XLSX from 'xlsx'
+import DailyReport from "./DailyReport";
 // import ReportPreview from "./report/ReportPreview";
 // import XLSXPopulate from "xlsx-populate";
 
@@ -12,7 +13,6 @@ const subsidies_balances = async () => {
   try {
     const response = await fetch(`${URL}${PORT}/${FORM}/abonos_saldos`);
     const data = await response.json();
-    console.log(data)
   } catch (error) {
     console.log(error);
   }
@@ -25,7 +25,6 @@ const spent = async () => {
   try {
     const response = await fetch(`${URL}${PORT}/${FORM}/gastos_empleados`);
     const data = await response.json();
-    console.log(data)
   } catch (error) {
     console.log(error);
   }
@@ -45,7 +44,6 @@ const getReportData = async () => {
 }
 
 const getReportDataWeek = async (formData) => {
-  console.log(JSON.stringify(formData))
   const FORM = "report/week";
   const URL = "http://localhost:";
   const PORT = "3003";
@@ -104,26 +102,26 @@ const createReport = async (data, reportType) => {
   XLSX.utils.book_append_sheet(libro, hojaSaldos, 'SALDOS');
 
   //if (reportType === 'semanal') {
-    // Crear una nueva hoja 'CUENTAS SEMANA' con el resultado de SALDO_TOTAL y ABONO_TOTAL
-    const hojaCuentasSemanaNueva = XLSX.utils.json_to_sheet([
-      {
-        ABONO: data.abonoTotal[0].ABONO_TOTAL,
-        SALDO: data.saldoTotal[0].SALDO_TOTAL,
-        SUMA: data.granTotal[0].SUMA_GENERAL,
-        GASTOS: data.gastoTotal[0].TOTAL_GASTOS_SEMANA,
-        TOTAL: data.diferenciaTotal[0].TOTAL,       
-       //xx: data.cuentasSemana[0].NEQUI
+  // Crear una nueva hoja 'CUENTAS SEMANA' con el resultado de SALDO_TOTAL y ABONO_TOTAL
+  const hojaCuentasSemanaNueva = XLSX.utils.json_to_sheet([
+    {
+      ABONO: data.abonoTotal[0].ABONO_TOTAL,
+      SALDO: data.saldoTotal[0].SALDO_TOTAL,
+      SUMA: data.granTotal[0].SUMA_GENERAL,
+      GASTOS: data.gastoTotal[0].TOTAL_GASTOS_SEMANA,
+      TOTAL: data.diferenciaTotal[0].TOTAL,
+      //xx: data.cuentasSemana[0].NEQUI
 
-      }, // Agrega SALDO_TOTAL y ABONO_TOTAL como nuevas columnas
+    }, // Agrega SALDO_TOTAL y ABONO_TOTAL como nuevas columnas
+    // Puedes agregar más transformaciones si es necesario
+    ...data.cuentasSemana.map(row => ({
+      ...row,
       // Puedes agregar más transformaciones si es necesario
-      ...data.cuentasSemana.map(row => ({
-        ...row,
-        // Puedes agregar más transformaciones si es necesario
-      }
-      )),
-    ]);
-    XLSX.utils.book_append_sheet(libro, hojaCuentasSemanaNueva, 'CUENTAS SEMANA');
- // }
+    }
+    )),
+  ]);
+  XLSX.utils.book_append_sheet(libro, hojaCuentasSemanaNueva, 'CUENTAS SEMANA');
+  // }
 
   XLSX.writeFile(libro, `reporte_${reportType}.xlsx`);
 }
@@ -158,22 +156,17 @@ const Reports = () => {
   const handleReport = async (e) => {
     e.preventDefault()
     const data = await getReportDataWeek(formData)
-    console.log("Datos devueltos:", data)
-    /createReport(data, "generalSemanal")
+    createReport(data, "generalSemanal")
   }
 
   const handleChange = ({ target }) => {
     setFormData((prev) => ({ ...prev, [target.name]: target.value }))
   }
 
-  // useEffect(() => {
-  //   console.log(formData)
-  // }, [formData])
-
   return (<Container>
-    <Row><h3>Reportes</h3></Row>
+    <Row className="text-center mt-3 mb-3"><h3>Reportes</h3></Row>
     <Form onSubmit={handleReport}>
-      <Row>
+      <Row className="mb-5">
         <Col>
           <Form.Group>
             <Form.Label>Fecha Inicial</Form.Label>
@@ -194,12 +187,15 @@ const Reports = () => {
               onChange={handleChange} />
           </Form.Group>
         </Col>
-        <Col>
+        <Col className="d-flex align-items-end">
           <Button type="submit">Generar Reporte</Button>
         </Col>
       </Row>
     </Form>
-    <Col><Button onClick={handleOldReport}></Button></Col>
+    <Row className="text-center mb-3"><h3>Reporte del Día</h3></Row>
+    <Row>
+      <DailyReport getReportDataWeek={getReportDataWeek} />
+    </Row>
   </Container>)
 }
 
