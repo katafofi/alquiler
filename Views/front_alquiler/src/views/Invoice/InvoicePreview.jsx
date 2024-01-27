@@ -235,7 +235,8 @@ const InvoicePreview = ({ id, invoiceModalActive, setInvoiceModalActive }) => {
                                       minimumFractionDigits: 0,
                                       maximumFractionDigits: 0,
                                     }
-                                  )}
+                                  )}{" "}
+                                  $
                                 </td>
                               </tr>
                             )
