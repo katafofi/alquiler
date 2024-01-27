@@ -8,7 +8,8 @@ const DailyReport = ({ getReportDataWeek }) => {
     const getDailyReport = async () => {
       try {
         let today = new Date()
-        today = `${today.getUTCFullYear()}-${today.getUTCMonth() < 9 ? "0" + (today.getUTCMonth() + 1) : today.getUTCMonth() + 1}-${today.getUTCDate()}`
+        today.setHours(today.getHours() - 5)
+        today = `${today.getFullYear()}-${today.getMonth() < 9 ? "0" + (today.getMonth() + 1) : today.getMonth() + 1}-${today.getDate()}`
         const data = await getReportDataWeek({ initialDate: today, finalDate: today })
         const day = data.dia
         setDailyData(day)
