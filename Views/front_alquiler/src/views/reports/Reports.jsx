@@ -127,8 +127,6 @@ const createReport = async (data, reportType) => {
 }
 
 
-
-
 const handleReportWeek = async () => {
   const data = await getReportDataWeek()
   createReport(data, "semanal")
@@ -154,9 +152,15 @@ const Reports = () => {
   const [formData, setFormData] = useState(initFormData())
 
   const handleReport = async (e) => {
-    e.preventDefault()
-    const data = await getReportDataWeek(formData)
-    createReport(data, "generalSemanal")
+    let verifyPassword = prompt("Por favor ingresa la contraseña para generar el reporte:")
+    console.log(verifyPassword)
+    if (verifyPassword === "cata2047901*") {
+      e.preventDefault()
+      const data = await getReportDataWeek(formData)
+      createReport(data, "generalSemanal")
+    } else {
+      alert("¡Contraseña incorrecta!")
+    }
   }
 
   const handleChange = ({ target }) => {
