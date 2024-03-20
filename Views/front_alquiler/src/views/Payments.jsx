@@ -16,6 +16,7 @@ const Payments = () => {
     IdEstadoPago: "",
     IdTipoPago: "",
     IdOrdenCompra: "",
+    nombre: "",
   });
   const [selected, setSelected] = useState(null);
   const [deleted, setDeleted] = useState(false);
@@ -127,6 +128,7 @@ const Payments = () => {
               IdEstadoPago: "",
               IdTipoPago: "",
               IdOrdenCompra: "",
+              nombre: "",
             });
           }
         } catch (error) {
@@ -169,6 +171,7 @@ const Payments = () => {
       IdEstadoPago: news.IdEstadoPago,
       IdTipoPago: news.IdTipoPago,
       IdOrdenCompra: news.IdOrdenCompra,
+      nombre: news.nombre
     });
   };
 
@@ -190,6 +193,7 @@ const Payments = () => {
         IdEstadoPago: "",
         IdTipoPago: "",
         IdOrdenCompra: "",
+        nombre: "",
       });
     } catch (error) {
       console.log(error);
@@ -229,6 +233,7 @@ const Payments = () => {
         IdEstadoPago: news.IdEstadoPago,
         IdTipoPago: news.IdTipoPago,
         IdOrdenCompra: news.IdOrdenCompra,
+        nombre: news.nombre
       }),
     });
     const data = await response.json();
@@ -245,6 +250,7 @@ const Payments = () => {
       IdEstadoPago: "",
       IdTipoPago: "",
       IdOrdenCompra: "",
+      nombre: "",
     });
   };
 
@@ -357,6 +363,15 @@ console.log
                   value={news.IdOrdenCompra}
                   options={OrdenCompraOptions}
                   onChange={handleSelect}
+                />
+                    <InputCataComponente
+                  value={news.nombre}
+                  onChange={handleInput}
+                  placeholder={"Ingrese nombre"}
+                  id={"nombre"}
+                  type={"text"}
+                  name={"nombre"}
+                  label={"nombre"}
                 />
                 <ButtonCataComponente
                   type="submit"
