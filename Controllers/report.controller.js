@@ -97,13 +97,17 @@ WHERE
       `);
 
 
-    // Realiza la tercera consulta SQL para la hoja 'SALDOS'
+    //
+    
+    
+    
+    no// Realiza la tercera consulta SQL para la hoja 'SALDOS'
     const [rowsSaldos] = await conexion.query(`
       SELECT 
         P.FechadPago, 
         OC.IdOrdenCompra, 
         OC.Total AS total_alquiler, 
-        CASE WHEN EP.IdEstadoPago = 1 THEN P.Valor ELSE 0 END AS ABONO, 
+        CASE WHEN EP.IdEstadoPago = 1 THEN P.Valor ELSE 0 END AS ABONOs, 
         CASE WHEN EP.IdEstadoPago = 2 THEN P.Valor ELSE 0 END AS SALDO 
       FROM pagos AS P 
       INNER JOIN tipopagos AS TP ON (P.IdTipoPago = TP.IdTipoPago) 
@@ -179,26 +183,25 @@ ORDER BY ORDEN ASC;
 
          `);
 
-    //     // Realiza la segunda consulta SQL para la hoja 'ABONOS'
+    //  hoja abonos OK    // Realiza la segunda consulta SQL para la hoja 'ABONOS'
     await conexion.query('SET lc_time_names = "es_ES";');
 
          const [rowsAbonos] = await conexion.query(`
-
-    SELECT 
-    DATE_FORMAT(P.FechadPago, '%d %b %Y') AS FECHA,
-    OC.IdOrdenCompra AS ORDEN,
-    FORMAT(OC.Total, 0) AS VALOR_FACTURA,
-    FORMAT(CASE WHEN EP.IdEstadoPago = 1 THEN P.Valor ELSE 0 END, 0) AS ABONO, 
-    FORMAT(CASE WHEN EP.IdEstadoPago = 2 THEN P.Valor ELSE 0 END, 0) AS SALDO
-FROM 
-    pagos AS P 
-    INNER JOIN tipopagos AS TP ON (P.IdTipoPago = TP.IdTipoPago) 
-    INNER JOIN estadopagos AS EP ON (P.IdEstadoPago = EP.IdEstadoPago) 
-    INNER JOIN ordencompras AS OC ON (P.IdOrdenCompra = OC.IdOrdenCompra) 
-WHERE 
-    P.FechadPago >= '${initialDate}'
-    AND P.FechadPago <= '${finalDate}'
-ORDER BY ORDEN ASC;
+         SELECT 
+         OC.IdOrdenCompra AS ORDEN,
+         MAX(FORMAT(CASE WHEN EP.IdEstadoPago = 1 THEN P.Valor ELSE 0 END, '#,##0')) AS ABONO
+     FROM 
+         pagos AS P 
+         INNER JOIN estadopagos AS EP ON (P.IdEstadoPago = EP.IdEstadoPago) 
+         INNER JOIN ordencompras AS OC ON (P.IdOrdenCompra = OC.IdOrdenCompra) 
+     WHERE 
+         P.FechadPago >= '${initialDate}'
+         AND P.FechadPago <= '${finalDate}'
+     GROUP BY ORDEN
+     HAVING ABONO <> '0'
+     ORDER BY ORDEN ASC;
+     
+     
 
 
   `);
@@ -274,25 +277,28 @@ WHERE
     //     // Establecer configuración de formato de fecha en español
         await conexion.query('SET lc_time_names = "es_ES";');
 
-    //     // Realizar la tercera consulta SQL para la hoja 'SALDOS'
+    //  ok si    // Realizar la tercera consulta SQL para la hoja 'SALDOS'
        const [rowsSaldos] = await conexion.query(`
-    SELECT 
-    LPAD(DATE_FORMAT(AL.FechaInicialAlquiler, '%d %b %y'), 15, ' ') AS FECHA_SALIDA,
-    LPAD(OC.IdOrdenCompra, 10, ' ') AS ORDEN,
-    LPAD(FORMAT(OC.Total, 0), 15, ' ') AS VALOR_FACTURA,
-    LPAD(FORMAT(CASE WHEN EP.IdEstadoPago = 1 THEN P.Valor ELSE 0 END, 0), 10, ' ') AS ABONO,
-    LPAD(FORMAT(CASE WHEN EP.IdEstadoPago = 2 THEN P.Valor ELSE 0 END, 0), 10, ' ') AS SALDO,
-    LPAD(FORMAT(OC.Total - (CASE WHEN EP.IdEstadoPago = 1 THEN P.Valor ELSE 0 END + CASE WHEN EP.IdEstadoPago = 2 THEN P.Valor ELSE 0 END), 0), 20, ' ') AS PENDIENTE_POR_PAGAR
+       SELECT 
+    OC.IdOrdenCompra AS ORDEN,
+    MAX(CASE 
+            WHEN EP.IdEstadoPago = 2 THEN FORMAT(P.Valor, '#,##0')
+            ELSE '0'
+        END) AS SALDO
 FROM 
-    PAGOS AS P 
-    INNER JOIN TIPOPAGOS AS TP ON P.IdTipoPago = TP.IdTipoPago
-    INNER JOIN ESTADOPAGOS AS EP ON P.IdEstadoPago = EP.IdEstadoPago
-    INNER JOIN ORDENCOMPRAS AS OC ON P.IdOrdenCompra = OC.IdOrdenCompra
-    INNER JOIN ALQUILERS AS AL ON OC.IdAlquiler = AL.IdAlquiler
+    pagos AS P
+    INNER JOIN estadopagos AS EP ON P.IdEstadoPago = EP.IdEstadoPago
+    INNER JOIN ordencompras AS OC ON P.IdOrdenCompra = OC.IdOrdenCompra
+    INNER JOIN alquilers AS AL ON OC.IdAlquiler = AL.IdAlquiler
 WHERE 
-    P.FechadPago >= '${initialDate}'
-    AND P.FechadPago <= '${finalDate}'
-ORDER BY ORDEN, PENDIENTE_POR_PAGAR;
+    AL.FechaInicialAlquiler >= '${initialDate}'-- Fecha inicial del rango
+    AND AL.FechaInicialAlquiler <= '${finalDate}' -- Fecha final del rango
+GROUP BY OC.IdOrdenCompra
+HAVING SUM(P.Valor) > 0 -- Solo mostrar aquellos con un valor mayor que 0 en SALDO
+ORDER BY ORDEN ASC;
+ 
+   
+   
 
    `);
 
@@ -371,6 +377,24 @@ GROUP BY
   
     
     `);
+    const [salidas] = await conexion.query(`
+    SELECT 
+    DATE_FORMAT(a.FechaInicialAlquiler, '%d de %M de %Y') AS FechaInicialAlquiler_formateada,
+    ROW_NUMBER() OVER () AS numero,
+    o.IdOrdenCompra
+FROM 
+    alquilers a
+LEFT JOIN 
+    ordencompras o ON a.IdAlquiler = o.IdAlquiler
+WHERE 
+    a.FechaInicialAlquiler >= '${initialDate}' 
+    AND a.FechaInicialAlquiler <= '${finalDate}'
+    AND o.IdOrdenCompra IS NOT NULL -- Excluir filas con IdOrdenCompra NULL
+ORDER BY 
+    numero ASC;
+
+
+    `);
 
     const response = {
        dia: rowsDia,
@@ -383,7 +407,8 @@ GROUP BY
        abonoTotal: abonoTotal,
        granTotal: granTotal,
        gastoTotal: gastoTotal,
-      diferenciaTotal: diferenciaTotal
+      diferenciaTotal: diferenciaTotal,
+      salidas: salidas
     };
 
     res.status(200).json(response)
