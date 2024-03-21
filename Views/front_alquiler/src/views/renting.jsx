@@ -316,7 +316,7 @@ const Renting = () => {
                 <InputCataComponente
                   value={news.FechaFinlAlquiler}
                   onChange={handleInput}
-                  placeholder={"Ingrese descripcion"}
+                  placeholder={"Ingrese fecha retirado"}
                   id={"FechaFinlAlquiler"}
                   type={"date"}
                   name={"FechaFinlAlquiler"}

@@ -17,6 +17,7 @@ const Credit = () => {
     IdEstadoPago: "",
     IdTipoPago: "",
     IdOrdenCompra: "",
+    nombre: "",
   });
   const [selected, setSelected] = useState(null);
   const [deleted, setDeleted] = useState(false);
@@ -131,6 +132,7 @@ const Credit = () => {
             IdEstadoPago: "",
             IdTipoPago: "",
             IdOrdenCompra: "",
+            nombre: "",
           });
         }
       } catch (error) {
@@ -167,6 +169,7 @@ const Credit = () => {
       IdEstadoPago: news.IdEstadoPago,
       IdTipoPago: news.IdTipoPago,
       IdOrdenCompra: news.IdOrdenCompra,
+      nombre: news.nombre
     });
   };
 
@@ -188,6 +191,7 @@ const Credit = () => {
         IdEstadoPago: "",
         IdTipoPago: "",
         IdOrdenCompra: "",
+        nombre: "",
       });
       return data
     } catch (error) {
@@ -228,6 +232,7 @@ const Credit = () => {
         IdEstadoPago: news.IdEstadoPago,
         IdTipoPago: news.IdTipoPago,
         IdOrdenCompra: news.IdOrdenCompra,
+        nombre: news.nombre
       }),
     });
     const data = await response.json();
@@ -244,6 +249,7 @@ const Credit = () => {
       IdEstadoPago: "",
       IdTipoPago: "",
       IdOrdenCompra: "",
+      nombre: "",
     });
   };
 
@@ -374,6 +380,18 @@ const Credit = () => {
                   options={TipoPagoOptions}
                   onChange={handleSelect}
                 />
+
+
+                  <InputCataComponente
+                  value={news.nombre}
+                  onChange={handleInput}
+                  placeholder={"Ingrese nombre"}
+                  id={"nombre"}
+                  type={"text"}
+                  name={"nombre"}
+                  label={"nombre"}
+                />
+
                 <ButtonCataComponente
                   type="submit"
                   className="btn btn-primary btn-block"

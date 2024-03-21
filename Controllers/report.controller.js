@@ -225,45 +225,46 @@ ORDER BY ORDEN ASC;
 
 
      `);
-    //     // REALIZA LA SUMA ENTRE  SALDO TOTAL + ABONO TOTAL DE LA SEMANA 
-        const [granTotal] = await conexion.query(`
-    SELECT FORMAT(ROUND(SUM(Valor)), 0) AS SUMA_GENERAL
+    // REALIZA LA SUMA ENTRE SALDO TOTAL + ABONO TOTAL DE LA SEMANA 
+const [granTotal] = await conexion.query(`
+SELECT FORMAT(SUM(Valor), 0) AS SUMA_GENERAL
 FROM pagos
 WHERE 
     FechadPago >= '${initialDate}'
     AND FechadPago <= '${finalDate}';
-       `);
-  
-    // `);
-
-    // REALIZAR LA RESTA ENTRE SUMA GENERAL y GASTOS TOTAL
-    const [diferenciaTotal] = await conexion.query(`
-    SELECT FORMAT(
-      (SELECT SUM(Valor) FROM pagos 
-       WHERE FechadPago >= '${initialDate}' AND FechadPago <= '${finalDate}') - 
-      (SELECT SUM(Monto) FROM gastosempleados 
-       WHERE Fecha >= '${initialDate}' AND Fecha <= '${finalDate}'), 2
-  ) AS TOTAL;
-
 `);
 
+// REALIZAR LA RESTA ENTRE SUMA GENERAL y GASTOS TOTAL
+const [diferenciaTotal] = await conexion.query(`
+SELECT 
+    FORMAT(
+        (SELECT SUM(Valor) FROM pagos 
+         WHERE FechadPago >= '${initialDate}' AND FechadPago <= '${finalDate}')
+         -
+        COALESCE(
+            (SELECT SUM(GE.Monto) FROM gastosempleados AS GE
+             INNER JOIN empleados AS E ON GE.IdEmpleado = E.IdEmpleado
+             WHERE GE.Fecha >= '${initialDate}' AND GE.Fecha <= '${finalDate}'
+            ), 
+            0
+        ), 
+        0
+) AS TOTAL;
+`);
 
-    //     //REALIZA SUMA DE GASTOS TOTAL DE LA SEMANA 
-      const [gastoTotal] = await conexion.query(`
+//REALIZA SUMA DE GASTOS TOTAL DE LA SEMANA 
+const [gastoTotal] = await conexion.query(`
+SELECT FORMAT(
+    COALESCE(SUM(GE.Monto), 0), 0
+) AS TOTAL_GASTOS_SEMANA
+FROM gastosempleados AS GE
+INNER JOIN empleados AS E ON GE.IdEmpleado = E.IdEmpleado
+WHERE 
+    GE.Fecha >= '${initialDate}'  
+    AND GE.Fecha <= '${finalDate}';  
+`);
 
-      SELECT REPLACE(
-        COALESCE(FORMAT(SUM(GE.Monto), 0), 0),
-        ',',
-        '.'
-      ) AS TOTAL_GASTOS_SEMANA
-      FROM gastosempleados AS GE
-      INNER JOIN empleados AS E ON GE.IdEmpleado = E.IdEmpleado
-      WHERE 
-        GE.Fecha >= '${initialDate}'  
-        AND GE.Fecha <= '${finalDate}';  
-  
-
-     `);
+// Luego puedes utilizar estas variables formateadas donde las necesites.
 
 
     //     // Realiza la tercera consulta SQL para la hoja 'SALDOS'
@@ -348,20 +349,23 @@ GROUP BY
 
         // Realiza la tercera consulta SQL para obtener SALDO_TOTAL
     const [saldoTotal] = await conexion.query(`
-    SELECT SUM(M.ABONO) AS SALDO_TOTAL
-    FROM (
-        SELECT 
-            P.FechadPago, 
-            OC.IdOrdenCompra, 
-            CASE WHEN EP.IdEstadoPago = 2 THEN P.Valor ELSE 0 END AS ABONO
-        FROM pagos AS P 
-            INNER JOIN tipopagos AS TP ON (P.IdTipoPago = TP.IdTipoPago) 
-            INNER JOIN estadopagos AS EP ON (P.IdEstadoPago = EP.IdEstadoPago) 
-            INNER JOIN ordencompras AS OC ON (P.IdOrdenCompra = OC.IdOrdenCompra) 
-        WHERE EP.IdEstadoPago = 2
-            AND P.FechadPago >= '${initialDate}'
-            AND P.FechadPago <= '${finalDate}'
-    ) as M;
+    SELECT FORMAT(
+      SUM(M.ABONO), 0
+  ) AS SALDO_TOTAL
+  FROM (
+      SELECT 
+          P.FechadPago, 
+          OC.IdOrdenCompra, 
+          CASE WHEN EP.IdEstadoPago = 2 THEN P.Valor ELSE 0 END AS ABONO
+      FROM pagos AS P 
+          INNER JOIN tipopagos AS TP ON (P.IdTipoPago = TP.IdTipoPago) 
+          INNER JOIN estadopagos AS EP ON (P.IdEstadoPago = EP.IdEstadoPago) 
+          INNER JOIN ordencompras AS OC ON (P.IdOrdenCompra = OC.IdOrdenCompra) 
+      WHERE EP.IdEstadoPago = 2
+          AND P.FechadPago >= '${initialDate}'
+          AND P.FechadPago <= '${finalDate}'
+  ) as M;
+  
     
     `);
 

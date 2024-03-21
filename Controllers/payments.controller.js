@@ -2,7 +2,7 @@ const exportToExcel = require("../Invoice/reportes_prueba");
 const Payments = require("../Models/payments.models");
 
 const CreatePayments = async (req, res) => {
-  const { FechadPago, Valor, IdEstadoPago, IdTipoPago, IdOrdenCompra } = req.body;
+  const { FechadPago, Valor, IdEstadoPago, IdTipoPago, IdOrdenCompra,nombre } = req.body;
 
   try {
     const PaymentsCreate = await Payments.create({
@@ -11,6 +11,7 @@ const CreatePayments = async (req, res) => {
       IdEstadoPago,
       IdTipoPago,
       IdOrdenCompra,
+      nombre,
     });
     res.status(200).json(PaymentsCreate);
   } catch (error) {
@@ -21,7 +22,7 @@ const CreatePayments = async (req, res) => {
 const UpdatePayments = async (req, res) => {
   const { IdPago } = req.params;
 
-  const { FechadPago, Valor, IdEstadoPago, IdTipoPago, IdOrdenCompra } = req.body;
+  const { FechadPago, Valor, IdEstadoPago, IdTipoPago, IdOrdenCompra, nombre } = req.body;
 
   try {
     const [result] = await Payments.update(
@@ -31,6 +32,7 @@ const UpdatePayments = async (req, res) => {
         IdEstadoPago,
         IdTipoPago,
         IdOrdenCompra,
+        nombre,
       },
       {
         where: { IdPago },
