@@ -11,20 +11,19 @@ const FORM = "renting";
 
 const NewRent = ({ updateActiveKeys, updateRentalStatus }) => {
   const [news, setNews] = useState({
-    //IdAlquiler
-    FechaInicialAlquiler: "",
-    FechaFinlAlquiler: "",
+    FechaInicialAlquiler: new Date().toISOString().split('T')[0],
+    FechaFinlAlquiler: new Date(new Date().getTime() + 4 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], // Suma 4 días a la fecha actual
     IdTienda: "",
     IdCliente: "",
     IdEstadoAlquiler: ""
   });
+  
 
   const [ClienteOptions, setClienteOptions] = useState([]);
   const [TiendaOptions, setTiendaOptions] = useState([]);
   const [statusRenting, setStatusRenting] = useState(null)
 
   const nextKeys = ['1']
-
 
   const handleInput = (e) => {
     const { name, value } = e.target;
@@ -117,8 +116,22 @@ const NewRent = ({ updateActiveKeys, updateRentalStatus }) => {
     getStatusRenting()
   }, []);
 
-  return (
+  useEffect(() => {
+    // Función para calcular la nueva fecha de finalización del alquiler
+    const calcularFechaFinAlquiler = () => {
+      const fechaInicial = new Date(news.FechaInicialAlquiler);
+      const fechaFinal = new Date(fechaInicial.getTime() + 4 * 24 * 60 * 60 * 1000); // Suma 4 días a la fecha inicial
+      return fechaFinal.toISOString().split('T')[0];
+    };
 
+    // Actualiza la fecha de finalización del alquiler cuando cambia la fecha inicial
+    setNews(prevNews => ({
+      ...prevNews,
+      FechaFinlAlquiler: calcularFechaFinAlquiler()
+    }));
+  }, [news.FechaInicialAlquiler]);
+
+  return (
     <Container className={"mt-4"}>
       <Row>
         <Col xs={4}>
@@ -152,8 +165,6 @@ const NewRent = ({ updateActiveKeys, updateRentalStatus }) => {
                 onChange={handleSelect}
               />
 
-
-
               <ButtonCataComponente
                 type="submit"
                 className="btn btn-primary btn-block"
@@ -170,4 +181,4 @@ const NewRent = ({ updateActiveKeys, updateRentalStatus }) => {
   )
 }
 
-export default NewRent
+export default NewRent;

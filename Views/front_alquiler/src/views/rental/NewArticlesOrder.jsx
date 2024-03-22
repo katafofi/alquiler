@@ -17,7 +17,7 @@ const NewArticlesOrder = (
 ) => {
   const [news, setNews] = useState({
     //IdArticuloOrdenCompra 
-    Cantidad: "",
+    Cantidad: "1",
     Precio: "",
     IdOrdenCompra: "",
     IdArticulo: ""
@@ -129,15 +129,7 @@ const NewArticlesOrder = (
           <Col className="col-6">
             <form onSubmit={handleSubmit} className="mb-4">
               <div className="form-row">
-                <InputCataComponente
-                  value={news.Cantidad}
-                  onChange={handleInput}
-                  placeholder={"Ingrese Cantidad"}
-                  id={"Cantidad"}
-                  type={"number"}
-                  name={"Cantidad"}
-                  label={"Cantidad"}
-                />
+              
 
                 <SelectCataComponente
                   required
@@ -146,6 +138,15 @@ const NewArticlesOrder = (
                   value={news.IdArticulo}
                   options={options}
                   onChange={handleSelect}
+                />
+                <InputCataComponente
+                  value={news.Cantidad}
+                  onChange={handleInput}
+                  placeholder={"Ingrese Cantidad"}
+                  id={"Cantidad"}
+                  type={"number"}
+                  name={"Cantidad"}
+                  label={"Cantidad"}
                 />
 
                 <InputCataComponente

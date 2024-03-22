@@ -16,9 +16,9 @@ const NewPayments = (
   const [forms, setForm] = useState([]);
   const [news, setNews] = useState({
     //IdPago
-    FechadPago: "",
+    FechadPago: new Date().toISOString().split('T')[0],
     Valor: "",
-    IdEstadoPago: "",
+    IdEstadoPago:"",
     IdTipoPago: "",
     IdOrdenCompra: "",
     nombre:"",

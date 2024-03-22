@@ -15,7 +15,7 @@ const NewPurchaseOrder = (
 ) => {
   const [news, setNews] = useState({
     IdOrdenCompra: "",
-    FechaCompra: "",
+    FechaCompra:new Date().toISOString().split('T')[0],
     IdAlquiler: "",
     IdEmpleado: "",
     Total: 0,
