@@ -17,9 +17,9 @@ const newsDefault = {
   Telefono: "",
   ReferenciaPersonalNombre: "",
   ReferenciaPersonalTelefono: "",
-  FotoDocumento: "",
-  FotoServicioPublico: "",
-  Fecha: "",
+  //FotoDocumento: "",
+  //FotoServicioPublico: "",
+  Fecha: new Date().toISOString().split('T')[0],
 }
 
 function verificarDatos(objeto) {
@@ -98,8 +98,8 @@ const Clients = () => {
             Telefono: "",
             ReferenciaPersonalNombre: "",
             ReferenciaPersonalTelefono: "",
-            FotoDocumento: null,
-            FotoServicioPublico: null,
+           // FotoDocumento: null,
+           // FotoServicioPublico: null,
             Fecha: "",
           });
         }
@@ -141,8 +141,8 @@ const Clients = () => {
       Telefono: news.Telefono,
       ReferenciaPersonalNombre: news.ReferenciaPersonalNombre,
       ReferenciaPersonalTelefono: news.ReferenciaPersonalTelefono,
-      FotoDocumento: fotoDocumento,
-      FotoServicioPublico: fotoServicioPublico,
+      //FotoDocumento: fotoDocumento,
+      //FotoServicioPublico: fotoServicioPublico,
       Fecha: news.Fecha,
     });
   };
@@ -161,8 +161,8 @@ const Clients = () => {
       formData.append("Telefono", news.Telefono)
       formData.append("ReferenciaPersonalNombre", news.ReferenciaPersonalNombre)
       formData.append("ReferenciaPersonalTelefono", news.ReferenciaPersonalTelefono)
-      if (fotoDocumento) formData.append("FotoDocumento", fotoDocumento, fotoDocumento.name)
-      if (fotoServicioPublico) formData.append("FotoServicioPublico", fotoServicioPublico, fotoServicioPublico.name)
+      //if (fotoDocumento) formData.append("FotoDocumento", fotoDocumento, fotoDocumento.name)
+    //  if (fotoServicioPublico) formData.append("FotoServicioPublico", fotoServicioPublico, fotoServicioPublico.name)
       formData.append("Fecha", news.Fecha)
 
       for (const entry of formData.entries()) {
@@ -186,8 +186,8 @@ const Clients = () => {
         Telefono: "",
         ReferenciaPersonalNombre: "",
         ReferenciaPersonalTelefono: "",
-        FotoDocumento: null,
-        FotoServicioPublico: null,
+       // FotoDocumento: null,
+       // FotoServicioPublico: null,
         Fecha: "",
       });
     } catch (error) {
@@ -255,12 +255,12 @@ const Clients = () => {
       formData.append("ReferenciaPersonalTelefono", news.ReferenciaPersonalTelefono);
       formData.append("Fecha", news.Fecha);
 
-      if (fotoDocumento) {
-        formData.append("FotoDocumento", fotoDocumento, fotoDocumento.name);
-      }
-      if (fotoServicioPublico) {
-        formData.append("FotoServicioPublico", fotoServicioPublico, fotoServicioPublico.name);
-      }
+      //if (fotoDocumento) {
+        //formData.append("FotoDocumento", fotoDocumento, fotoDocumento.name);
+     // }
+     // if (fotoServicioPublico) {
+       // formData.append("FotoServicioPublico", fotoServicioPublico, fotoServicioPublico.name);
+     // }
 
       const response = await fetch(
         `${URL}${PORT}/${form}/${selected.IdCliente}`,
@@ -289,8 +289,8 @@ const Clients = () => {
         Telefono: "",
         ReferenciaPersonalNombre: "",
         ReferenciaPersonalTelefono: "",
-        FotoDocumento: null,
-        FotoServicioPublico: null,
+       // FotoDocumento: null,
+        //FotoServicioPublico: null,
         Fecha: "",
       });
     } catch (error) {
@@ -452,23 +452,7 @@ const Clients = () => {
                   label={"Referencia Personal Telefono"}
                 />
 
-                <InputCataComponente
-                  onChange={handleInputFileDocumentoChange}
-                  placeholder={"Ingrese URL de foto de documento"}
-                  id={"FotoDocumento"}
-                  type={"file"}
-                  name={"FotoDocumento"}
-                  label={"Foto de Documento"}
-                />
-
-                <InputCataComponente
-                  onChange={handleInputFileServicioPublicoChange}
-                  placeholder={"Ingrese URL de foto de servicio público"}
-                  id={"FotoServicioPublico"}
-                  type={"file"}
-                  name={"FotoServicioPublico"}
-                  label={"Foto de Servicio Público"}
-                />
+             
 
                 <InputCataComponente
                   value={news.Fecha}
