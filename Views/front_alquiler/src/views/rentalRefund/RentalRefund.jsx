@@ -50,6 +50,16 @@ const RentalRefund = () => {
     setActiveKeys(getActiveKeys(keyStatus))
   }, [keyStatus])
 
+  useEffect(() => {
+    console.log('tableData', tableData)
+  }, [tableData])
+  useEffect(() => {
+    console.log('selected purchase order', selectedIdPurchaseOrder)
+  }, [selectedIdPurchaseOrder])
+
+
+
+
   return (
     <Container fluid className='mb-5'>
       <Accordion activeKey={activeKeys}>

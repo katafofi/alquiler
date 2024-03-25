@@ -17,8 +17,12 @@ const FindPurchaseOrder = ({
 
   useEffect(() => {
     if (tableData) setFilteredTableData(tableData
-      .filter(data => data.idPurchaseOrder && data.negativeRecord === null).reverse())
+      .filter(data => data.idPurchaseOrder && data.idEstadoAlquiler === 1).reverse())
   }, [tableData])
+
+  useEffect(() => {
+    console.log('Filtered table data', filteredTableData)
+  }, [filteredTableData])
 
   useEffect(() => {
     if (filteredTableData) {
@@ -46,7 +50,7 @@ const FindPurchaseOrder = ({
   const handleSubmit = (e) => {
     e.preventDefault()
     setFilteredTableData(tableData
-      .filter(data => data.idPurchaseOrder && data.negativeRecord === null)
+      .filter(data => data.idPurchaseOrder && data.idEstadoAlquiler === 1)
       .filter(data => (data.name + data.lastName)
         .toLowerCase()
         .replaceAll(" ", "")
@@ -68,11 +72,6 @@ const FindPurchaseOrder = ({
     setSelectedIdPurchaseOrder(idPurchaseOrder)
     updateActiveKeys(NEXTKEYS)
   }
-
-  useEffect(() => {
-    console.log(filteredTableData)
-  }, [filteredTableData])
-
 
   return (
     <Container>

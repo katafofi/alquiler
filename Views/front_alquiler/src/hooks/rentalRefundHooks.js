@@ -25,6 +25,7 @@ const getTableData = (clientsData, purchaseOrderData, rentsData, negativeRecords
       lastName: client.Apellido,
       negativeRecord: negativeRecord ? negativeRecord : null,
       idPurchaseOrder: purchaseOrder ? purchaseOrder.IdOrdenCompra : null,
+      idEstadoAlquiler: rent.IdEstadoAlquiler,
     }
   })
   return newTableData

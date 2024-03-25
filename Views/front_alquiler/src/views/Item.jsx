@@ -265,7 +265,6 @@ const Item = () => {
         .includes(filter.toString().toLowerCase())
     )
     .slice(indexOfFirst, indexOfLast);
-  console.log;
   return (
     <>
       <div className="container mt-4">

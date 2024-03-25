@@ -304,7 +304,6 @@ const NegativeRecord = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // console.log(selected)
     if (selected) {
 
       if (window.confirm("¿Estás seguro de que quieres actualizar este?")) {
@@ -336,8 +335,6 @@ const NegativeRecord = () => {
 
   const indexOfLast = (currentPage + 1) * PerPage;
   const indexOfFirst = indexOfLast - PerPage;
-
-  // console.log(current, tableData)
 
 
   return (

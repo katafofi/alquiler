@@ -162,9 +162,10 @@ const Credit = () => {
 
   const handleEdit = async (news) => {
     setSelected(news);
+    console.log(news);
     setNews({
       IdPago: news.IdPago,
-      FechadPago: news.FechadPago,
+      FechadPago: news.FechadPago.split('T')[0],
       Valor: news.Valor,
       IdEstadoPago: news.IdEstadoPago,
       IdTipoPago: news.IdTipoPago,
@@ -187,7 +188,7 @@ const Credit = () => {
       setForm((prev) => [...prev, data]);
       setNews({
         IdPago: "",
-        FechadPago: "",
+        FechadPago: new Date().toISOString().split('T')[0],
         Valor: "",
         IdEstadoPago: "",
         IdTipoPago: "",
@@ -210,7 +211,7 @@ const Credit = () => {
   const handleInput = (e) => {
     const { name, value } = e.target;
     setNews((prev) => ({ ...prev, [name]: value }));
-    checkIdExist(e)
+    if (e.target.name === "IdOrdenCompra") checkIdExist(e)
   };
 
   const handleSelect = (e) => {
@@ -279,6 +280,7 @@ const Credit = () => {
         const data = await handleCreate();
         setNewPaymentId(data.IdOrdenCompra)
         setInvoiceModalActive(true)
+        setExistPurchaseOrder(false)
         e.target.reset();
       } catch (error) {
         console.error("Error al crear:", error);
