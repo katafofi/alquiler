@@ -12,7 +12,7 @@ const Credit = () => {
   const [forms, setForm] = useState([]);
   const [news, setNews] = useState({
     //IdPago
-    FechadPago:new Date().toISOString().split('T')[0], 
+    FechadPago: new Date().toISOString().split('T')[0],
     Valor: "",
     IdEstadoPago: "",
     IdTipoPago: "",
@@ -162,15 +162,17 @@ const Credit = () => {
 
   const handleEdit = async (news) => {
     setSelected(news);
+    console.log(news);
     setNews({
       IdPago: news.IdPago,
-      FechadPago: news.FechadPago,
+      FechadPago: news.FechadPago.split('T')[0],
       Valor: news.Valor,
       IdEstadoPago: news.IdEstadoPago,
       IdTipoPago: news.IdTipoPago,
       IdOrdenCompra: news.IdOrdenCompra,
       nombre: news.nombre
     });
+    setExistPurchaseOrder(true)
   };
 
   const handleCreate = async () => {
@@ -186,7 +188,7 @@ const Credit = () => {
       setForm((prev) => [...prev, data]);
       setNews({
         IdPago: "",
-        FechadPago: "",
+        FechadPago: new Date().toISOString().split('T')[0],
         Valor: "",
         IdEstadoPago: "",
         IdTipoPago: "",
@@ -209,6 +211,7 @@ const Credit = () => {
   const handleInput = (e) => {
     const { name, value } = e.target;
     setNews((prev) => ({ ...prev, [name]: value }));
+    if (e.target.name === "IdOrdenCompra") checkIdExist(e)
   };
 
   const handleSelect = (e) => {
@@ -264,6 +267,7 @@ const Credit = () => {
         if (window.confirm("¿Estás seguro de que quieres actualizar este?")) {
           try {
             handleUpdate();
+            e.target.reset();
           } catch (error) {
             console.error("Error al actualizar:", error);
           }
@@ -276,6 +280,8 @@ const Credit = () => {
         const data = await handleCreate();
         setNewPaymentId(data.IdOrdenCompra)
         setInvoiceModalActive(true)
+        setExistPurchaseOrder(false)
+        e.target.reset();
       } catch (error) {
         console.error("Error al crear:", error);
       }
@@ -333,7 +339,6 @@ const Credit = () => {
                     id={"IdOrdenCompra"}
                     value={news.IdOrdenCompra}
                     onChange={handleInput}
-                    onBlur={checkIdExist}
                     placeholder={"Ingrese la orden de compra"}
                     type={"number"}
                   />
@@ -351,6 +356,7 @@ const Credit = () => {
                   type={"date"}
                   name={"FechadPago"}
                   label={"FechadPago"}
+                  disabled={existPurchaseOrder ? false : true}
                 />
 
                 <InputCataComponente
@@ -361,6 +367,7 @@ const Credit = () => {
                   type={"number"}
                   name={"Valor"}
                   label={"Valor"}
+                  disabled={existPurchaseOrder ? false : true}
                 />
 
                 <SelectCataComponente
@@ -370,6 +377,7 @@ const Credit = () => {
                   value={news.IdEstadoPago}
                   options={EstadoPagoOptions}
                   onChange={handleSelect}
+                  disabled={existPurchaseOrder ? false : true}
                 />
 
                 <SelectCataComponente
@@ -379,10 +387,11 @@ const Credit = () => {
                   value={news.IdTipoPago}
                   options={TipoPagoOptions}
                   onChange={handleSelect}
+                  disabled={existPurchaseOrder ? false : true}
                 />
 
 
-                  <InputCataComponente
+                <InputCataComponente
                   value={news.nombre}
                   onChange={handleInput}
                   placeholder={"Ingrese nombre"}
@@ -390,13 +399,16 @@ const Credit = () => {
                   type={"text"}
                   name={"nombre"}
                   label={"nombre"}
+                  disabled={existPurchaseOrder ? false : true}
                 />
 
                 <ButtonCataComponente
                   type="submit"
                   className="btn btn-primary btn-block"
                   title="Guardar"
+                  disabled={existPurchaseOrder ? false : true}
                 />
+
               </div>
             </form>
           </div>

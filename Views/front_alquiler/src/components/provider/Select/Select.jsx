@@ -1,9 +1,9 @@
 import React from "react";
 
-export const SelectCataComponente = ({ required, label, name, value, options, onChange }) => {
+export const SelectCataComponente = ({ required, label, name, value, options, onChange, disabled }) => {
   return (
     <div className="form-group">
-       <label htmlFor={name}>{name}:</label>
+      <label htmlFor={name}>{name}:</label>
       <select
         className="form-control"
         id={name}
@@ -11,6 +11,7 @@ export const SelectCataComponente = ({ required, label, name, value, options, on
         required={required}
         value={value}
         onChange={onChange}
+        disabled={disabled}
       >
         <option>{label}</option>
         {options.map(option => (
