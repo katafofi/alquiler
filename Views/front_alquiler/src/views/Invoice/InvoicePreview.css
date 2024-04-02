@@ -1,5 +1,5 @@
 .img-cont{
-    width: 100px;
+    width: 200px;
 }
 
 .flex-center{
@@ -13,4 +13,8 @@
 .f-family-DancingScript{
     font-family: 'DancingScript', cursive;
     font-size: 24px;
+}
+
+.table-header-red {
+    color: red !important;
 }

@@ -320,7 +320,7 @@ const Clients = () => {
           console.error("Error al crear:", error);
         }
       } else {
-        alert("Porfavor ingrese todos los datos obligatorios antes de guardar.")
+        alert("Porfavor ingrese todos los datos obligatorios o valide que el usuario no exista antes de guardar.")
       }
     }
   };
