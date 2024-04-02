@@ -280,22 +280,23 @@ WHERE
     //  ok si    // Realizar la tercera consulta SQL para la hoja 'SALDOS'
        const [rowsSaldos] = await conexion.query(`
        SELECT 
-    OC.IdOrdenCompra AS ORDEN,
-    MAX(CASE 
-            WHEN EP.IdEstadoPago = 2 THEN FORMAT(P.Valor, '#,##0')
-            ELSE '0'
-        END) AS SALDO
-FROM 
-    pagos AS P
-    INNER JOIN estadopagos AS EP ON P.IdEstadoPago = EP.IdEstadoPago
-    INNER JOIN ordencompras AS OC ON P.IdOrdenCompra = OC.IdOrdenCompra
-    INNER JOIN alquilers AS AL ON OC.IdAlquiler = AL.IdAlquiler
-WHERE 
-    AL.FechaInicialAlquiler >= '${initialDate}'-- Fecha inicial del rango
-    AND AL.FechaInicialAlquiler <= '${finalDate}' -- Fecha final del rango
-GROUP BY OC.IdOrdenCompra
-HAVING SUM(P.Valor) > 0 -- Solo mostrar aquellos con un valor mayor que 0 en SALDO
-ORDER BY ORDEN ASC;
+       OC.IdOrdenCompra AS ORDEN,
+       MAX(CASE 
+               WHEN EP.IdEstadoPago = 2 THEN FORMAT(P.Valor, '#,##0')
+               ELSE '0'
+           END) AS SALDO,
+       FORMAT((OC.Total - COALESCE(SUM(P.Valor), 0)), '#,##0') AS 'Pendiente por pagar'
+   FROM 
+       pagos AS P
+       INNER JOIN estadopagos AS EP ON P.IdEstadoPago = EP.IdEstadoPago
+       INNER JOIN ordencompras AS OC ON P.IdOrdenCompra = OC.IdOrdenCompra
+       INNER JOIN alquilers AS AL ON OC.IdAlquiler = AL.IdAlquiler
+   WHERE 
+       AL.FechaInicialAlquiler >= '${initialDate}'  -- Fecha inicial del rango
+       AND AL.FechaInicialAlquiler <= '${finalDate}' -- Fecha final del rango
+   GROUP BY OC.IdOrdenCompra, OC.Total
+   HAVING SUM(P.Valor) > 0 OR OC.Total - COALESCE(SUM(P.Valor), 0) = 0 -- Mostrar aquellos con un valor mayor que 0 en SALDO o aquellos con resultado 0 en la resta
+   ORDER BY ORDEN ASC;
  
    
    
