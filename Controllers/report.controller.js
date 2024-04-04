@@ -162,25 +162,25 @@ const generarReporteSemanal = async (req, res) => {
      const [rowsDia] = await conexion.query(`
     
      SELECT 
-    LPAD(DATE_FORMAT(P.FechadPago, '%d %b %Y'), 15, ' ') AS FECHA,
-    LPAD(OC.IdOrdenCompra, 10, ' ') AS ORDEN,
-    LPAD(DATE_FORMAT(AL.FechaInicialAlquiler, '%d %b %Y'), 15, ' ') AS FECHA_SALIDA,
-    LPAD(FORMAT(OC.Total, 0), 15, ' ') AS VALOR_FACTURA,
-    LPAD(FORMAT(CASE WHEN EP.IdEstadoPago = 1 THEN P.Valor ELSE 0 END, 0), 15, ' ') AS ABONO, 
-    LPAD(FORMAT(CASE WHEN EP.IdEstadoPago = 2 THEN P.Valor ELSE 0 END, 0), 15, ' ') AS SALDO, 
-    LPAD(TP.Descripcion, 20, ' ') AS TIPOPAGO, 
-    LPAD(DATE_FORMAT(P.createdAt, '%d %b %Y'), 20, ' ') AS FECHA_CREACION 
-FROM 
-    pagos AS P 
-    INNER JOIN tipopagos AS TP ON (P.IdTipoPago = TP.IdTipoPago) 
-    INNER JOIN estadopagos AS EP ON (P.IdEstadoPago = EP.IdEstadoPago) 
-    INNER JOIN ordencompras AS OC ON (P.IdOrdenCompra = OC.IdOrdenCompra) 
-    INNER JOIN alquilers AS AL ON (OC.IdAlquiler = AL.IdAlquiler)
-WHERE 
-    P.FechadPago >= '${initialDate}'
-    AND P.FechadPago <= '${finalDate}'
-ORDER BY ORDEN ASC;
-
+     DATE_FORMAT(P.FechadPago, '%d %b %Y') AS FECHA,
+     OC.IdOrdenCompra AS ORDEN,
+     DATE_FORMAT(AL.FechaInicialAlquiler, '%d %b %Y') AS FECHA_SALIDA,
+     FORMAT(OC.Total, 2) AS VALOR_FACTURA,
+     FORMAT(CASE WHEN EP.IdEstadoPago = 1 THEN P.Valor ELSE 0 END, 2) AS ABONO, 
+     FORMAT(CASE WHEN EP.IdEstadoPago = 2 THEN P.Valor ELSE 0 END, 2) AS SALDO, 
+     TP.Descripcion AS TIPOPAGO, 
+     
+     P.nombre AS NOMBRE
+ FROM 
+     pagos AS P 
+     INNER JOIN tipopagos AS TP ON P.IdTipoPago = TP.IdTipoPago
+     INNER JOIN estadopagos AS EP ON P.IdEstadoPago = EP.IdEstadoPago
+     INNER JOIN ordencompras AS OC ON P.IdOrdenCompra = OC.IdOrdenCompra
+     INNER JOIN alquilers AS AL ON OC.IdAlquiler = AL.IdAlquiler
+ WHERE 
+     P.FechadPago >= '${initialDate}'
+     AND P.FechadPago <= '${finalDate}'
+ ORDER BY ORDEN ASC;
          `);
 
     //  hoja abonos OK    // Realiza la segunda consulta SQL para la hoja 'ABONOS'
