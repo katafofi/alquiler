@@ -12,7 +12,7 @@ const Credit = () => {
   const [forms, setForm] = useState([]);
   const [news, setNews] = useState({
     //IdPago
-    FechadPago: new Date().toISOString().split('T')[0],
+    FechadPago: new Date(), // Inicializa con la fecha y hora actual
     Valor: "",
     IdEstadoPago: "",
     IdTipoPago: "",
@@ -31,7 +31,6 @@ const Credit = () => {
   const [existPurchaseOrder, setExistPurchaseOrder] = useState(false)
   const [invoiceModalActive, setInvoiceModalActive] = useState(false)
   const [newPaymentId, setNewPaymentId] = useState(null)
-
 
   const PerPage = 10;
   const form = "payments";
@@ -77,8 +76,8 @@ const Credit = () => {
       const response = await fetch(`${URL}${PORT}/statusPay`);
       const data = await response.json();
       const newOptions = data.map((element) => ({
-        value: element.IdEstadoPago, //lo que selecciona en el back
-        label: element.Descripcion + " - " + element.IdEstadoPago, //lo que se ve en el selector
+        value: element.IdEstadoPago,
+        label: element.Descripcion + " - " + element.IdEstadoPago,
       }));
       setEstadoPagoOptions(newOptions);
     } catch (error) {
@@ -91,8 +90,8 @@ const Credit = () => {
       const response = await fetch(`${URL}${PORT}/paymentType`);
       const data = await response.json();
       const newOptions = data.map((element) => ({
-        value: element.IdTipoPago, //lo que selecciona en el back
-        label: element.Descripcion + " - " + element.IdTipoPago, //lo que se ve en el selector
+        value: element.IdTipoPago,
+        label: element.Descripcion + " - " + element.IdTipoPago,
       }));
       setTipoPagoOptions(newOptions);
     } catch (error) {
@@ -105,8 +104,8 @@ const Credit = () => {
       const response = await fetch(`${URL}${PORT}/PuchaseOrder`);
       const data = await response.json();
       const newOptions = data.map((element) => ({
-        value: element.IdOrdenCompra, //lo que selecciona en el back
-        label: element.FechaCompra + " - " + element.IdOrdenCompra, //lo que se ve en el selector
+        value: element.IdOrdenCompra,
+        label: element.FechaCompra + " - " + element.IdOrdenCompra,
       }));
       setOrdenCompraOptions(newOptions);
     } catch (error) {
@@ -139,7 +138,6 @@ const Credit = () => {
         console.log(error);
       }
     }
-
   };
 
   const handleDeleteM = async (ids) => {
@@ -165,7 +163,7 @@ const Credit = () => {
     console.log(news);
     setNews({
       IdPago: news.IdPago,
-      FechadPago: news.FechadPago.split('T')[0],
+      FechadPago: new Date(news.FechadPago),
       Valor: news.Valor,
       IdEstadoPago: news.IdEstadoPago,
       IdTipoPago: news.IdTipoPago,
@@ -188,7 +186,7 @@ const Credit = () => {
       setForm((prev) => [...prev, data]);
       setNews({
         IdPago: "",
-        FechadPago: new Date().toISOString().split('T')[0],
+        FechadPago: new Date(),
         Valor: "",
         IdEstadoPago: "",
         IdTipoPago: "",
@@ -200,6 +198,7 @@ const Credit = () => {
       console.log(error);
     }
   };
+
   const handleInputSearch = (e) => {
     const { name, value } = e.target;
     setNews((prev) => ({ ...prev, [name]: value }));
@@ -230,7 +229,7 @@ const Credit = () => {
       },
       body: JSON.stringify({
         IdPago: news.IdPago,
-        FechadPago: news.FechadPago,
+        FechadPago: news.FechadPago.toISOString(), // Convertir a formato ISOString
         Valor: news.Valor,
         IdEstadoPago: news.IdEstadoPago,
         IdTipoPago: news.IdTipoPago,
@@ -255,7 +254,6 @@ const Credit = () => {
       nombre: "",
     });
   };
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -322,7 +320,7 @@ const Credit = () => {
               type={"search"}
               name={"filter"}
               id={"filter"}
-              placeholder={"Filtrar por Fecha"} //no es necesario
+              placeholder={"Filtrar por Fecha"}
             />
           </div>
         </div>
@@ -332,7 +330,7 @@ const Credit = () => {
               <div className="form-row">
                 <div className='form-group'>
                   <label htmlFor={"IdOrdenCompra"}>ID Orden de compra:</label>
-                  <input  //los input son para ingreso de inaformacion 
+                  <input
                     className='form-control'
                     label={"- SeleccionarOrdenPago -"}
                     name={"IdOrdenCompra"}
@@ -349,7 +347,7 @@ const Credit = () => {
                 </div>
 
                 <InputCataComponente
-                  value={news.FechadPago}
+                  value={news.FechadPago.toISOString().split('T')[0]} // Convertir a formato de fecha adecuado
                   onChange={handleInput}
                   placeholder={"Ingrese Fecha de pago"}
                   id={"FechadPago"}
@@ -389,7 +387,6 @@ const Credit = () => {
                   onChange={handleSelect}
                   disabled={existPurchaseOrder ? false : true}
                 />
-
 
                 <InputCataComponente
                   value={news.nombre}
@@ -442,4 +439,4 @@ const Credit = () => {
   );
 }
 
-export default Credit
+export default Credit;

@@ -12,7 +12,7 @@ const FORM = "renting";
 const NewRent = ({ updateActiveKeys, updateRentalStatus }) => {
   const [news, setNews] = useState({
     FechaInicialAlquiler: new Date().toISOString().split('T')[0],
-    FechaFinlAlquiler: new Date(new Date().getTime() + 4 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], // Suma 4 días a la fecha actual
+    FechaFinlAlquiler: '', // Eliminamos la fecha final por ahora
     IdTienda: "",
     IdCliente: "",
     IdEstadoAlquiler: ""
@@ -121,6 +121,10 @@ const NewRent = ({ updateActiveKeys, updateRentalStatus }) => {
     const calcularFechaFinAlquiler = () => {
       const fechaInicial = new Date(news.FechaInicialAlquiler);
       const fechaFinal = new Date(fechaInicial.getTime() + 4 * 24 * 60 * 60 * 1000); // Suma 4 días a la fecha inicial
+
+      // Convertir a hora en zona horaria de Colombia (GMT-5)
+      fechaFinal.setHours(fechaFinal.getHours() - 5);
+
       return fechaFinal.toISOString().split('T')[0];
     };
 

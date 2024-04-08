@@ -39,6 +39,30 @@ const NewPayments = (
     handleGetTipoPago();
   }, []);
 
+  useEffect(() => {
+    // Función para calcular la fecha de pago en la zona horaria de Colombia (GMT-5)
+    const calcularFechaPago = () => {
+      const fechaActual = new Date();
+      const horaActual = fechaActual.getHours();
+      
+      // Si es antes de las 5 AM en Colombia, ajustar la fecha al día anterior
+      if (horaActual < 5) {
+        fechaActual.setDate(fechaActual.getDate() - 1);
+      }
+
+      // Ajustar la hora a la zona horaria de Colombia (GMT-5)
+      fechaActual.setHours(fechaActual.getHours() - 5);
+
+      return fechaActual.toISOString().split('T')[0];
+    };
+
+    // Actualizar la fecha de pago en el estado 'news'
+    setNews(prevNews => ({
+      ...prevNews,
+      FechadPago: calcularFechaPago()
+    }));
+  }, []);
+
   const getTotalPrice = () => addedArticles.reduce((counter, current) => counter + parseInt(current.Precio), 0)
 
   const handleGetEstadoPago = async () => {
@@ -198,4 +222,4 @@ const NewPayments = (
   );
 }
 
-export default NewPayments
+export default NewPayments;
