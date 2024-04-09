@@ -1,5 +1,6 @@
 
 import { useState, useEffect } from "react";
+import { DateTime } from "luxon"; // Importar DateTime de la biblioteca Luxon
 import ButtonCataComponente from "../../components/provider/Button/Button";
 import TitleCataComponente from "../../components/provider/Title/Title";
 import InputCataComponente from "../../components/provider/Input/Input";
@@ -13,8 +14,7 @@ const Credit = () => {
   const [forms, setForm] = useState([]);
   const [news, setNews] = useState({
     //IdPago
-    FechadPago: new Date().toISOString().split('T')[0],
-    Valor: "",
+    FechadPago: DateTime.now().setZone('America/Bogota').toISODate(), // Obtener la fecha actual en la zona horaria de Colombia
     IdEstadoPago: "",
     IdTipoPago: "",
     IdOrdenCompra: "",

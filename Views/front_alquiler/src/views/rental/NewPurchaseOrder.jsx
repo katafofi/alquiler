@@ -1,30 +1,29 @@
 import { useState, useEffect } from "react";
+import { DateTime } from "luxon"; // Importar DateTime de la biblioteca Luxon
 import ButtonCataComponente from "../../components/provider/Button/Button";
 import InputCataComponente from "../../components/provider/Input/Input";
 import { SelectCataComponente } from "../../components/provider/Select/Select";
 import { Button } from "react-bootstrap";
 import { handleDeleteById } from "../../utils/requests";
 
-const NewPurchaseOrder = (
-  {
-    rentalStatus,
-    updateActiveKeys,
-    updateRentalStatus,
-    setIdPurchaseOrder
-  }
-) => {
+const NewPurchaseOrder = ({
+  rentalStatus,
+  updateActiveKeys,
+  updateRentalStatus,
+  setIdPurchaseOrder,
+}) => {
   const [news, setNews] = useState({
     IdOrdenCompra: "",
-    FechaCompra:new Date().toISOString().split('T')[0],
+    FechaCompra: DateTime.now().setZone('America/Bogota').toISODate(), // Obtener la fecha actual en la zona horaria de Colombia
     IdAlquiler: "",
     IdEmpleado: "",
     Total: 0,
   });
   const [options, setOptions] = useState([]);
-  const [purchaseOrders, setPurchaseOrders] = useState(null)
+  const [purchaseOrders, setPurchaseOrders] = useState(null);
 
-  const nextKeys = ['2', '3', '4']
-  const prevKeys = ['0']
+  const nextKeys = ["2", "3", "4"];
+  const prevKeys = ["0"];
 
   const FORM = "PuchaseOrder";
   const URL = "http://localhost:";
@@ -35,15 +34,13 @@ const NewPurchaseOrder = (
     handleGetPurchaseOrders();
   }, []);
 
-
   const handleGetEmpleado = async () => {
     try {
       const response = await fetch(`${URL}${PORT}/employe`);
       const data = await response.json();
       const newOptions = data.map((element) => ({
-        value: element.IdEmpleado, //lo que selecciona en el back
-        label:
-          element.Nombre + " " + element.Apellido + " - " + element.IdEmpleado, //lo que se ve en el selector
+        value: element.IdEmpleado,
+        label: element.Nombre + " " + element.Apellido + " - " + element.IdEmpleado,
       }));
       setOptions(newOptions);
     } catch (error) {
@@ -61,7 +58,6 @@ const NewPurchaseOrder = (
     }
   };
 
-
   const handleInput = (e) => {
     const { name, value } = e.target;
     setNews((prev) => ({ ...prev, [name]: value }));
@@ -76,7 +72,6 @@ const NewPurchaseOrder = (
   };
 
   const handleCreate = async () => {
-    // setNews({ ...news, IdAlquiler: rentalStatus.rent.IdAlquiler })
     try {
       const response = await fetch(`${URL}${PORT}/${FORM}`, {
         method: "POST",
@@ -86,7 +81,7 @@ const NewPurchaseOrder = (
         body: JSON.stringify({ ...news, IdAlquiler: rentalStatus.rent.IdAlquiler }),
       });
       const data = await response.json();
-      return data
+      return data;
     } catch (error) {
       console.log(error);
     }
@@ -95,29 +90,27 @@ const NewPurchaseOrder = (
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (news.IdOrdenCompra !== "" && purchaseOrders) {
-      if (purchaseOrders.find(order => order.IdOrdenCompra === parseInt(news.IdOrdenCompra))) {
-        alert("La orden de compra seleccionada ya esta asignada a un alquiler.")
-        return null
+      if (purchaseOrders.find((order) => order.IdOrdenCompra === parseInt(news.IdOrdenCompra))) {
+        alert("La orden de compra seleccionada ya está asignada a un alquiler.");
+        return null;
       }
     }
     try {
       const data = await handleCreate();
       if (data) {
-        updateRentalStatus({ purchaseOrder: data })
-        updateActiveKeys(nextKeys)
-        setIdPurchaseOrder(data.IdOrdenCompra)
+        updateRentalStatus({ purchaseOrder: data });
+        updateActiveKeys(nextKeys);
+        setIdPurchaseOrder(data.IdOrdenCompra);
       }
     } catch (error) {
       console.error("Error al crear:", error);
     }
-
-
   };
 
   const handleReturnToRent = async () => {
-    await handleDeleteById(rentalStatus.rent.IdAlquiler, "renting")
-    updateActiveKeys(prevKeys)
-  }
+    await handleDeleteById(rentalStatus.rent.IdAlquiler, "renting");
+    updateActiveKeys(prevKeys);
+  };
 
   return (
     <>
@@ -126,8 +119,6 @@ const NewPurchaseOrder = (
           <div className="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
             <form onSubmit={handleSubmit} className="mb-4">
               <div className="form-row">
-
-
                 <InputCataComponente
                   value={news.FechaCompra}
                   onChange={handleInput}
@@ -137,7 +128,6 @@ const NewPurchaseOrder = (
                   name={"FechaCompra"}
                   label={"FechaCompra"}
                 />
-
                 <SelectCataComponente
                   required
                   label={"- Seleccionar empleado -"}
@@ -146,7 +136,6 @@ const NewPurchaseOrder = (
                   options={options}
                   onChange={handleSelect}
                 />
-
                 <InputCataComponente
                   value={news.IdOrdenCompra}
                   onChange={handleInput}
@@ -156,13 +145,11 @@ const NewPurchaseOrder = (
                   name={"IdOrdenCompra"}
                   label={"IdOrdenCompra"}
                 />
-
                 <ButtonCataComponente
                   type="submit"
                   className="btn btn-primary btn-block"
                   title="Guardar"
                 />
-
                 <Button variant="warning" onClick={handleReturnToRent}>Regresar</Button>
               </div>
             </form>
@@ -170,7 +157,7 @@ const NewPurchaseOrder = (
         </div>
       </div>
     </>
-  )
-}
+  );
+};
 
-export default NewPurchaseOrder
+export default NewPurchaseOrder;
