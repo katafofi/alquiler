@@ -94,12 +94,18 @@ const createReport = async (data, reportType) => {
     // Omitir la propiedad createdAt en el objeto resultante
     ...((({ createdAt, ...rest }) => rest)(row)),
   })));
+   // Crea una hoja de Excel con los resultados de 'GASTOS'
+   const hojaSalidas = XLSX.utils.json_to_sheet(data.salidas.map(row => ({
+    // Omitir la propiedad createdAt en el objeto resultante
+    ...((({ createdAt, ...rest }) => rest)(row)),
+  })));
 
 
   XLSX.utils.book_append_sheet(libro, hojaDia, 'DIA');
   XLSX.utils.book_append_sheet(libro, hojaAbonos, 'ABONOS');
   XLSX.utils.book_append_sheet(libro, hojaGastos, 'GASTOS');
   XLSX.utils.book_append_sheet(libro, hojaSaldos, 'SALDOS');
+  XLSX.utils.book_append_sheet(libro, hojaSalidas, 'SALIDAS');
 
   //if (reportType === 'semanal') {
   // Crear una nueva hoja 'CUENTAS SEMANA' con el resultado de SALDO_TOTAL y ABONO_TOTAL
