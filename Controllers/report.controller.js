@@ -20,7 +20,7 @@ async function generarReporte(req, res) {
   });
 
   try {
-    // Realiza la primera consulta SQL para la hoja 'dia'
+    // Realiza la primera consulta SQL para la hoja 'dia' esta se usa en la vista de front
     await conexion.query('SET lc_time_names = "es_ES";');
 
     const [rowsDia] = await conexion.query(`
@@ -41,100 +41,17 @@ FROM
     INNER JOIN alquilers AS AL ON (OC.IdAlquiler = AL.IdAlquiler)
 WHERE 
     YEARWEEK(P.FechadPago) = YEARWEEK(CURDATE());
-    `);
+    `); 
+    
+       
 
-    // Realiza la segunda consulta SQL para la hoja 'ABONOS'
-    const [rowsAbonos] = await conexion.query(`
-      SELECT 
-         
-        OC.IdOrdenCompra, 
-        OC.Total AS total_alquiler, 
-        CASE WHEN EP.IdEstadoPago = 1 THEN P.Valor ELSE 0 END AS ABONO, 
-        CASE WHEN EP.IdEstadoPago = 2 THEN P.Valor ELSE 0 END AS SALDO, 
-        OC.Total - COALESCE(SUM(CASE WHEN EP.IdEstadoPago = 1 THEN P.Valor ELSE 0 END) OVER (PARTITION BY OC.IdOrdenCompra ORDER BY P.FechadPago), 0) - COALESCE(SUM(CASE WHEN EP.IdEstadoPago = 2 THEN P.Valor ELSE 0 END) OVER (PARTITION BY OC.IdOrdenCompra ORDER BY P.FechadPago), 0) AS PendientePorPagar 
-      FROM 
-        pagos AS P 
-        INNER JOIN tipopagos AS TP ON (P.IdTipoPago = TP.IdTipoPago) 
-        INNER JOIN estadopagos AS EP ON (P.IdEstadoPago = EP.IdEstadoPago) 
-        INNER JOIN ordencompras AS OC ON (P.IdOrdenCompra = OC.IdOrdenCompra) 
-      WHERE 
-        EP.IdEstadoPago IN (1, 2);
-      `);
-
-    // Realiza la tercera consulta SQL para obtener ABONO_TOTAL
-    const [abonoTotal] = await conexion.query(`
-    SELECT FORMAT(
-      SUM(M.ABONO), 0
-  ) AS ABONO_TOTAL
-  FROM (
-      SELECT 
-          P.FechadPago, 
-          OC.IdOrdenCompra, 
-          CASE WHEN EP.IdEstadoPago = 1 THEN P.Valor ELSE 0 END AS ABONO
-      FROM pagos AS P 
-          INNER JOIN tipopagos AS TP ON (P.IdTipoPago = TP.IdTipoPago) 
-          INNER JOIN estadopagos AS EP ON (P.IdEstadoPago = EP.IdEstadoPago) 
-          INNER JOIN ordencompras AS OC ON (P.IdOrdenCompra = OC.IdOrdenCompra) 
-      WHERE EP.IdEstadoPago = 1
-  ) as M;
   
-    `);
-
-    // Realiza la tercera consulta SQL para obtener SALDO_TOTAL
-    const [saldoTotal] = await conexion.query(`
-      SELECT SUM(M.ABONO) AS SALDO_TOTAL
-      FROM (
-        SELECT 
-          P.FechadPago, 
-          OC.IdOrdenCompra, 
-          CASE WHEN EP.IdEstadoPago = 2 THEN P.Valor ELSE 0 END AS ABONO
-        FROM pagos AS P 
-          INNER JOIN tipopagos AS TP ON (P.IdTipoPago = TP.IdTipoPago) 
-          INNER JOIN estadopagos AS EP ON (P.IdEstadoPago = EP.IdEstadoPago) 
-          INNER JOIN ordencompras AS OC ON (P.IdOrdenCompra = OC.IdOrdenCompra) 
-        WHERE EP.IdEstadoPago = 2
-      ) as M;
-      `);
-
-
-    //
     
-    
-    
-    no// Realiza la tercera consulta SQL para la hoja 'SALDOS'
-    const [rowsSaldos] = await conexion.query(`
-      SELECT 
-        P.FechadPago, 
-        OC.IdOrdenCompra, 
-        OC.Total AS total_alquiler, 
-        CASE WHEN EP.IdEstadoPago = 1 THEN P.Valor ELSE 0 END AS ABONOs, 
-        CASE WHEN EP.IdEstadoPago = 2 THEN P.Valor ELSE 0 END AS SALDO 
-      FROM pagos AS P 
-      INNER JOIN tipopagos AS TP ON (P.IdTipoPago = TP.IdTipoPago) 
-      INNER JOIN estadopagos AS EP ON (P.IdEstadoPago = EP.IdEstadoPago) 
-      INNER JOIN ordencompras AS OC ON (P.IdOrdenCompra = OC.IdOrdenCompra) 
-      INNER JOIN alquilers AS AL ON (OC.IdAlquiler = AL.IdAlquiler);
-    `);
-
-    // Realiza la cuarta consulta SQL para la hoja 'GASTOS'
-    await conexion.query('SET lc_time_names = "es_ES";');
-    const [rowsGastos] = await conexion.query(`
-    SELECT 
-    DATE_FORMAT(GE.Fecha, '%d %b %Y') AS FECHA,
-    GE.Descripcion,
-    GE.Monto,
-    E.Nombre,
-    E.Apellido
-FROM gastosempleados AS GE
-INNER JOIN empleados AS E ON GE.IdEmpleado = E.IdEmpleado
-WHERE WEEK(GE.Fecha) = WEEK(CURDATE());
-    `);
 
     const response = {
-      dia: rowsDia,
-      abonos: rowsAbonos,
-      saldos: rowsSaldos,
-      gastos: rowsGastos,
+      dia: rowsDia,  
+     
+      
     }
 
     res.status(200).json(response)
@@ -188,6 +105,7 @@ const generarReporteSemanal = async (req, res) => {
 
          const [rowsAbonos] = await conexion.query(`
          SELECT 
+
          OC.IdOrdenCompra AS ORDEN,
          MAX(FORMAT(CASE WHEN EP.IdEstadoPago = 1 THEN P.Valor ELSE 0 END, '#,##0')) AS ABONO
      FROM 
