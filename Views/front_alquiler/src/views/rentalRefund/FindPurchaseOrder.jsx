@@ -8,6 +8,7 @@ const FindPurchaseOrder = ({
   updateActiveKeys,
   setSelectedIdPurchaseOrder
 }) => {
+  // #region Estados
   const [inputFilter, setInputFilter] = useState(null)
   const [filteredTableData, setFilteredTableData] = useState(null)
   const [tableDataRange, setTableDataRange] = useState(initTableDataRange)
@@ -17,7 +18,10 @@ const FindPurchaseOrder = ({
 
   useEffect(() => {
     if (tableData) setFilteredTableData(tableData
-      .filter(data => data.idPurchaseOrder && data.idEstadoAlquiler === 1).reverse())
+      .filter(data => data.idPurchaseOrder
+        && data.idEstadoAlquiler === 1
+        && data.negativeRecord === null)
+      .reverse())
   }, [tableData])
 
   useEffect(() => {
@@ -44,6 +48,8 @@ const FindPurchaseOrder = ({
       })
     }
   }, [page, filteredTableData])
+
+  // #region Handlers
 
   const handleChange = ({ target }) => setInputFilter(target.value)
 
@@ -72,7 +78,7 @@ const FindPurchaseOrder = ({
     setSelectedIdPurchaseOrder(idPurchaseOrder)
     updateActiveKeys(NEXTKEYS)
   }
-
+  // #region Render
   return (
     <Container>
       <Row>
