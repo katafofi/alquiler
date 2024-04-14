@@ -178,29 +178,36 @@ const Credit = () => {
 
   const handleCreate = async () => {
     try {
+      const currentDateTime = DateTime.now().setZone('America/Bogota');
+      const newNews = {
+        ...news,
+        FechadPago: currentDateTime.toISODate(),
+      };
+  
       const response = await fetch(`${URL}${PORT}/${form}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(news),
+        body: JSON.stringify(newNews),
       });
       const data = await response.json();
       setForm((prev) => [...prev, data]);
       setNews({
         IdPago: "",
-        FechadPago: new Date().toISOString().split('T')[0],
+        FechadPago: currentDateTime.toISODate(),
         Valor: "",
         IdEstadoPago: "",
         IdTipoPago: "",
         IdOrdenCompra: "",
         nombre: "",
       });
-      return data
+      return data;
     } catch (error) {
       console.log(error);
     }
   };
+  
   const handleInputSearch = (e) => {
     const { name, value } = e.target;
     setNews((prev) => ({ ...prev, [name]: value }));
