@@ -119,15 +119,7 @@ const NewPurchaseOrder = ({
           <div className="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
             <form onSubmit={handleSubmit} className="mb-4">
               <div className="form-row">
-                <InputCataComponente
-                  value={news.FechaCompra}
-                  onChange={handleInput}
-                  placeholder={"Ingrese FechaCompra"}
-                  id={"FechaCompra"}
-                  type={"date"}
-                  name={"FechaCompra"}
-                  label={"FechaCompra"}
-                />
+
                 <SelectCataComponente
                   required
                   label={"- Seleccionar empleado -"}
@@ -136,15 +128,8 @@ const NewPurchaseOrder = ({
                   options={options}
                   onChange={handleSelect}
                 />
-                <InputCataComponente
-                  value={news.IdOrdenCompra}
-                  onChange={handleInput}
-                  placeholder={"Ingrese Orden Compra"}
-                  id={"IdOrdenCompra"}
-                  type={"number"}
-                  name={"IdOrdenCompra"}
-                  label={"IdOrdenCompra"}
-                />
+             
+                
                 <ButtonCataComponente
                   type="submit"
                   className="btn btn-primary btn-block"

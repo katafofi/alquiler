@@ -157,15 +157,7 @@ const NewPayments = (
           <Col className="col-6">
             <form onSubmit={handleSubmit} className="mb-4">
               <div className="form-row">
-                <InputCataComponente
-                  value={news.FechadPago}
-                  onChange={handleInput}
-                  placeholder={"Ingrese Fecha de pago"}
-                  id={"FechadPago"}
-                  type={"date"}
-                  name={"FechadPago"}
-                  label={"FechadPago"}
-                />
+           
 
                 <InputCataComponente
                   value={news.Valor}
