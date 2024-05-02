@@ -20,7 +20,7 @@ const NewArticlesOrder = (
     Cantidad: "1",
     Precio: "",
     IdOrdenCompra: "",
-    IdArticulo: ""
+    IdArticulo: "7"
   });
 
   const [articles, setArticles] = useState([])
@@ -164,7 +164,6 @@ const NewArticlesOrder = (
                   className="btn btn-primary btn-block"
                   title="Agregar"
                 />
-                <Button variant="warning" onClick={handleReturnToPurchaseOrder}>Regresar</Button>
               </div>
             </form>
           </Col>

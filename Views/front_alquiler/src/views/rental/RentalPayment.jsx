@@ -18,8 +18,8 @@ const NewPayments = (
     //IdPago
     FechadPago: new Date().toISOString().split('T')[0],
     Valor: "",
-    IdEstadoPago:"",
-    IdTipoPago: "",
+    IdEstadoPago:"1",
+    IdTipoPago: "3",
     IdOrdenCompra: "",
     nombre:"",
   });

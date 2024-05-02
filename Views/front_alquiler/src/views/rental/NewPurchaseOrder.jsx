@@ -135,7 +135,9 @@ const NewPurchaseOrder = ({
                   className="btn btn-primary btn-block"
                   title="Guardar"
                 />
-                <Button variant="warning" onClick={handleReturnToRent}>Regresar</Button>
+                
+                
+  
               </div>
             </form>
           </div>
