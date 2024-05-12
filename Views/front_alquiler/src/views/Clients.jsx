@@ -17,17 +17,15 @@ const newsDefault = {
   Telefono: "",
   ReferenciaPersonalNombre: "",
   ReferenciaPersonalTelefono: "",
-  //FotoDocumento: "",
-  //FotoServicioPublico: "",
   Fecha: new Date().toISOString().split('T')[0],
 }
 
-function verificarDatos(objeto) {
-  for (let clave in objeto) {
-    if (clave === "FotoDocumento" || clave === "FotoServicioPublico") {
-      continue;
-    }
-    if (objeto[clave] === "") {
+function verificarDatos(formulario) {
+  if (formulario['Telefono'].length < 11
+    || formulario['ReferenciaPersonalTelefono'].length < 11) return false;
+  for (let clave in formulario) {
+    if (formulario[clave] !== 'Correo'
+      && formulario[clave] === "") {
       return false;
     }
   }
@@ -36,13 +34,10 @@ function verificarDatos(objeto) {
 
 const Clients = () => {
   const [forms, setForm] = useState([]);
-  const [fotoDocumento, setFotoDocumento] = useState(null);
-  const [fotoServicioPublico, setFotoServicioPublico] = useState(null);
   const [news, setNews] = useState(newsDefault);
   const [selected, setSelected] = useState(null);
   const [deleted, setDeleted] = useState(false);
   const [deletedM, setDeletedM] = useState(false);
-  const [options, setOptions] = useState([]);
   const [currentPage, setCurrentPage] = useState([]);
   const [filter, setFilter] = useState("");
 
@@ -65,6 +60,11 @@ const Clients = () => {
     setDeletedM(false);
   }, [deletedM]);
 
+  // useEffect(() => {
+  //   console.log(news)
+  // }, [news])
+
+
   const handleGet = async () => {
     try {
       const response = await fetch(`${URL}${PORT}/${form}`);
@@ -82,7 +82,6 @@ const Clients = () => {
         const response = await fetch(`${URL}${PORT}/${form}/${id}`, {
           method: "DELETE",
         });
-        console.log(response);
         setForm((prev) => prev.filter((info) => info.IdCliente != id));
         setDeleted(true);
         if (selected && selected.IdCliente == id) {
@@ -98,8 +97,6 @@ const Clients = () => {
             Telefono: "",
             ReferenciaPersonalNombre: "",
             ReferenciaPersonalTelefono: "",
-           // FotoDocumento: null,
-           // FotoServicioPublico: null,
             Fecha: "",
           });
         }
@@ -120,7 +117,6 @@ const Clients = () => {
           },
           body: JSON.stringify(ids),
         });
-        console.log(response);
         setDeletedM(true);
       } catch (error) {
         console.log(error);
@@ -141,37 +137,19 @@ const Clients = () => {
       Telefono: news.Telefono,
       ReferenciaPersonalNombre: news.ReferenciaPersonalNombre,
       ReferenciaPersonalTelefono: news.ReferenciaPersonalTelefono,
-      //FotoDocumento: fotoDocumento,
-      //FotoServicioPublico: fotoServicioPublico,
       Fecha: news.Fecha,
     });
   };
 
   const handleCreate = async () => {
     try {
-
-      const formData = new FormData()
-
-      formData.append("Nombre", news.Nombre)
-      formData.append("Apellido", news.Apellido)
-      formData.append("Cedula", news.Cedula)
-      formData.append("Correo", news.Correo)
-      formData.append("Direccion", news.Direccion)
-      formData.append("Barrio", news.Barrio)
-      formData.append("Telefono", news.Telefono)
-      formData.append("ReferenciaPersonalNombre", news.ReferenciaPersonalNombre)
-      formData.append("ReferenciaPersonalTelefono", news.ReferenciaPersonalTelefono)
-      //if (fotoDocumento) formData.append("FotoDocumento", fotoDocumento, fotoDocumento.name)
-    //  if (fotoServicioPublico) formData.append("FotoServicioPublico", fotoServicioPublico, fotoServicioPublico.name)
-      formData.append("Fecha", news.Fecha)
-
-      for (const entry of formData.entries()) {
-        //console.log(entry);
-      }
-
+      console.log(news)
       const response = await fetch(`${URL}${PORT}/${form}`, {
         method: "POST",
-        body: formData,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(news),
       });
       const data = await response.json();
       setForm((prev) => [...prev, data]);
@@ -186,8 +164,6 @@ const Clients = () => {
         Telefono: "",
         ReferenciaPersonalNombre: "",
         ReferenciaPersonalTelefono: "",
-       // FotoDocumento: null,
-       // FotoServicioPublico: null,
         Fecha: "",
       });
     } catch (error) {
@@ -216,30 +192,6 @@ const Clients = () => {
     }));
   };
 
-  const handleInputFileDocumentoChange = (event) => {
-    const file = event.target.files[0];
-    if (file && file.type === 'image/jpg' || file.type === 'image/jpeg') {
-      setFotoDocumento(file);
-    } else {
-      alert('Please select a valid JPG file.' + file.type);
-      event.target.value = null;
-    }
-  };
-
-  const handleInputFileServicioPublicoChange = (event) => {
-    const file = event.target.files[0];
-
-    if (file && file.type === 'image/jpg' || file.type === 'image/jpeg') {
-      setFotoServicioPublico(file);
-    } else {
-      alert(file.type + 'Por favor seleccionar un arhico en formato JPG ya que tienen calidad y es imagen segura otro tipo no sera permitido a no ser que sea evaluado por seguridad');
-      event.target.value = null;
-    }
-  };
-
-
-
-
   const handleUpdate = async () => {
     try {
       const formData = new FormData();
@@ -255,12 +207,6 @@ const Clients = () => {
       formData.append("ReferenciaPersonalTelefono", news.ReferenciaPersonalTelefono);
       formData.append("Fecha", news.Fecha);
 
-      //if (fotoDocumento) {
-        //formData.append("FotoDocumento", fotoDocumento, fotoDocumento.name);
-     // }
-     // if (fotoServicioPublico) {
-       // formData.append("FotoServicioPublico", fotoServicioPublico, fotoServicioPublico.name);
-     // }
 
       const response = await fetch(
         `${URL}${PORT}/${form}/${selected.IdCliente}`,
@@ -289,8 +235,6 @@ const Clients = () => {
         Telefono: "",
         ReferenciaPersonalNombre: "",
         ReferenciaPersonalTelefono: "",
-       // FotoDocumento: null,
-        //FotoServicioPublico: null,
         Fecha: "",
       });
     } catch (error) {
@@ -320,7 +264,7 @@ const Clients = () => {
           console.error("Error al crear:", error);
         }
       } else {
-        alert("Porfavor ingrese todos los datos obligatorios o valide que el usuario no exista antes de guardar.")
+        alert("Porfavor ingrese todos los datos obligatorios, verifique que los celulares estén correctos y valide que el usuario no exista antes de guardar.")
       }
     }
   };
@@ -337,10 +281,6 @@ const Clients = () => {
       .includes(filter.toString().toLowerCase())
     )
     .slice(indexOfFirst, indexOfLast);
-
-  useEffect(() => {
-    console.log(current)
-  }, [current])
 
   return (
     <>
@@ -452,8 +392,6 @@ const Clients = () => {
                   label={"Referencia Personal Telefono"}
                 />
 
-             
-
                 <InputCataComponente
                   value={news.Fecha}
                   onChange={handleInput}
@@ -474,15 +412,12 @@ const Clients = () => {
           </div>
           <div className="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
             <TabletCataComponente
-              data={current}
+              data={current.reverse()}
               handleDelete={handleDelete}
               handleEdit={handleEdit}
               handleDeleteM={handleDeleteM}
               idField={"IdCliente"}
-              Fields={["Nombre", "Apellido", "Correo", "Cedula", "Direccion", "Barrio",
-                // "FotoDocumento",
-                // "FotoServicioPublico"
-              ]}
+              Fields={["Nombre", "Apellido", "Correo", "Cedula", "Direccion", "Barrio"]}
             />
             <PaginateCataComponente
               data={forms}

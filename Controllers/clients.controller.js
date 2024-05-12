@@ -3,6 +3,7 @@ const Clients = require("../Models/clients.model");
 const bufferToFile = require('../provider/bufferToFile');
 
 const CreateClients = async (req, res) => {
+  console.log("\n\nEl body es: ", req.body, "\n\n")
   const {
     Nombre,
     Apellido,
@@ -16,11 +17,6 @@ const CreateClients = async (req, res) => {
     Fecha
   } = req.body;
 
-  const FotoDocumento = req.files && req.files['FotoDocumento'] ? req.files['FotoDocumento'][0].path : null;
-  const FotoServicioPublico = req.files && req.files['FotoServicioPublico'] ? req.files['FotoServicioPublico'][0].path : null;
-
-  // console.log(FotoDocumento)
-  // console.log(FotoServicioPublico)
   //organizar que se guarden son los dos que vienen desde el cb multer
   try {
     const ClientsCreate = await Clients.create({
@@ -33,8 +29,6 @@ const CreateClients = async (req, res) => {
       Telefono,
       ReferenciaPersonalNombre,
       ReferenciaPersonalTelefono,
-      FotoDocumento,
-      FotoServicioPublico,
       Fecha
     });
     res.status(200).json(ClientsCreate);
@@ -61,8 +55,6 @@ const UpdateClients = async (req, res) => {
       Fecha
     } = req.body;
 
-    const FotoDocumento = req.files && req.files['FotoDocumento'] ? req.files['FotoDocumento'][0].path : null;
-    const FotoServicioPublico = req.files && req.files['FotoServicioPublico'] ? req.files['FotoServicioPublico'][0].path : null;
     const [result] = await Clients.update(
       {
         Nombre,
@@ -138,14 +130,7 @@ const FindOneClientsById = async (req, res) => {
 const FindAllClients = async (req, res) => {
   try {
     const result = await Clients.findAll();
-
-    const clientsFilepath = await Promise.all(result.map(async (client) => {
-      client.FotoDocumento = await bufferToFile(client.FotoDocumento, `FotoDocumento_${client.Cedula}_${client.Nombre}.jpg`)
-      client.FotoServicioPublico = await bufferToFile(client.FotoServicioPublico, `FotoServicioPublico_${client.Cedula}_${client.Nombre}.jpg`)
-      return client
-    }))
-
-    res.status(200).json(clientsFilepath);
+    res.status(200).json(result);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

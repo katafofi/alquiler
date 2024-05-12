@@ -30,11 +30,6 @@ const InvoicePreview = ({ id, invoiceModalActive, setInvoiceModalActive }) => {
       .reduce((counter, current) => counter + parseInt(current.Precio), 0)
       .toLocaleString();
 
-  useEffect(() => {
-    console.log("ID:", id);
-    console.log("Invoice data:", invoiceData);
-  }, [invoiceData]);
-
   return (
     <Modal
       show={invoiceModalActive}
@@ -135,13 +130,13 @@ const InvoicePreview = ({ id, invoiceModalActive, setInvoiceModalActive }) => {
                     <Table striped bordered hover size="sm">
                       <thead>
                         <tr>
-                        <th class="table-header-red">Orden de trabajo</th>
+                          <th class="table-header-red">Orden de trabajo</th>
                           <th>cliente</th>
                         </tr>
                       </thead>
                       <tbody>
                         <tr>
-                        <td class="table-header-red">{invoiceData.IdOrdenCompra}</td>
+                          <td class="table-header-red">{invoiceData.IdOrdenCompra}</td>
                           <td>{invoiceData.Cliente.IdCliente}</td>
                         </tr>
                       </tbody>
@@ -185,7 +180,7 @@ const InvoicePreview = ({ id, invoiceModalActive, setInvoiceModalActive }) => {
                       <td>
                         {
                           monthNames[
-                            invoiceData.FechaInicialAlquiler.getUTCMonth()
+                          invoiceData.FechaInicialAlquiler.getUTCMonth()
                           ]
                         }
                       </td>
@@ -202,7 +197,7 @@ const InvoicePreview = ({ id, invoiceModalActive, setInvoiceModalActive }) => {
                       <td>
                         {
                           monthNames[
-                            invoiceData.FechaFinlAlquiler.getUTCMonth()
+                          invoiceData.FechaFinlAlquiler.getUTCMonth()
                           ]
                         }
                       </td>
