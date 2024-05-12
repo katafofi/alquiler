@@ -6,6 +6,7 @@ import TabletCataComponente from "../components/provider/Table/Table";
 import PaginateCataComponente from "../components/provider/Paginate/Paginate";
 import { SelectCataComponente } from "../components/provider/Select/Select";
 import SearchCataComponente from "../components/provider/Search/Search";
+import { Button } from "react-bootstrap";
 
 const newsDefault = {
   Nombre: "",
@@ -21,10 +22,13 @@ const newsDefault = {
 }
 
 function verificarDatos(formulario) {
-  if (formulario['Telefono'].length < 11
-    || formulario['ReferenciaPersonalTelefono'].length < 11) return false;
+  if (
+    formulario['Telefono'].length < 11
+    || formulario['ReferenciaPersonalTelefono'].length < 11
+  ) return false;
+
   for (let clave in formulario) {
-    if (formulario[clave] !== 'Correo'
+    if (clave !== 'Correo'
       && formulario[clave] === "") {
       return false;
     }
@@ -86,19 +90,7 @@ const Clients = () => {
         setDeleted(true);
         if (selected && selected.IdCliente == id) {
           setSelected(null);
-          setNews({
-            IdCliente: "",
-            Nombre: "",
-            Apellido: "",
-            Cedula: "",
-            Correo: "",
-            Direccion: "",
-            Barrio: "",
-            Telefono: "",
-            ReferenciaPersonalNombre: "",
-            ReferenciaPersonalTelefono: "",
-            Fecha: "",
-          });
+          setNews(newsDefault);
         }
       } catch (error) {
         console.log(error);
@@ -128,7 +120,6 @@ const Clients = () => {
     console.log(news)
     setSelected(news);
     setNews({
-      IdCliente: news.IdCliente,
       Nombre: news.Nombre,
       Apellido: news.Apellido,
       Cedula: news.Cedula,
@@ -154,19 +145,7 @@ const Clients = () => {
       });
       const data = await response.json();
       setForm((prev) => [...prev, data]);
-      setNews({
-        IdCliente: "",
-        Nombre: "",
-        Apellido: "",
-        Cedula: "",
-        Correo: "",
-        Direccion: "",
-        Barrio: "",
-        Telefono: "",
-        ReferenciaPersonalNombre: "",
-        ReferenciaPersonalTelefono: "",
-        Fecha: "",
-      });
+      setNews(newsDefault);
     } catch (error) {
       console.log(error);
     }
@@ -207,19 +186,7 @@ const Clients = () => {
 
       setSelected(null);
 
-      setNews({
-        IdCliente: "",
-        Nombre: "",
-        Apellido: "",
-        Cedula: "",
-        Correo: "",
-        Direccion: "",
-        Barrio: "",
-        Telefono: "",
-        ReferenciaPersonalNombre: "",
-        ReferenciaPersonalTelefono: "",
-        Fecha: "",
-      });
+      setNews(newsDefault);
     } catch (error) {
       console.error("Error al actualizar:", error);
     }
@@ -251,6 +218,11 @@ const Clients = () => {
       }
     }
   };
+
+  const handleReset = () => {
+    setSelected(null);
+    setNews(newsDefault);
+  }
 
   const handlePageChange = (selectedPage) => {
     setCurrentPage(selectedPage);
@@ -384,12 +356,14 @@ const Clients = () => {
                   name={"Fecha"}
                   label={"Fecha"}
                 />
-
-                <ButtonCataComponente
-                  type="submit"
-                  className="btn btn-primary btn-block"
-                  title="Guardar"
-                />
+                <div style={{ display: 'flex', gap: '10px' }}>
+                  <ButtonCataComponente
+                    type="submit"
+                    className="btn btn-primary btn-block"
+                    title={selected ? "Actualizar" : "Guardar"}
+                  />
+                  {selected && <Button variant="primary" onClick={handleReset}>Nuevo Cliente</Button>}
+                </div>
               </div>
             </form>
           </div>
