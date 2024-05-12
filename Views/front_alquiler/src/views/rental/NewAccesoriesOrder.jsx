@@ -94,8 +94,13 @@ const NewAccesoriesOrder = (
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const data = await handleCreate();
-      if (data) setAddedAccesories([...addedAccesories, data])
+      console.log(news)
+      if (news.IdAccesorio !== "Seleccione un accesorio") {
+        const data = await handleCreate();
+        if (data) setAddedAccesories([...addedAccesories, data])
+      } else {
+        alert("Seleccione un accesorio")
+      }
     } catch (error) {
       console.error("Error al crear:", error);
     }
@@ -122,17 +127,17 @@ const NewAccesoriesOrder = (
             <form onSubmit={handleSubmit} className="mb-4">
               <div className="form-row">
 
-                
+
 
                 <SelectCataComponente
                   required
-                  label={" Seleccionar un Accesorio -"}
+                  label={"Seleccione un accesorio"}
                   name={"IdAccesorio"}
                   value={news.IdAccesorio}
                   options={options}
                   onChange={handleSelect}
                 />
-                  <InputCataComponente
+                <InputCataComponente
                   value={news.cantidad}
                   onChange={handleInput}
                   placeholder={"Ingrese cantidad"}
@@ -146,7 +151,7 @@ const NewAccesoriesOrder = (
                   className="btn btn-primary btn-block"
                   title="Agregar"
                 />
-                
+
               </div>
             </form>
           </Col>
