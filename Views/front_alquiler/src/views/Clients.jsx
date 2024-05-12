@@ -125,6 +125,7 @@ const Clients = () => {
   };
 
   const handleEdit = async (news) => {
+    console.log(news)
     setSelected(news);
     setNews({
       IdCliente: news.IdCliente,
@@ -137,7 +138,7 @@ const Clients = () => {
       Telefono: news.Telefono,
       ReferenciaPersonalNombre: news.ReferenciaPersonalNombre,
       ReferenciaPersonalTelefono: news.ReferenciaPersonalTelefono,
-      Fecha: news.Fecha,
+      Fecha: news.Fecha ? new Date(news.Fecha).toISOString().split('T')[0] : '',
     });
   };
 
@@ -184,35 +185,17 @@ const Clients = () => {
     setNews((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSelect = (e) => {
-    const { name, value } = e.target;
-    setNews((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
 
   const handleUpdate = async () => {
     try {
-      const formData = new FormData();
-
-      formData.append("Nombre", news.Nombre);
-      formData.append("Apellido", news.Apellido);
-      formData.append("Cedula", news.Cedula);
-      formData.append("Correo", news.Correo);
-      formData.append("Direccion", news.Direccion);
-      formData.append("Barrio", news.Barrio);
-      formData.append("Telefono", news.Telefono);
-      formData.append("ReferenciaPersonalNombre", news.ReferenciaPersonalNombre);
-      formData.append("ReferenciaPersonalTelefono", news.ReferenciaPersonalTelefono);
-      formData.append("Fecha", news.Fecha);
-
-
       const response = await fetch(
         `${URL}${PORT}/${form}/${selected.IdCliente}`,
         {
           method: "PATCH",
-          body: formData,
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(news),
         }
       );
 

@@ -1,9 +1,6 @@
 const Clients = require("../Models/clients.model");
 
-const bufferToFile = require('../provider/bufferToFile');
-
 const CreateClients = async (req, res) => {
-  console.log("\n\nEl body es: ", req.body, "\n\n")
   const {
     Nombre,
     Apellido,
@@ -66,8 +63,6 @@ const UpdateClients = async (req, res) => {
         Telefono,
         ReferenciaPersonalNombre,
         ReferenciaPersonalTelefono,
-        FotoDocumento,
-        FotoServicioPublico,
         Fecha
       },
       {
