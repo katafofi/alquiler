@@ -41,7 +41,7 @@ const DailyReport = ({ getReportDataWeek }) => {
                 <td >
                   {data.ORDEN}
                 </td>
-                <td class="red-text">
+                <td className="red-text">
                   {data.FECHA_SALIDA}
                 </td>
                 <td >
@@ -56,7 +56,7 @@ const DailyReport = ({ getReportDataWeek }) => {
                 <td >
                   {data.TIPOPAGO}
                 </td>
-                
+
                 <td >
                   {data.NOMBRE}
                 </td>

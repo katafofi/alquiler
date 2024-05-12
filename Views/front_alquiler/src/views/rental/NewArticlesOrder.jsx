@@ -100,8 +100,13 @@ const NewArticlesOrder = (
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const data = await handleCreate();
-      if (data) setAddedArticles([...addedArticles, data])
+      console.log(news)
+      if (news.IdArticulo !== "Seleccione un artículo") {
+        const data = await handleCreate();
+        if (data) setAddedArticles([...addedArticles, data])
+      } else {
+        alert('Seleccione un articulo')
+      }
     } catch (error) {
       console.error("Error al crear:", error);
     }
@@ -129,11 +134,11 @@ const NewArticlesOrder = (
           <Col className="col-6">
             <form onSubmit={handleSubmit} className="mb-4">
               <div className="form-row">
-              
+
 
                 <SelectCataComponente
                   required
-                  label={" Seleccionar un Accesorio -"}
+                  label={"Seleccione un artículo"}
                   name={"IdArticulo"}
                   value={news.IdArticulo}
                   options={options}
@@ -186,7 +191,7 @@ const NewArticlesOrder = (
                         {
                           articles.find(
                             article => article.IdArticulo === parseInt(el.IdArticulo)
-                          ).Descripcion
+                          )?.Descripcion
                         }
                       </td>
                       <td>{el.Precio}</td>
