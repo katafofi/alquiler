@@ -108,7 +108,7 @@ const TabletCataComponente = ({
                   className="btn btn-warning btn-sm"
                   onClick={() => handleEdit(provider)}
                 >
-                  update
+                  actualizar
                 </button>
                 &nbsp;
                 <button
@@ -116,7 +116,7 @@ const TabletCataComponente = ({
                   className="btn btn-danger btn-sm"
                   onClick={() => handleDelete(provider[idField])}
                 >
-                  Delete
+                  Borrar
                 </button>
                 &nbsp;
                 {idField == "IdOrdenCompra" && (
