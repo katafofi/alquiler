@@ -23,8 +23,8 @@ const newsDefault = {
 
 function verificarDatos(formulario) {
   if (
-    formulario['Telefono'].length < 11
-    || formulario['ReferenciaPersonalTelefono'].length < 11
+    formulario['Telefono'].length < 10
+    || formulario['ReferenciaPersonalTelefono'].length < 10
   ) return false;
 
   for (let clave in formulario) {
