@@ -24,6 +24,7 @@ const NewRent = ({ updateActiveKeys, updateRentalStatus }) => {
   const [statusRenting, setStatusRenting] = useState(null)
 
   const nextKeys = ['1']
+  
 
   const handleInput = (e) => {
     const { name, value } = e.target;
