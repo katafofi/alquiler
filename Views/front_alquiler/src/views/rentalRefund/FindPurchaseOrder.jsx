@@ -1,91 +1,57 @@
-import { useEffect, useState } from 'react'
-import { Button, Col, Container, Form, Row, Table } from 'react-bootstrap'
+import { useEffect, useState, useMemo, useCallback } from 'react';
+import { Button, Col, Container, Form, Row, Table } from 'react-bootstrap';
 
-const initTableDataRange = { init: 1, final: 10 }
+const initTableDataRange = { init: 1, final: 10 };
 
 const FindPurchaseOrder = ({
   tableData,
   updateActiveKeys,
   setSelectedIdPurchaseOrder
 }) => {
-  // #region Estados
-  const [inputFilter, setInputFilter] = useState(null)
-  const [filteredTableData, setFilteredTableData] = useState(null)
-  const [tableDataRange, setTableDataRange] = useState(initTableDataRange)
-  const [page, setPage] = useState(1)
+  const [inputFilter, setInputFilter] = useState('');
+  const [filteredTableData, setFilteredTableData] = useState(null);
+  const [tableDataRange, setTableDataRange] = useState(initTableDataRange);
+  const [page, setPage] = useState(1);
 
-  const NEXTKEYS = ['1']
+  const NEXTKEYS = ['1'];
 
-  useEffect(() => {
-    if (tableData) setFilteredTableData(tableData
-      .filter(data => data.idPurchaseOrder
-        && data.idEstadoAlquiler === 1
-        && data.negativeRecord === null)
-      .reverse())
-  }, [tableData])
+  const filteredData = useMemo(() => {
+    if (!tableData) return null;
+    return tableData.filter(data => data.idPurchaseOrder && data.idEstadoAlquiler === 1 && data.negativeRecord === null);
+  }, [tableData]);
 
   useEffect(() => {
-    console.log('Filtered table data', filteredTableData)
-  }, [filteredTableData])
+    setFilteredTableData(filteredData);
+  }, [filteredData]);
 
-  useEffect(() => {
-    if (filteredTableData) {
-      setTableDataRange({
-        init: filteredTableData.length < 10
-          ? 0
-          : page === 1
-            ? 0
-            : (page - 1) * 10,
-        final: filteredTableData.length < 10
-          ?
-          filteredTableData.length
-          :
-          page === Math.floor(filteredTableData.length / 10) + 1
-            ?
-            (page - 1) * 10 + filteredTableData.length % 10
-            :
-            (page - 1) * 10 + 10
-      })
-    }
-  }, [page, filteredTableData])
+  const handleSubmit = useCallback((e) => {
+    e.preventDefault();
+    const filtered = filteredData.filter(data => (data.name + data.lastName)
+      .toLowerCase()
+      .replaceAll(" ", "")
+      .includes(inputFilter.toLowerCase().replaceAll(" ", "")));
+    setFilteredTableData(filtered);
+    setTableDataRange(initTableDataRange);
+    setPage(1);
+  }, [filteredData, inputFilter]);
 
-  // #region Handlers
+  const handlePage = useCallback(({ target }) => {
+    const { name } = target;
+    setPage(prevPage => name === "next" ? prevPage + 1 : prevPage - 1);
+  }, []);
 
-  const handleChange = ({ target }) => setInputFilter(target.value)
+  const handleSelect = useCallback((idPurchaseOrder) => {
+    setSelectedIdPurchaseOrder(idPurchaseOrder);
+    updateActiveKeys(NEXTKEYS);
+  }, [setSelectedIdPurchaseOrder, updateActiveKeys]);
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    setFilteredTableData(tableData
-      .filter(data => data.idPurchaseOrder && data.idEstadoAlquiler === 1)
-      .filter(data => (data.name + data.lastName)
-        .toLowerCase()
-        .replaceAll(" ", "")
-        .includes(inputFilter.toLowerCase().replaceAll(" ", ""))))
-    setTableDataRange(initTableDataRange)
-    setPage(1)
-  }
-
-  const handlePage = ({ target }) => {
-    const { name } = target
-    if (name === "next") {
-      setPage(page + 1)
-    } else {
-      setPage(page - 1)
-    }
-  }
-
-  const handleSelect = (idPurchaseOrder) => {
-    setSelectedIdPurchaseOrder(idPurchaseOrder)
-    updateActiveKeys(NEXTKEYS)
-  }
-  // #region Render
   return (
     <Container>
       <Row>
         <Form onSubmit={handleSubmit}>
           <Row>
             <Col xs={3}>
-              <Form.Control onChange={handleChange} />
+              <Form.Control onChange={(e) => setInputFilter(e.target.value)} />
             </Col>
             <Col xs={1}>
               <Button variant="primary" type="submit">Buscar</Button>
@@ -98,7 +64,7 @@ const FindPurchaseOrder = ({
                     variant="dark"
                     onClick={handlePage}
                     name="prev"
-                    disabled={page === 1 ? true : false}
+                    disabled={page === 1}
                   >
                     Atrás
                   </Button>
@@ -111,14 +77,9 @@ const FindPurchaseOrder = ({
                     variant="dark"
                     onClick={handlePage}
                     name="next"
-                    disabled={
-                      filteredTableData.length < 10
-                        ? true
-                        : page === Math.floor(filteredTableData.length / 10) + 1 && filteredTableData.length % 10 > 0
-                          ? true
-                          : false
-                    }
-                  >Siguiente
+                    disabled={page === Math.ceil(filteredTableData.length / 10)}
+                  >
+                    Siguiente
                   </Button>
                 </Col>
               </>
@@ -140,7 +101,7 @@ const FindPurchaseOrder = ({
           </thead>
           <tbody>
             {filteredTableData &&
-              filteredTableData.reverse().slice(tableDataRange.init, tableDataRange.final).map((row, index) => (
+              filteredTableData.slice((page - 1) * 10, page * 10).map((row, index) => (
                 <tr key={index}>
                   <td>{row.initialDate}</td>
                   <td>{row.finalDate}</td>
@@ -158,9 +119,8 @@ const FindPurchaseOrder = ({
           </tbody>
         </Table>
       </Row>
-
     </Container>
-  )
-}
+  );
+};
 
-export default FindPurchaseOrder
+export default FindPurchaseOrder;
