@@ -225,9 +225,9 @@ const createHtmlInvoice = ({
         <P>El cliente esta en la obligación de responder por las prendas ya descritas</P>
         <p>El retardo en la devolución de las prendas ocasionara</p>
         <p><strong>MULTA DE $10.000 DIARIOS.</strong></p>
-        <p>El cliente esta obligado a llevar las prendas estipuladas en esta factura.</p>
-        <p><strong>Por Ningún Motivo se Hará Devolución de Dinero Ni Transferencia de Saldos a Otra Factura.</strong></p>
-        <p>La entrega de las prendas será en la fecha establecida en esta factura.</p>
+        <p>El cliente esta obligado a llevar las prendas estipuladas en esta orden de trabajo.</p>
+        <p><strong>Por Ningún Motivo se Hará Devolución de Dinero Ni Transferencia de Saldos a Otra orden compra.</strong></p>
+        <p>La entrega de las prendas será en la fecha establecida en esta orden compra.</p>
         <p>Después de las 3 pm para la entrega de las prendas favor traer fotocopia de cédula de la persona quien venga a
           mirarlas y un recibo público de agua o luz.</p>
         <table>
