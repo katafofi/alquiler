@@ -105,7 +105,7 @@ const createReport = async (data, reportType) => {
   XLSX.utils.book_append_sheet(libro, hojaAbonos, 'ABONOS');
   XLSX.utils.book_append_sheet(libro, hojaGastos, 'GASTOS');
   XLSX.utils.book_append_sheet(libro, hojaSaldos, 'SALDOS');
-  XLSX.utils.book_append_sheet(libro, hojaSalidas, 'SALIDAS');
+  XLSX.utils.book_append_sheet(libro, hojaSalidas, 'SALIDASarregal');
 
   //if (reportType === 'semanal') {
   // Crear una nueva hoja 'CUENTAS SEMANA' con el resultado de SALDO_TOTAL y ABONO_TOTAL

@@ -290,20 +290,40 @@ GROUP BY
     
     `);
     const [salidas] = await conexion.query(`
-    SELECT 
-    DATE_FORMAT(a.FechaInicialAlquiler, '%d de %M de %Y') AS fechaSalida,
-    ROW_NUMBER() OVER () AS numero,
-    o.IdOrdenCompra
+  SELECT 
+    DATE_FORMAT(a.FechaInicialAlquiler, '%d de %M de %Y') AS fechaSalida, 
+    ROW_NUMBER() OVER (ORDER BY a.FechaInicialAlquiler) AS numero, 
+    o.IdOrdenCompra,
+    CASE 
+        WHEN p.IdEstadoPago = 1 THEN 'saldo'
+        WHEN p.IdEstadoPago = 2 THEN 'abono'
+        ELSE 'desconocido'  
+    END AS estadoPago,
+    COALESCE(suma_pagos.suma_valores, 0) AS sumaValores,  -- Suma de los valores
+    o.Total,  -- Total
+    (o.Total - COALESCE(suma_pagos.suma_valores, 0)) AS validacion  -- Nueva columna con nombre 'validacion'
 FROM 
     alquilers a
 LEFT JOIN 
     ordencompras o ON a.IdAlquiler = o.IdAlquiler
+LEFT JOIN 
+    pagos p ON o.IdOrdenCompra = p.IdOrdenCompra
+LEFT JOIN
+    (SELECT 
+         IdOrdenCompra,
+         SUM(valor) AS suma_valores
+     FROM 
+         pagos
+     GROUP BY 
+         IdOrdenCompra) suma_pagos ON o.IdOrdenCompra = suma_pagos.IdOrdenCompra
 WHERE 
-    a.FechaInicialAlquiler >= '${initialDate}' 
+    a.FechaInicialAlquiler >= '${initialDate}'
     AND a.FechaInicialAlquiler <= '${finalDate}'
-    AND o.IdOrdenCompra IS NOT NULL -- Excluir filas con IdOrdenCompra NULL
+    AND o.IdOrdenCompra IS NOT NULL 
 ORDER BY 
     numero ASC;
+
+
 
 
     `);
