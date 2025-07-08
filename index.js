@@ -33,6 +33,8 @@ const PucharseOrderRouter = require("./Routes/purchaseorder.route.js");
 const RentalRefuntRouter = require("./Routes/rentalRefunt.route")
 const sendEmailRouter = require("./Routes/sendEmail.route");
 const statusRenting = require("./Routes/statusRenting.route");
+const reportDailyRoutes = require('./Routes/reportDaily.route');
+
 
 const app = express();
 app.use(bodyParser.json({ limit: '40mb' }));
@@ -76,6 +78,8 @@ app.use("/PuchaseItemOrder", PuchareItemOrderRouter);
 app.use("/PuchaseOrder", PucharseOrderRouter);
 app.use("/rentalrefurnt", RentalRefuntRouter);
 app.use("/statusRenting", statusRenting);
+app.use("/reportDaily", reportDailyRoutes);
+
 
 async function MigrateModels() {
   await syncModels();

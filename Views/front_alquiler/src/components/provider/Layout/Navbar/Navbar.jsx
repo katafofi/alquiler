@@ -62,6 +62,7 @@ const NavbarCataComponente = () => {
     ],
     reportes: [
       { to: '/reports', label: 'reportes' },
+      { to: '/reports/reportDaily', label: 'reportes diarios ' },
     ],
   //  reportsNegative: [
      // { to: '/reportsNegative', label: 'Consultar negatividad' },
