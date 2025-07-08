@@ -29,10 +29,18 @@ async function getReportDaily(req, res) {
       GROUP BY nombre;
     `);
 
+    // Consulta 3: Suma de gastos del día
+    const [gastosHoy] = await conexion.execute(`
+      SELECT IFNULL(SUM(Monto), 0) AS totalGastosHoy
+      FROM gastosempleados
+      WHERE Fecha = CURDATE();
+    `);
+
     // Respuesta estructurada
     res.status(200).json({
-      totalEfectivo: totalEfectivo[0], // 👈 asegúrate que exista y no esté vacío
-      efectivoPorNombre
+      totalEfectivo: totalEfectivo[0], 
+      efectivoPorNombre,
+      gastosHoy: gastosHoy[0] // 👈 agrega en el JSON
     });
 
   } catch (error) {

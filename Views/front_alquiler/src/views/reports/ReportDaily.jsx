@@ -6,7 +6,7 @@ const getReportData = async () => {
   try {
     const response = await fetch(URL);
     const data = await response.json();
-    console.log(data); // ✅ revisa estructura
+    console.log(data); // ✅ revisa estructura en consola
     return data;
   } catch (error) {
     console.log(error);
@@ -17,6 +17,7 @@ const ReportDaily = () => {
   const [report, setReport] = useState({
     totalEfectivo: { efectivo: 0 },
     efectivoPorNombre: [],
+    gastosHoy: { totalGastosHoy: 0 },
   });
 
   const fetchReport = async () => {
@@ -28,6 +29,10 @@ const ReportDaily = () => {
     fetchReport();
   }, []);
 
+  const totalEfectivo = report.totalEfectivo?.efectivo ?? 0;
+  const totalGastosHoy = report.gastosHoy?.totalGastosHoy ?? 0;
+  const neto = totalEfectivo - totalGastosHoy;
+
   return (
     <Container>
       <Row className="text-center mt-3 mb-3">
@@ -36,13 +41,27 @@ const ReportDaily = () => {
 
       <Row>
         <Col>
-          <Button variant="primary" onClick={fetchReport}>Actualizar</Button>
+          <Button variant="primary" onClick={fetchReport}>
+            Actualizar
+          </Button>
         </Col>
       </Row>
 
       <Row className="mt-3">
         <Col>
-          <h5>Total efectivo: ${report.totalEfectivo?.efectivo ?? 0}</h5>
+          <h5>Total efectivo: ${totalEfectivo}</h5>
+        </Col>
+      </Row>
+
+      <Row className="mt-3">
+        <Col>
+          <h5>Total gastos hoy: ${totalGastosHoy}</h5>
+        </Col>
+      </Row>
+
+      <Row className="mt-3">
+        <Col>
+          <h5>Neto (efectivo - gastos hoy): ${neto}</h5>
         </Col>
       </Row>
 
