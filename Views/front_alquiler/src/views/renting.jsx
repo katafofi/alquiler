@@ -10,19 +10,15 @@ import InvoicePreview from "./Invoice/InvoicePreview";
 
 function formatearFecha(fechaString) {
   let fecha = new Date(fechaString);
-
   let año = fecha.getUTCFullYear();
-  // Agregar 1 al mes porque getMonth() devuelve un índice basado en cero
-  let mes = (fecha.getUTCMonth() + 1).toString().padStart(2, '0');
-  let dia = fecha.getUTCDate().toString().padStart(2, '0');
-
+  let mes = (fecha.getUTCMonth() + 1).toString().padStart(2, "0");
+  let dia = fecha.getUTCDate().toString().padStart(2, "0");
   return `${año}-${mes}-${dia}`;
 }
 
 const Renting = () => {
   const [forms, setForm] = useState([]);
   const [news, setNews] = useState({
-    //IdAlquiler
     FechaInicialAlquiler: "",
     FechaFinlAlquiler: "",
     IdTienda: "",
@@ -37,8 +33,9 @@ const Renting = () => {
   const [filter, setFilter] = useState("");
   const [ClienteOptions, setClienteOptions] = useState([]);
   const [TiendaOptions, setTiendaOptions] = useState([]);
-  const [invoiceModalActive, setInvoiceModalActive] = useState(false)
-  const [purchaseOrders, setPurchaseOrders] = useState(null)
+  const [invoiceModalActive, setInvoiceModalActive] = useState(false);
+  const [purchaseOrders, setPurchaseOrders] = useState(null);
+  const [authPassword, setAuthPassword] = useState(""); // 🆕 para credencial oculta
 
   const PerPage = 10;
   const form = "renting";
@@ -48,14 +45,14 @@ const Renting = () => {
 
   useEffect(() => {
     handleGet();
-    handleGetPurchaseOrders()
+    handleGetPurchaseOrders();
     handleGetTienda();
     handleGetCliente();
   }, [selected]);
 
   useEffect(() => {
     handleGet();
-    handleGetPurchaseOrders()
+    handleGetPurchaseOrders();
     handleGetTienda();
     handleGetCliente();
     setDeleted(false);
@@ -63,7 +60,7 @@ const Renting = () => {
 
   useEffect(() => {
     handleGet();
-    handleGetPurchaseOrders()
+    handleGetPurchaseOrders();
     handleGetTienda();
     handleGetCliente();
     setDeletedM(false);
@@ -94,8 +91,8 @@ const Renting = () => {
       const response = await fetch(`${URL}${PORT}/Clients`);
       const data = await response.json();
       const newOptions = data.map((element) => ({
-        value: element.IdCliente, //lo que selecciona en el back
-        label: element.Nombre + " - " + element.Apellido + element.IdCliente, //lo que se ve en el selector
+        value: element.IdCliente,
+        label: `${element.Nombre} ${element.Apellido} - ${element.IdCliente}`,
       }));
       setClienteOptions(newOptions);
     } catch (error) {
@@ -108,8 +105,8 @@ const Renting = () => {
       const response = await fetch(`${URL}${PORT}/store`);
       const data = await response.json();
       const newOptions = data.map((element) => ({
-        value: element.IdTienda, //lo que selecciona en el back
-        label: element.IdTienda, //lo que se ve en el selector
+        value: element.IdTienda,
+        label: element.IdTienda,
       }));
       setTiendaOptions(newOptions);
     } catch (error) {
@@ -117,45 +114,101 @@ const Renting = () => {
     }
   };
 
+  // 🔒 Solicita credencial con campo de tipo password
+  const solicitarCredencial = () => {
+    return new Promise((resolve) => {
+      const modal = document.createElement("div");
+      modal.style.position = "fixed";
+      modal.style.top = "0";
+      modal.style.left = "0";
+      modal.style.width = "100vw";
+      modal.style.height = "100vh";
+      modal.style.background = "rgba(0, 0, 0, 0.5)";
+      modal.style.display = "flex";
+      modal.style.justifyContent = "center";
+      modal.style.alignItems = "center";
+      modal.style.zIndex = "9999";
+
+      modal.innerHTML = `
+        <div style="background: white; padding: 20px; border-radius: 10px; text-align: center;">
+          <h5>Ingrese la credencial de autorización</h5>
+          <input id="credInput" type="password" placeholder="Contraseña" style="padding: 8px; margin: 10px 0; width: 80%;"/>
+          <br/>
+          <button id="confirmBtn" style="margin-right: 10px; padding: 6px 12px;">Confirmar</button>
+          <button id="cancelBtn" style="padding: 6px 12px;">Cancelar</button>
+        </div>
+      `;
+
+      document.body.appendChild(modal);
+
+      modal.querySelector("#confirmBtn").onclick = () => {
+        const valor = modal.querySelector("#credInput").value;
+        document.body.removeChild(modal);
+        resolve(valor);
+      };
+
+      modal.querySelector("#cancelBtn").onclick = () => {
+        document.body.removeChild(modal);
+        resolve(null);
+      };
+    });
+  };
+
   const handleDelete = async (id) => {
-    try {
-      const response = await fetch(`${URL}${PORT}/${form}/${id}`, {
-        method: "DELETE",
-      });
-      setForm((prev) => prev.filter((info) => info.IdAlquiler != id));
-      setDeleted(true);
-      if (selected && selected.IdAlquiler == id) {
-        setSelected(null);
-        setNews({
-          IdAlquiler: "",
-          FechaInicialAlquiler: "",
-          FechaFinlAlquiler: "",
-          IdTienda: "",
-          IdCliente: "",
-        });
+    const cred = await solicitarCredencial();
+    if (cred === "202312") {
+      if (window.confirm("¿Estás seguro de que quieres eliminar?")) {
+        try {
+          const response = await fetch(`${URL}${PORT}/${form}/${id}`, {
+            method: "DELETE",
+          });
+          setForm((prev) => prev.filter((info) => info.IdAlquiler !== id));
+          setDeleted(true);
+          if (selected && selected.IdAlquiler === id) {
+            setSelected(null);
+            setNews({
+              IdAlquiler: "",
+              FechaInicialAlquiler: "",
+              FechaFinlAlquiler: "",
+              IdTienda: "",
+              IdCliente: "",
+            });
+          }
+        } catch (error) {
+          console.log(error);
+        }
       }
-    } catch (error) {
-      console.log(error);
+    } else {
+      alert("Credencial incorrecta o acceso no autorizado.");
     }
   };
 
   const handleDeleteM = async (ids) => {
-    try {
-      const response = await fetch(`${URL}${PORT}/${form}/delete/all`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(ids),
-      });
-      setDeletedM(true);
-    } catch (error) {
-      console.log(error);
+    const cred = await solicitarCredencial();
+    if (cred === "202312") {
+      if (window.confirm("¿Estás seguro de que quieres eliminar múltiples registros?")) {
+        try {
+          const response = await fetch(`${URL}${PORT}/${form}/delete/all`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(ids),
+          });
+          setDeletedM(true);
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    } else {
+      alert("Credencial incorrecta o acceso no autorizado.");
     }
   };
+
   const handleEdit = async (news) => {
     setSelected(news);
-    setLastSelectedPurchaseId(purchaseOrders.find(order => order.IdAlquiler === news.IdAlquiler).IdOrdenCompra)
+    const order = purchaseOrders?.find(
+      (order) => order.IdAlquiler === news.IdAlquiler
+    );
+    setLastSelectedPurchaseId(order ? order.IdOrdenCompra : null);
     setNews({
       IdAlquiler: news.IdAlquiler,
       FechaInicialAlquiler: formatearFecha(news.FechaInicialAlquiler),
@@ -169,9 +222,7 @@ const Renting = () => {
     try {
       const response = await fetch(`${URL}${PORT}/${form}`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(news),
       });
       const data = await response.json();
@@ -188,14 +239,6 @@ const Renting = () => {
     }
   };
 
-  const handleInputSearch = (e) => {
-    const { name, value } = e.target;
-    setNews((prev) => ({ ...prev, [name]: value }));
-    if (name === "filter") {
-      setFilter(value);
-    }
-  };
-
   const handleInput = (e) => {
     const { name, value } = e.target;
     setNews((prev) => ({ ...prev, [name]: value }));
@@ -203,58 +246,48 @@ const Renting = () => {
 
   const handleSelect = (e) => {
     const { name, value } = e.target;
-    setNews((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setNews((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleUpdate = async () => {
-    const response = await fetch(
-      `${URL}${PORT}/${form}/${selected.IdAlquiler}`,
-      {
+    const cred = await solicitarCredencial();
+    if (cred === "202312") {
+      const response = await fetch(`${URL}${PORT}/${form}/${selected.IdAlquiler}`, {
         method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          IdAlquiler: news.IdAlquiler,
-          FechaInicialAlquiler: news.FechaInicialAlquiler,
-          FechaFinlAlquiler: news.FechaFinlAlquiler,
-          IdTienda: news.IdTienda,
-          IdCliente: news.IdCliente,
-        }),
-      }
-    );
-    const data = await response.json();
-    setForm((prev) =>
-      prev.map((estado) =>
-        estado.IdAlquiler == data.IdAlquiler ? data : estado
-      )
-    );
-    setSelected(null);
-    setNews({
-      IdAlquiler: "",
-      FechaInicialAlquiler: "",
-      FechaFinlAlquiler: "",
-      IdTienda: "",
-      IdCliente: "",
-    });
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(news),
+      });
+      const data = await response.json();
+      setForm((prev) =>
+        prev.map((estado) =>
+          estado.IdAlquiler === data.IdAlquiler ? data : estado
+        )
+      );
+      setSelected(null);
+      setNews({
+        IdAlquiler: "",
+        FechaInicialAlquiler: "",
+        FechaFinlAlquiler: "",
+        IdTienda: "",
+        IdCliente: "",
+      });
+      setInvoiceModalActive(true);
+    } else {
+      alert("Credencial incorrecta o acceso no autorizado.");
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     if (selected) {
       try {
         await handleUpdate();
-        setInvoiceModalActive(true)
       } catch (error) {
         console.error("Error al actualizar:", error);
       }
     } else {
       try {
-        handleCreate();
+        await handleCreate();
       } catch (error) {
         console.error("Error al crear:", error);
       }
@@ -266,6 +299,12 @@ const Renting = () => {
     setFilter("");
   };
 
+  // 🆕 Solución del error — función agregada
+  const handleInputSearch = (e) => {
+    const { value } = e.target;
+    setFilter(value);
+  };
+
   const indexOfLast = (currentPage + 1) * PerPage;
   const indexOfFirst = indexOfLast - PerPage;
   const current = forms
@@ -275,54 +314,52 @@ const Renting = () => {
         .includes(filter.toString().toLowerCase())
     )
     .slice(indexOfFirst, indexOfLast);
+
   return (
     <>
       <div className="container mt-4">
-        {invoiceModalActive && lastSelectedPurchaseId &&
+        {invoiceModalActive && lastSelectedPurchaseId && (
           <InvoicePreview
             id={lastSelectedPurchaseId}
             invoiceModalActive={invoiceModalActive}
             setInvoiceModalActive={setInvoiceModalActive}
           />
-        }
+        )}
         <div className="row">
           <div className="col">
             <TitleCataComponente title="Alquiler" size="h6" />
-
             <SearchCataComponente
               value={filter}
               onChange={handleInputSearch}
               type={"search"}
               name={"filter"}
               id={"filter"}
-              placeholder={"Filtrar por Id cliente"} //no es necesario
+              placeholder={"Filtrar por Id cliente"}
             />
           </div>
         </div>
         <div className="row">
-          <div className="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
+          <div className="col-12 col-lg-4">
             <form onSubmit={handleSubmit} className="mb-4">
               <div className="form-row">
-
                 <InputCataComponente
                   value={news.FechaInicialAlquiler}
                   onChange={handleInput}
-                  placeholder={"Ingrese descripcion"}
+                  placeholder={"Ingrese fecha inicial"}
                   id={"FechaInicialAlquiler"}
                   type={"date"}
                   name={"FechaInicialAlquiler"}
-                  label={"FechaInicialAlquiler"}
+                  label={"Fecha Inicial Alquiler"}
                 />
                 <InputCataComponente
                   value={news.FechaFinlAlquiler}
                   onChange={handleInput}
-                  placeholder={"Ingrese fecha retirado"}
+                  placeholder={"Ingrese fecha final"}
                   id={"FechaFinlAlquiler"}
                   type={"date"}
                   name={"FechaFinlAlquiler"}
-                  label={"FechaFinlAlquiler"}
+                  label={"Fecha Final Alquiler"}
                 />
-
                 <SelectCataComponente
                   required
                   label={"- Seleccionar tienda -"}
@@ -331,16 +368,14 @@ const Renting = () => {
                   options={TiendaOptions}
                   onChange={handleSelect}
                 />
-
                 <SelectCataComponente
                   required
-                  label={"- Seleccionar Cliente "}
+                  label={"- Seleccionar Cliente -"}
                   name={"IdCliente"}
                   value={news.IdCliente}
                   options={ClienteOptions}
                   onChange={handleSelect}
                 />
-
                 <ButtonCataComponente
                   type="submit"
                   className="btn btn-primary btn-block"
@@ -349,14 +384,20 @@ const Renting = () => {
               </div>
             </form>
           </div>
-          <div className="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
+          <div className="col-12 col-lg-8">
             <TabletCataComponente
               data={current}
               handleDelete={handleDelete}
               handleEdit={handleEdit}
               handleDeleteM={handleDeleteM}
               idField={"IdAlquiler"}
-              Fields={["IdAlquiler", "FechaInicialAlquiler", "FechaFinlAlquiler", "IdTienda", "IdCliente"]}
+              Fields={[
+                "IdAlquiler",
+                "FechaInicialAlquiler",
+                "FechaFinlAlquiler",
+                "IdTienda",
+                "IdCliente",
+              ]}
             />
             <PaginateCataComponente
               data={forms}

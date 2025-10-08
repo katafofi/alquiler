@@ -10,7 +10,6 @@ import SearchCataComponente from "../components/provider/Search/Search";
 const AccesoriesInventory = () => {
   const [forms, setForm] = useState([]);
   const [news, setNews] = useState({
-    //IdInventarioAccesorio:
     Cantidad: "",
     IdAccesorio: "",
   });
@@ -27,6 +26,59 @@ const AccesoriesInventory = () => {
   const URL = "http://localhost:";
   const PORT = "3003";
 
+  // 🔐 Función personalizada para pedir credencial oculta
+  const solicitarCredencial = () => {
+    return new Promise((resolve) => {
+      // Crear el contenedor del modal
+      const modal = document.createElement("div");
+      modal.style.position = "fixed";
+      modal.style.top = "0";
+      modal.style.left = "0";
+      modal.style.width = "100%";
+      modal.style.height = "100%";
+      modal.style.backgroundColor = "rgba(0,0,0,0.5)";
+      modal.style.display = "flex";
+      modal.style.justifyContent = "center";
+      modal.style.alignItems = "center";
+      modal.style.zIndex = "9999";
+
+      // Crear el contenido del modal
+      const box = document.createElement("div");
+      box.style.backgroundColor = "white";
+      box.style.padding = "20px";
+      box.style.borderRadius = "10px";
+      box.style.textAlign = "center";
+      box.innerHTML = `
+        <h5>Ingrese la credencial de autorización</h5>
+        <input id="credencialInput" type="password" placeholder="••••••" style="padding: 8px; width: 80%; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px;" />
+        <br/>
+        <button id="okBtn" style="margin-right: 10px; padding: 5px 15px;">Aceptar</button>
+        <button id="cancelBtn" style="padding: 5px 15px;">Cancelar</button>
+      `;
+      modal.appendChild(box);
+      document.body.appendChild(modal);
+
+      // Obtener elementos
+      const input = box.querySelector("#credencialInput");
+      const okBtn = box.querySelector("#okBtn");
+      const cancelBtn = box.querySelector("#cancelBtn");
+
+      // Eventos
+      okBtn.addEventListener("click", () => {
+        const value = input.value;
+        modal.remove();
+        resolve(value);
+      });
+      cancelBtn.addEventListener("click", () => {
+        modal.remove();
+        resolve(null);
+      });
+    });
+  };
+
+  // ------------------------------
+  // useEffects
+  // ------------------------------
   useEffect(() => {
     handleGet();
     handleGetAccesorios();
@@ -44,6 +96,9 @@ const AccesoriesInventory = () => {
     setDeletedM(false);
   }, [deletedM]);
 
+  // ------------------------------
+  // Funciones principales
+  // ------------------------------
   const handleGet = async () => {
     try {
       const response = await fetch(`${URL}${PORT}/${form}`);
@@ -53,13 +108,14 @@ const AccesoriesInventory = () => {
       console.log(error);
     }
   };
+
   const handleGetAccesorios = async () => {
     try {
       const response = await fetch(`${URL}${PORT}/accesories`);
       const data = await response.json();
       const newOptions = data.map((element) => ({
-        value: element.IdAccesorio, //lo que selecciona en el back
-        label: element.Descripcion + " - " + element.IdOrdenCompra, //lo que se ve en el selector
+        value: element.IdAccesorio,
+        label: element.Descripcion + " - " + element.IdOrdenCompra,
       }));
       setOptions(newOptions);
     } catch (error) {
@@ -67,8 +123,12 @@ const AccesoriesInventory = () => {
     }
   };
 
+  // ------------------------------
+  // CRUD
+  // ------------------------------
   const handleDelete = async (id) => {
-    if (window.prompt("Ingrese la credencial de autorizacion", 0) == "202312") {
+    const credencial = await solicitarCredencial();
+    if (credencial === "202312") {
       if (window.confirm("¿Estás seguro de que quieres eliminar?")) {
         try {
           const response = await fetch(`${URL}${PORT}/${form}/${id}`, {
@@ -92,13 +152,14 @@ const AccesoriesInventory = () => {
         }
       }
     } else {
-      alert("No esta permitido para las credenciales por defecto.");
+      alert("Credencial incorrecta o cancelada.");
     }
   };
 
   const handleDeleteM = async (ids) => {
-    if (window.prompt("Ingrese la credencial de autorizacion", 0) == "202312") {
-      if (window.confirm("¿Estás seguro de que quieres eliminar?")) {
+    const credencial = await solicitarCredencial();
+    if (credencial === "202312") {
+      if (window.confirm("¿Estás seguro de que quieres eliminar todos?")) {
         try {
           const response = await fetch(`${URL}${PORT}/${form}/delete/all`, {
             method: "POST",
@@ -114,7 +175,7 @@ const AccesoriesInventory = () => {
         }
       }
     } else {
-      alert("No esta permitido para las credenciales por defecto.");
+      alert("Credencial incorrecta o cancelada.");
     }
   };
 
@@ -148,27 +209,6 @@ const AccesoriesInventory = () => {
     }
   };
 
-  const handleInputSearch = (e) => {
-    const { name, value } = e.target;
-    setNews((prev) => ({ ...prev, [name]: value }));
-    if (name === "filter") {
-      setFilter(value);
-    }
-  };
-
-  const handleInput = (e) => {
-    const { name, value } = e.target;
-    setNews((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleSelect = (e) => {
-    const { name, value } = e.target;
-    setNews((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
-
   const handleUpdate = async () => {
     const response = await fetch(
       `${URL}${PORT}/${form}/${selected.IdInventarioAccesorio}`,
@@ -178,12 +218,13 @@ const AccesoriesInventory = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          IdInventarioAccesorio: news.IdInventarioAccesorio, // Asegúrate de que news tenga los datos correctos
+          IdInventarioAccesorio: news.IdInventarioAccesorio,
           Cantidad: news.Cantidad,
-          IdAccesorio: news.IdAccesorio
+          IdAccesorio: news.IdAccesorio,
         }),
       }
-    );    const data = await response.json();
+    );
+    const data = await response.json();
     setForm((prev) =>
       prev.map((estado) =>
         estado.IdInventarioAccesorio == data.IdInventarioAccesorio
@@ -203,9 +244,8 @@ const AccesoriesInventory = () => {
     e.preventDefault();
 
     if (selected) {
-      if (
-        window.prompt("Ingrese la credencial de autorizacion", 0) == "202312"
-      ) {
+      const credencial = await solicitarCredencial();
+      if (credencial === "202312") {
         if (window.confirm("¿Estás seguro de que quieres actualizar este?")) {
           try {
             handleUpdate();
@@ -214,7 +254,7 @@ const AccesoriesInventory = () => {
           }
         }
       } else {
-        alert("No esta permitido para las credenciales por defecto.");
+        alert("Credencial incorrecta o cancelada.");
       }
     } else {
       try {
@@ -225,6 +265,9 @@ const AccesoriesInventory = () => {
     }
   };
 
+  // ------------------------------
+  // Filtros y paginación
+  // ------------------------------
   const handlePageChange = (selectedPage) => {
     setCurrentPage(selectedPage);
     setFilter("");
@@ -233,36 +276,44 @@ const AccesoriesInventory = () => {
   const indexOfLast = (currentPage + 1) * PerPage;
   const indexOfFirst = indexOfLast - PerPage;
   const current = forms
-    .filter((item) =>
-      item.IdAccesorio.toString()
+    .filter((item) => {
+      const idAccesorio = item?.IdAccesorio ?? "";
+      return idAccesorio
+        .toString()
         .toLowerCase()
-        .includes(filter.toString().toLowerCase())
-    )
+        .includes(filter.toString().toLowerCase());
+    })
     .slice(indexOfFirst, indexOfLast);
 
+  // ------------------------------
+  // Render
+  // ------------------------------
   return (
     <>
       <div className="container mt-4">
         <div className="row">
           <div className="col">
-            <TitleCataComponente title="inventario de accesorios" size="h6" />
+            <TitleCataComponente title="Inventario de Accesorios" size="h6" />
             <SearchCataComponente
               value={filter}
-              onChange={handleInputSearch}
+              onChange={(e) => setFilter(e.target.value)}
               type={"search"}
               name={"filter"}
               id={"filter"}
-              placeholder={"Filtrar por Estado"} //no es necesario
+              placeholder={"Filtrar por ID Accesorio"}
             />
           </div>
         </div>
+
         <div className="row">
           <div className="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
             <form onSubmit={handleSubmit} className="mb-4">
               <div className="form-row">
                 <InputCataComponente
                   value={news.Cantidad}
-                  onChange={handleInput}
+                  onChange={(e) =>
+                    setNews({ ...news, [e.target.name]: e.target.value })
+                  }
                   placeholder={"Ingrese Cantidad"}
                   id={"Cantidad"}
                   type={"number"}
@@ -272,11 +323,13 @@ const AccesoriesInventory = () => {
 
                 <SelectCataComponente
                   required
-                  label={" Seleccionar un Accesorio -"}
+                  label={"Seleccionar un Accesorio -"}
                   name={"IdAccesorio"}
                   value={news.IdAccesorio}
                   options={options}
-                  onChange={handleSelect}
+                  onChange={(e) =>
+                    setNews({ ...news, [e.target.name]: e.target.value })
+                  }
                 />
 
                 <ButtonCataComponente
@@ -287,6 +340,7 @@ const AccesoriesInventory = () => {
               </div>
             </form>
           </div>
+
           <div className="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
             <TabletCataComponente
               data={current}
