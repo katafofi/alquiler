@@ -20,7 +20,7 @@ const sendEmail = async (req, res) => {
     subject: `Alerta cliente reportado!`,
     html: `
       <div>
-        <p>Se ha generado un reporte negativo para el siguiente delincuente:</p>
+        <p>Se ha generado un reporte negativo para el siguiente cliente:</p>
         <ul>
           <li>Fecha: ${data.createdAt}</li>
           <li>ID Cliente: ${data.IdCliente}</li>
