@@ -7,7 +7,7 @@ async function getReportDaily(req, res) {
     conexion = await mysql.createConnection({
       host: 'localhost',
       user: 'cata',
-      password: 'cata2047901*',
+      password: 'TuNuevaClaveSegura123!',
       database: 'Alquiler2',
     });
 

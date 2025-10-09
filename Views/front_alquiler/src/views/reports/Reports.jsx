@@ -159,7 +159,7 @@ const Reports = () => {
 
     // 🔒 Credencial oculta
     const cred = await solicitarCredencial();
-    if (cred === "cata2047901*") {
+    if (cred === "TuNuevaClaveSegura123!") {
       const data = await getReportDataWeek(formData);
       createReport(data, "generalSemanal");
     } else {
