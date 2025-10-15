@@ -332,45 +332,85 @@ const handleDelete = async (id) => {
   };
 
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+ const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    if (selected) {
-      if (
-        window.prompt("Ingrese la credencial de autorizacion", 0) == "202312"
-      ) {
-        if (window.confirm("¿Estás seguro de que quieres actualizar este?")) {
-          try {
-            handleUpdate();
-            e.target.reset();
-          } catch (error) {
-            console.error("Error al actualizar:", error);
-          }
+  if (selected) {
+    // Crear modal seguro
+    const modal = document.createElement("div");
+    modal.style.position = "fixed";
+    modal.style.top = "0";
+    modal.style.left = "0";
+    modal.style.width = "100%";
+    modal.style.height = "100%";
+    modal.style.backgroundColor = "rgba(0,0,0,0.5)";
+    modal.style.display = "flex";
+    modal.style.alignItems = "center";
+    modal.style.justifyContent = "center";
+    modal.style.zIndex = "9999";
+
+    modal.innerHTML = `
+      <div style="background:white; padding:20px; border-radius:10px; max-width:350px; text-align:center;">
+        <h5>Autorización requerida</h5>
+        <p>Ingrese la contraseña para actualizar:</p>
+        <input type="password" id="updatePassword" placeholder="Contraseña"
+               style="width:100%; padding:8px; margin:10px 0; border-radius:6px; border:1px solid #ccc;">
+        <div style="display:flex; gap:10px; justify-content:center; margin-top:10px;">
+          <button id="cancelUpdate" style="padding:6px 12px; background:#ccc; border:none; border-radius:5px;">Cancelar</button>
+          <button id="confirmUpdate" style="padding:6px 12px; background:#007bff; color:white; border:none; border-radius:5px;">Actualizar</button>
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(modal);
+
+    // Esperar interacción
+    document.getElementById("cancelUpdate").onclick = () => {
+      modal.remove();
+    };
+
+    document.getElementById("confirmUpdate").onclick = async () => {
+      const inputPassword = document.getElementById("updatePassword").value.trim();
+
+      // Clave válida = "202312"
+      const hashedCorrectPassword = sha256("202312").toString();
+      const hashedInput = sha256(inputPassword).toString();
+
+      if (hashedInput !== hashedCorrectPassword) {
+        alert("❌ Contraseña incorrecta. No tienes permiso para actualizar.");
+        modal.remove();
+        return;
+      }
+
+      if (window.confirm("¿Estás seguro de que quieres actualizar este registro?")) {
+        try {
+          await handleUpdate();
+          e.target.reset();
+          alert("✅ Registro actualizado correctamente.");
+        } catch (error) {
+          console.error("Error al actualizar:", error);
+          alert("⚠️ Error al intentar actualizar el registro.");
+        } finally {
+          modal.remove();
         }
       } else {
-        alert("No esta permitido para las credenciales por defecto.");
+        modal.remove();
       }
-    } else {
-      try {
-        const data = await handleCreate();
-        setNewPaymentId(data.IdOrdenCompra)
-        setInvoiceModalActive(true)
-        setExistPurchaseOrder(false)
-        e.target.reset();
-      } catch (error) {
-        console.error("Error al crear:", error);
-      }
-    }
-  };
-
-  const checkIdExist = (e) => {
-    const { value } = e.target;
-    if (OrdenCompraOptions.filter(el => el.value === parseInt(value)).length > 0) {
-      setExistPurchaseOrder(true)
-    } else {
-      setExistPurchaseOrder(false)
+    };
+  } else {
+    // Si no hay selección, se crea un nuevo registro normalmente
+    try {
+      const data = await handleCreate();
+      setNewPaymentId(data.IdOrdenCompra);
+      setInvoiceModalActive(true);
+      setExistPurchaseOrder(false);
+      e.target.reset();
+    } catch (error) {
+      console.error("Error al crear:", error);
     }
   }
+};
+
 
   const handlePageChange = (selectedPage) => {
     setCurrentPage(selectedPage);
