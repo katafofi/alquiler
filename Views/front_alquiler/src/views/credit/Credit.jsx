@@ -9,7 +9,6 @@ import PaginateCataComponente from "../../components/provider/Paginate/Paginate"
 import { SelectCataComponente } from "../../components/provider/Select/Select";
 import SearchCataComponente from "../../components/provider/Search/Search";
 import InvoicePreview from "../Invoice/InvoicePreview";
-import sha256 from "crypto-js/sha256";
 
 const Credit = () => {
   const [forms, setForm] = useState([]);
@@ -115,75 +114,16 @@ const Credit = () => {
       console.log(error);
     }
   };
-// 🔸 Asegúrate de tener esta importación al inicio del archivo:
 
-const handleDelete = async (id) => {
-  if (!window.confirm("¿Estás seguro de que quieres eliminar este registro?")) return;
-
-  // Crear modal
-  const modal = document.createElement("div");
-  modal.style.position = "fixed";
-  modal.style.top = "0";
-  modal.style.left = "0";
-  modal.style.width = "100%";
-  modal.style.height = "100%";
-  modal.style.backgroundColor = "rgba(0,0,0,0.5)";
-  modal.style.display = "flex";
-  modal.style.alignItems = "center";
-  modal.style.justifyContent = "center";
-  modal.style.zIndex = "9999";
-
-  modal.innerHTML = `
-    <div style="background:white; padding:20px; border-radius:10px; max-width:350px; text-align:center;">
-      <h5>Confirmar eliminación</h5>
-      <p>Por favor ingrese la contraseña para continuar:</p>
-      <input type="password" id="deletePassword" placeholder="Contraseña" 
-             style="width:100%; padding:8px; margin:10px 0; border-radius:6px; border:1px solid #ccc;">
-      <div style="display:flex; gap:10px; justify-content:center; margin-top:10px;">
-        <button id="cancelDelete" style="padding:6px 12px; background:#ccc; border:none; border-radius:5px;">Cancelar</button>
-        <button id="confirmDelete" style="padding:6px 12px; background:#dc3545; color:white; border:none; border-radius:5px;">Eliminar</button>
-      </div>
-    </div>
-  `;
-
-  document.body.appendChild(modal);
-
-  return new Promise((resolve) => {
-    document.getElementById("cancelDelete").onclick = () => {
-      modal.remove();
-      resolve();
-    };
-
-    document.getElementById("confirmDelete").onclick = async () => {
-      const inputPassword = document.getElementById("deletePassword").value.trim();
-
-      // Clave correcta "202312"
-      const hashedCorrectPassword = sha256("202312").toString();
-
-      // Generar hash del input ingresado
-      const hashedInput = sha256(inputPassword).toString();
-
-      console.log("Ingresada:", inputPassword);
-      console.log("Hash generado:", hashedInput);
-      console.log("Hash correcto:", hashedCorrectPassword);
-
-      if (hashedInput !== hashedCorrectPassword) {
-        alert("❌ Contraseña incorrecta. Operación cancelada.");
-        modal.remove();
-        resolve();
-        return;
-      }
-
+  const handleDelete = async (id) => {
+    if (window.confirm("¿Estás seguro de que quieres eliminar?")) {
       try {
         const response = await fetch(`${URL}${PORT}/${form}/${id}`, {
           method: "DELETE",
         });
-
-        if (!response.ok) throw new Error("Error al eliminar el registro.");
-
+        console.log(response);
         setForm((prev) => prev.filter((info) => info.IdPago != id));
         setDeleted(true);
-
         if (selected && selected.IdPago == id) {
           setSelected(null);
           setNews({
@@ -196,19 +136,12 @@ const handleDelete = async (id) => {
             nombre: "",
           });
         }
-
-        alert("✅ Registro eliminado correctamente.");
       } catch (error) {
-        console.error("Error al eliminar:", error);
-        alert("⚠️ No se pudo eliminar el registro.");
-      } finally {
-        modal.remove();
-        resolve();
+        console.log(error);
       }
-    };
-  });
-};
+    }
 
+  };
 
   const handleDeleteM = async (ids) => {
     if (window.confirm("¿Estás seguro de que quieres eliminar?")) {
@@ -332,85 +265,45 @@ const handleDelete = async (id) => {
   };
 
 
- const handleSubmit = async (e) => {
-  e.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-  if (selected) {
-    // Crear modal seguro
-    const modal = document.createElement("div");
-    modal.style.position = "fixed";
-    modal.style.top = "0";
-    modal.style.left = "0";
-    modal.style.width = "100%";
-    modal.style.height = "100%";
-    modal.style.backgroundColor = "rgba(0,0,0,0.5)";
-    modal.style.display = "flex";
-    modal.style.alignItems = "center";
-    modal.style.justifyContent = "center";
-    modal.style.zIndex = "9999";
-
-    modal.innerHTML = `
-      <div style="background:white; padding:20px; border-radius:10px; max-width:350px; text-align:center;">
-        <h5>Autorización requerida</h5>
-        <p>Ingrese la contraseña para actualizar:</p>
-        <input type="password" id="updatePassword" placeholder="Contraseña"
-               style="width:100%; padding:8px; margin:10px 0; border-radius:6px; border:1px solid #ccc;">
-        <div style="display:flex; gap:10px; justify-content:center; margin-top:10px;">
-          <button id="cancelUpdate" style="padding:6px 12px; background:#ccc; border:none; border-radius:5px;">Cancelar</button>
-          <button id="confirmUpdate" style="padding:6px 12px; background:#007bff; color:white; border:none; border-radius:5px;">Actualizar</button>
-        </div>
-      </div>
-    `;
-
-    document.body.appendChild(modal);
-
-    // Esperar interacción
-    document.getElementById("cancelUpdate").onclick = () => {
-      modal.remove();
-    };
-
-    document.getElementById("confirmUpdate").onclick = async () => {
-      const inputPassword = document.getElementById("updatePassword").value.trim();
-
-      // Clave válida = "202312"
-      const hashedCorrectPassword = sha256("202312").toString();
-      const hashedInput = sha256(inputPassword).toString();
-
-      if (hashedInput !== hashedCorrectPassword) {
-        alert("❌ Contraseña incorrecta. No tienes permiso para actualizar.");
-        modal.remove();
-        return;
-      }
-
-      if (window.confirm("¿Estás seguro de que quieres actualizar este registro?")) {
-        try {
-          await handleUpdate();
-          e.target.reset();
-          alert("✅ Registro actualizado correctamente.");
-        } catch (error) {
-          console.error("Error al actualizar:", error);
-          alert("⚠️ Error al intentar actualizar el registro.");
-        } finally {
-          modal.remove();
+    if (selected) {
+      if (
+        window.prompt("Ingrese la credencial de autorizacion", 0) == "202312"
+      ) {
+        if (window.confirm("¿Estás seguro de que quieres actualizar este?")) {
+          try {
+            handleUpdate();
+            e.target.reset();
+          } catch (error) {
+            console.error("Error al actualizar:", error);
+          }
         }
       } else {
-        modal.remove();
+        alert("No esta permitido para las credenciales por defecto.");
       }
-    };
-  } else {
-    // Si no hay selección, se crea un nuevo registro normalmente
-    try {
-      const data = await handleCreate();
-      setNewPaymentId(data.IdOrdenCompra);
-      setInvoiceModalActive(true);
-      setExistPurchaseOrder(false);
-      e.target.reset();
-    } catch (error) {
-      console.error("Error al crear:", error);
+    } else {
+      try {
+        const data = await handleCreate();
+        setNewPaymentId(data.IdOrdenCompra)
+        setInvoiceModalActive(true)
+        setExistPurchaseOrder(false)
+        e.target.reset();
+      } catch (error) {
+        console.error("Error al crear:", error);
+      }
+    }
+  };
+
+  const checkIdExist = (e) => {
+    const { value } = e.target;
+    if (OrdenCompraOptions.filter(el => el.value === parseInt(value)).length > 0) {
+      setExistPurchaseOrder(true)
+    } else {
+      setExistPurchaseOrder(false)
     }
   }
-};
-
 
   const handlePageChange = (selectedPage) => {
     setCurrentPage(selectedPage);
