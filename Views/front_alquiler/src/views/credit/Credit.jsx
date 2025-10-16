@@ -421,18 +421,39 @@ const Credit = () => {
             </form>
           </div>
           <div className="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
-            <TabletCataComponente
-              data={current}
-              handleDelete={handleDelete}
-              handleEdit={handleEdit}
-              handleDeleteM={handleDeleteM}
-              idField={"IdPago"}
-              Fields={[
-                "FechadPago",
-                "Valor",
-                "IdOrdenCompra",
-              ]}
-            />
+      <div className="table-responsive mt-3">
+  <table className="table table-striped table-bordered align-middle">
+    <thead className="table-dark">
+      <tr>
+        <th>ID Pago</th>
+        <th>Fecha de Pago</th>
+        <th>Valor</th>
+        <th>ID Orden de Compra</th>
+      </tr>
+    </thead>
+    <tbody>
+      {current.length > 0 ? (
+        current
+          .slice()
+          .sort((a, b) => b.IdPago - a.IdPago)
+          .map((item) => (
+            <tr key={item.IdPago}>
+              <td>{item.IdPago}</td>
+              <td>{item.FechadPago}</td>
+              <td>{item.Valor}</td>
+              <td>{item.IdOrdenCompra}</td>
+            </tr>
+          ))
+      ) : (
+        <tr>
+          <td colSpan="4" className="text-center text-muted py-3">
+            No hay pagos registrados.
+          </td>
+        </tr>
+      )}
+    </tbody>
+  </table>
+</div>
             <PaginateCataComponente
               data={forms}
               PerPage={PerPage}
