@@ -34,6 +34,8 @@ const RentalRefuntRouter = require("./Routes/rentalRefunt.route")
 const sendEmailRouter = require("./Routes/sendEmail.route");
 const statusRenting = require("./Routes/statusRenting.route");
 const reportDailyRoutes = require('./Routes/reportDaily.route');
+const EntregasRouter = require("./Routes/entregas.route");
+
 
 
 const app = express();
@@ -79,6 +81,8 @@ app.use("/PuchaseOrder", PucharseOrderRouter);
 app.use("/rentalrefurnt", RentalRefuntRouter);
 app.use("/statusRenting", statusRenting);
 app.use("/reportDaily", reportDailyRoutes);
+app.use("/entregas", EntregasRouter);
+
 
 
 async function MigrateModels() {

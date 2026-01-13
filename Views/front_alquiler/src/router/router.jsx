@@ -30,6 +30,8 @@ import Rental from "../views/rental/Rental";
 import Credit from "../views/credit/Credit";
 import RentalRefund from "../views/rentalRefund/RentalRefund";
 import ReportDaily from '../views/reports/ReportDaily';
+import Entregas from '../views/reports/Entregas';
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -160,6 +162,11 @@ const router = createBrowserRouter([
         path: "/renting",
         element: <Renting />,
       },
+      {
+  path: "/reports/entregas",
+  element: <Entregas />,
+},
+
     ],
   },
 
