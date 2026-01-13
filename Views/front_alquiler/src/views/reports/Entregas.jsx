@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Container, Row, Col, Table, Button, Form } from "react-bootstrap";
+
 const getEntregasData = async (fechaInicio, fechaFin) => {
   const URL = `http://localhost:3003/entregas?fechaInicio=${fechaInicio}&fechaFin=${fechaFin}`;
   try {
@@ -10,7 +11,6 @@ const getEntregasData = async (fechaInicio, fechaFin) => {
   }
 };
 
-
 const Entregas = () => {
   const [fechaInicio, setFechaInicio] = useState("");
   const [fechaFin, setFechaFin] = useState("");
@@ -19,6 +19,17 @@ const Entregas = () => {
     total: 0,
   });
 
+  // ✅ estado para filas marcadas
+  const [checkedRows, setCheckedRows] = useState({});
+
+  const toggleCheck = (idOrden, index) => {
+    const key = `${idOrden}-${index}`;
+    setCheckedRows((prev) => ({
+      ...prev,
+      [key]: !prev[key],
+    }));
+  };
+
   const fetchEntregas = async () => {
     if (!fechaInicio || !fechaFin) {
       alert("Seleccione ambas fechas");
@@ -26,11 +37,15 @@ const Entregas = () => {
     }
 
     const result = await getEntregasData(fechaInicio, fechaFin);
-    if (result) setData(result);
+    if (result) {
+      setData(result);
+      setCheckedRows({}); // reset checks
+    }
   };
 
   return (
     <Container>
+      {/* TITULO */}
       <Row className="text-center mt-3 mb-3">
         <h3>Reporte de Entregas</h3>
       </Row>
@@ -75,6 +90,7 @@ const Entregas = () => {
           <Table striped bordered hover responsive>
             <thead>
               <tr>
+                <th>✔</th>
                 <th>Fecha</th>
                 <th>ID Cliente</th>
                 <th>Nombre</th>
@@ -83,25 +99,43 @@ const Entregas = () => {
                 <th>Artículo</th>
               </tr>
             </thead>
+
             <tbody>
               {data.entregas.length === 0 && (
                 <tr>
-                  <td colSpan="6" className="text-center">
+                  <td colSpan="7" className="text-center">
                     No hay entregas
                   </td>
                 </tr>
               )}
 
-              {data.entregas.map((e, idx) => (
-                <tr key={idx}>
-                  <td>{e.FechaInicialAlquiler?.split("T")[0]}</td>
-                  <td>{e.IdCliente}</td>
-                  <td>{e.Nombre}</td>
-                  <td>{e.Apellido}</td>
-                  <td>{e.IdOrdenCompra}</td>
-                  <td>{e.ArticuloDescripcion}</td>
-                </tr>
-              ))}
+              {data.entregas.map((e, idx) => {
+                const key = `${e.IdOrdenCompra}-${idx}`;
+                const checked = checkedRows[key];
+
+                return (
+                  <tr
+                    key={key}
+                    className={checked ? "table-success" : ""}
+                  >
+                    <td className="text-center">
+                      <Form.Check
+                        type="checkbox"
+                        checked={checked || false}
+                        onChange={() =>
+                          toggleCheck(e.IdOrdenCompra, idx)
+                        }
+                      />
+                    </td>
+                    <td>{e.FechaInicialAlquiler?.split("T")[0]}</td>
+                    <td>{e.IdCliente}</td>
+                    <td>{e.Nombre}</td>
+                    <td>{e.Apellido}</td>
+                    <td>{e.IdOrdenCompra}</td>
+                    <td>{e.ArticuloDescripcion}</td>
+                  </tr>
+                );
+              })}
             </tbody>
           </Table>
         </Col>
